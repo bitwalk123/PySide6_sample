@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import sys
-from PySide2.QtCore import Qt, Slot
+from PySide2.QtCore import Qt
 from PySide2.QtWidgets import (
     QApplication,
     QWidget,
@@ -19,13 +19,22 @@ class Example(QWidget):
         self.show()
 
     def initUI(self):
-        cbox = QCheckBox('チェックボックス')
-        cbox.toggle()
-        cbox.stateChanged.connect(self.checkboxChanged)
+        cbox_A = QCheckBox('チェックボックスＡ')
+        cbox_A.toggle()
+        cbox_A.stateChanged.connect(self.checkboxChanged)
+
+        cbox_B = QCheckBox('チェックボックスＢ')
+        cbox_B.stateChanged.connect(self.checkboxChanged)
+
+        cbox_C = QCheckBox('チェックボックスＣ')
+        cbox_C.stateChanged.connect(self.checkboxChanged)
 
         vbox = QVBoxLayout()
         self.setLayout(vbox)
-        vbox.addWidget(cbox)
+
+        vbox.addWidget(cbox_A)
+        vbox.addWidget(cbox_B)
+        vbox.addWidget(cbox_C)
 
     def checkboxChanged(self, state):
         sender = self.sender()
