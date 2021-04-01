@@ -17,10 +17,10 @@ class Example(QWidget):
         self.show()
 
     def initUI(self):
+        lab = QLabel('ラベルは文字を表示します。')
+
         vbox = QVBoxLayout()
         self.setLayout(vbox)
-
-        lab = QLabel('ラベルは文字を表示します。')
         vbox.addWidget(lab)
 
 

@@ -19,12 +19,12 @@ class Example(QWidget):
         self.show()
 
     def initUI(self):
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
-
         btn = QPushButton('プッシュボタン')
         btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         btn.clicked.connect(self.buttonClicked)
+
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
         vbox.addWidget(btn)
 
     def buttonClicked(self):
