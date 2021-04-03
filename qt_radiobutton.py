@@ -30,6 +30,14 @@ class Example(QWidget):
         rb_C = QRadioButton('ラジオボタンＣ')
         rb_C.toggled.connect(self.checkboxChanged)
 
+        # Reference:
+        # https://doc.qt.io/qtforpython/PySide6/QtWidgets/QRadioButton.html
+        #
+        # Radio buttons are autoExclusive by default. If auto-exclusive is
+        # enabled, radio buttons that belong to the same parent widget behave
+        # as if they were part of the same exclusive button group. If you need
+        # multiple exclusive button groups for radio buttons that belong to the
+        # same parent widget, put them into a QButtonGroup .
         rb_group = QButtonGroup()
         rb_group.addButton(rb_A)
         rb_group.addButton(rb_B)
