@@ -37,11 +37,11 @@ class Example(QWidget):
         vbox.addWidget(cbox_C)
 
     def checkboxChanged(self, state):
-        sender = self.sender()
-        if state == Qt.Checked:
-            print('「' + sender.text() + '」にチェックを入れました。')
+        cbox = self.sender()
+        if cbox.isChecked():
+            print('「' + cbox.text() + '」にチェックを入れました。')
         else:
-            print('「' + sender.text() + '」のチェックを外しました。')
+            print('「' + cbox.text() + '」のチェックを外しました。')
 
 
 def main():
