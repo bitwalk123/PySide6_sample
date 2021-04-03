@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import sys
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (
+    QApplication,
+    QCalendarWidget,
+    QVBoxLayout,
+    QWidget,
+)
+
+
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+        self.setWindowTitle("Calendar")
+        self.show()
+
+    def initUI(self):
+        cbox_A = QCalendarWidget()
+
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
+
+        vbox.addWidget(cbox_A)
+
+
+def main():
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
