@@ -15,16 +15,16 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.setWindowTitle("Calendar")
+        self.setWindowTitle('Calendar')
         self.show()
 
     def initUI(self):
-        cbox_A = QCalendarWidget()
+        calendar = QCalendarWidget()
 
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
-        vbox.addWidget(cbox_A)
+        vbox.addWidget(calendar)
 
 
 def main():

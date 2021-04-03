@@ -15,7 +15,7 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.setWindowTitle("CheckBox")
+        self.setWindowTitle('CheckBox')
         self.show()
 
     def initUI(self):

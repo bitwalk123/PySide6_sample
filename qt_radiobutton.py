@@ -16,7 +16,7 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.setWindowTitle("RadioButton")
+        self.setWindowTitle('RadioButton')
         self.show()
 
     def initUI(self):
