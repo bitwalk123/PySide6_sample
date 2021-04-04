@@ -5,7 +5,8 @@ import sys
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
-    QSlider,
+    QSizePolicy,
+    QSpinBox,
     QVBoxLayout,
     QWidget,
 )
@@ -14,25 +15,24 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Slider')
+        self.setWindowTitle('SpinBox')
         self.initUI()
 
     def initUI(self):
-        slider = QSlider(orientation=Qt.Horizontal)
-        slider.setTickPosition(QSlider.TicksBothSides)
-        slider.setMinimum(0)
-        slider.setMaximum(100)
-        slider.setTickInterval(10)
-        slider.valueChanged.connect(self.show_value)
+        sbox = QSpinBox()
+        sbox.setRange(0, 100)
+        sbox.setAlignment(Qt.AlignRight)
+        sbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sbox.valueChanged.connect(self.show_value)
 
         vbox = QVBoxLayout()
-        vbox.addWidget(slider)
+        vbox.addWidget(sbox)
         self.setLayout(vbox)
         self.show()
 
     def show_value(self):
-        sld: QSlider = self.sender()
-        print(sld.value())
+        spin: QSpinBox = self.sender()
+        print(spin.value())
 
 
 def main():
