@@ -28,8 +28,7 @@ class Example(QWidget):
         dial = QDial()
         dial.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         dial.setNotchesVisible(True)
-        dial.setMinimum(self.value_min)
-        dial.setMaximum(self.value_max)
+        dial.setRange(self.value_min, self.value_max)
         dial.setValue(self.value_old)
         dial.valueChanged.connect(lambda: self.dialer_changed(dial, label))
 

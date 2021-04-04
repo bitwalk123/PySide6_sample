@@ -20,8 +20,7 @@ class Example(QWidget):
     def initUI(self):
         slider = QSlider(orientation=Qt.Horizontal)
         slider.setTickPosition(QSlider.TicksBothSides)
-        slider.setMinimum(0)
-        slider.setMaximum(100)
+        slider.setRange(0, 100)
         slider.setTickInterval(10)
         slider.valueChanged.connect(self.show_value)
 
