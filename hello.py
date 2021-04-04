@@ -5,7 +5,12 @@ import sys
 import PySide6
 from PySide6 import QtCore
 from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout
+from PySide6.QtWidgets import (
+    QApplication,
+    QLabel,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 class Hello(QWidget):
@@ -34,6 +39,7 @@ def main():
     app: QApplication = QApplication(sys.argv)
     ex: Hello = Hello()
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     main()
