@@ -5,6 +5,7 @@ import sys
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
+    QSizePolicy,
     QSlider,
     QVBoxLayout,
     QWidget,
@@ -19,6 +20,10 @@ class Example(QWidget):
 
     def initUI(self):
         slider = QSlider(orientation=Qt.Horizontal)
+        slider.setTickPosition(QSlider.TicksBothSides)
+        slider.setMinimum(0)
+        slider.setMaximum(100)
+        slider.setTickInterval(10)
         slider.valueChanged.connect(self.show_value)
 
         vbox = QVBoxLayout()
