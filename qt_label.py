@@ -5,6 +5,7 @@ import sys
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
+    QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
@@ -18,6 +19,7 @@ class Example(QWidget):
 
     def initUI(self):
         lab = QLabel('ラベルは文字を表示します。')
+        lab.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         vbox = QVBoxLayout()
         self.setLayout(vbox)
