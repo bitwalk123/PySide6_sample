@@ -67,7 +67,9 @@ class TaskThread(QThread):
             time.sleep(0.1)
             self.progressChanged.emit(progress)
 
+        time.sleep(0.5)
         self.progressCompleted.emit()
+        self.progressChanged.emit(0)
         self.exit(0)
 
 
