@@ -16,7 +16,7 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.setWindowTitle('左上寄せできない！')
+        self.setWindowTitle('Layout 1.1')
         self.show()
 
     def initUI(self):
