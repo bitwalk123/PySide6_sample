@@ -18,7 +18,7 @@ class Example(QScrollArea):
         self.setWidgetResizable(True)
 
         self.initUI()
-        self.setWindowTitle('左上寄せ')
+        self.setWindowTitle('左上寄せできた！')
         self.show()
 
     def initUI(self):
