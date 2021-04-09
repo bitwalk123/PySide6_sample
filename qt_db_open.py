@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Reference
+# https://realpython.com/python-pyqt-database/
 import sys
 
 from PySide6.QtSql import QSqlDatabase
@@ -5,7 +10,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox, QLabel
 
 # Create the connection
 con = QSqlDatabase.addDatabase("QSQLITE")
-con.setDatabaseName("/home/bitwalk/contacts.sqlite")
+con.setDatabaseName("contacts.sqlite")
 
 # Create the application
 app = QApplication(sys.argv)
