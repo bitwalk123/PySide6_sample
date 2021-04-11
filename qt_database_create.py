@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import csv
+import os
 import sys
 from PySide6.QtCore import QSize
 from PySide6.QtSql import (
@@ -106,6 +107,9 @@ class TaskThread(QThread):
         self.file_csv = file_csv
 
     def run(self):
+        if os.path.exists(self.name_db):
+            os.remove(self.name_db)
+
         con = QSqlDatabase.addDatabase('QSQLITE')
         con.setDatabaseName(self.name_db)
 
