@@ -114,11 +114,8 @@ class TaskThread(QThread):
         con.setDatabaseName(self.name_db)
 
         if not con.open():
-            QMessageBox.critical(
-                None,
-                'Error!',
-                'Database Error: %s' % con.lastError().databaseText(),
-            )
+            self.show_error_message(con)
+            self.progressChanged.emit(100)
             self.progressCompleted.emit()
             self.exit(0)
             return
@@ -126,7 +123,9 @@ class TaskThread(QThread):
         self.create_db_table()
         data = self.read_csv_file(self.file_csv)
         self.append_record(con, data)
+        self.complete(con)
 
+    def complete(self, con):
         con.close()
         self.progressCompleted.emit()
         self.exit(0)
@@ -136,7 +135,7 @@ class TaskThread(QThread):
         query.exec_(
             '''
             CREATE TABLE postal (
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+                id INTEGER PRIMARY KEY,
                 postal_code TEXT,
                 address_1 TEXT,
                 address_2 TEXT,
@@ -168,11 +167,17 @@ class TaskThread(QThread):
             record.setValue(3, line[2])
             record.setValue(4, line[3])
             if not dbModel.insertRecord(-1, record):
-                QMessageBox.critical(
-                    None,
-                    'Error!',
-                    'Database Error: %s' % con.lastError().text(),
-                )
+                self.show_error_message(con)
+                self.progressChanged.emit(100)
+                break
+
+    def show_error_message(self, con):
+        QMessageBox.critical(
+            None,
+            'Error!',
+            'Database Error: %s' % con.lastError().databaseText(),
+        )
+
 
 
 def main():
