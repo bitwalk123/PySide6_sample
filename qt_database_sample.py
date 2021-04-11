@@ -61,7 +61,6 @@ class Example(QWidget):
             but.setEnabled(False)
 
             self.create_db_table()
-            print(con.tables())
             con.close()
 
     def create_db_table(self):
