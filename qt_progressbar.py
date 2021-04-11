@@ -46,7 +46,7 @@ class Example(QMainWindow):
         self.setStatusBar(status_bar)
 
     def task_gen(self):
-        self.task = TaskThread(self)
+        self.task = TaskThread()
         self.task.progressChanged.connect(self.progbar.setValue)
 
     def task_start(self):
