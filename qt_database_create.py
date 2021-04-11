@@ -145,7 +145,7 @@ class TaskThread(QThread):
         )
 
     def read_csv_file(self, filename):
-        with open(filename, newline='') as f:
+        with open(filename, newline='', encoding='utf_8') as f:
             reader = csv.reader(f)
             data = list(reader)
         return data
