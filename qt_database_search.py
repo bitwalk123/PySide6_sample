@@ -13,6 +13,7 @@ from PySide6.QtSql import (
 from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
+    QFrame,
     QGridLayout,
     QLabel,
     QLineEdit,
@@ -36,7 +37,7 @@ class Example(QMainWindow):
         super().__init__()
 
         self.initUI()
-        self.setMinimumSize(QSize(600, 0))
+        self.setMinimumSize(QSize(600, 400))
         self.setWindowTitle('郵便番号検索')
         self.show()
 
@@ -57,7 +58,10 @@ class Example(QMainWindow):
         lab0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         grid.addWidget(lab0, r, 0)
 
-        entry0 = QLineEdit()
+        entry0 = QLabel()
+        entry0.setStyleSheet("QLabel {background: #fff;}")
+        entry0.setFrameShape(QFrame.Panel)
+        entry0.setFrameShadow(QFrame.Sunken)
         entry0.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         grid.addWidget(entry0, r, 1)
 
@@ -68,9 +72,12 @@ class Example(QMainWindow):
 
     def click_db_create(self, ent: QLineEdit):
         dialog = QFileDialog()
+        filters: str = 'SQLite file (*.db *.sqlite *.sqlite3 *db3);; All (*.*)'
+        dialog.setNameFilter(filters)
+
         if dialog.exec_():
-            fname = dialog.selectedFiles()[0]
-            print(fname)
+            filename = dialog.selectedFiles()[0]
+            ent.setText(filename)
 
 
 def main():
