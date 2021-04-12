@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QProgressBar,
     QPushButton,
+    QScrollArea,
     QSizePolicy,
     QStatusBar,
     QWidget,
@@ -41,8 +42,13 @@ class Example(QMainWindow):
         self.show()
 
     def initUI(self):
+        area = QScrollArea()
+        area.setWidgetResizable(True)
+        self.setCentralWidget(area)
+
         base = QWidget()
-        self.setCentralWidget(base)
+        base.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        area.setWidget(base)
 
         grid = QGridLayout()
         base.setLayout(grid)

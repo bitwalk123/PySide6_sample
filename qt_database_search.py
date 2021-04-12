@@ -12,6 +12,7 @@ from PySide6.QtSql import (
 )
 from PySide6.QtWidgets import (
     QApplication,
+    QFileDialog,
     QGridLayout,
     QLabel,
     QLineEdit,
@@ -19,6 +20,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QProgressBar,
     QPushButton,
+    QScrollArea,
     QSizePolicy,
     QStatusBar,
     QWidget,
@@ -27,6 +29,7 @@ from PySide6.QtCore import (
     QThread,
     Signal,
 )
+
 
 class Example(QMainWindow):
     def __init__(self):
@@ -38,7 +41,37 @@ class Example(QMainWindow):
         self.show()
 
     def initUI(self):
-        pass
+        area = QScrollArea()
+        area.setWidgetResizable(True)
+        self.setCentralWidget(area)
+
+        base = QWidget()
+        base.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        area.setWidget(base)
+
+        grid = QGridLayout()
+        base.setLayout(grid)
+
+        r = 0
+        lab0 = QLabel('データベースファイル')
+        lab0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        grid.addWidget(lab0, r, 0)
+
+        entry0 = QLineEdit()
+        entry0.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        grid.addWidget(entry0, r, 1)
+
+        but0 = QPushButton('選択')
+        but0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        but0.clicked.connect(lambda: self.click_db_create(entry0))
+        grid.addWidget(but0, r, 2)
+
+    def click_db_create(self, ent: QLineEdit):
+        dialog = QFileDialog()
+        if dialog.exec_():
+            fname = dialog.selectedFiles()[0]
+            print(fname)
+
 
 def main():
     app = QApplication(sys.argv)
