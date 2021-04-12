@@ -37,7 +37,7 @@ class Example(QMainWindow):
 
         self.initUI()
         self.setMinimumSize(QSize(600, 0))
-        self.setWindowTitle("郵便番号データベース作成")
+        self.setWindowTitle('郵便番号データベース作成')
         self.show()
 
     def initUI(self):
