@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import csv
-import os
 import sys
 from PySide6.QtCore import QSize
 from PySide6.QtSql import (
     QSqlDatabase,
     QSqlQuery,
-    QSqlTableModel,
 )
 from PySide6.QtWidgets import (
     QApplication,
@@ -20,16 +17,10 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMainWindow,
     QMessageBox,
-    QProgressBar,
     QPushButton,
     QScrollArea,
     QSizePolicy,
-    QStatusBar,
     QWidget,
-)
-from PySide6.QtCore import (
-    QThread,
-    Signal,
 )
 
 
@@ -139,20 +130,12 @@ class Example(QMainWindow):
             self.combo1.clear()
             while query.next():
                 self.combo1.addItem(query.value(0))
-        # con.close()
-
-    def show_error_message(self, con):
-        QMessageBox.critical(
-            None,
-            'Error!',
-            'Database Error: %s' % con.lastError().databaseText(),
-        )
 
     def on_address_1_index_changed(self):
         idx = self.combo1.currentIndex()
         address_1 = self.combo1.itemText(idx)
-        query = QSqlQuery()
 
+        query = QSqlQuery()
         sql = 'SELECT DISTINCT address_2 FROM postal WHERE address_1 = ? ORDER BY id;'
         query.prepare(sql)
         query.addBindValue(address_1)
@@ -195,6 +178,12 @@ class Example(QMainWindow):
             while query.next():
                 self.zipcode.setText(query.value(0))
 
+    def show_error_message(self, con):
+        QMessageBox.critical(
+            None,
+            'Error!',
+            'Database Error: %s' % con.lastError().databaseText(),
+        )
 
 
 def main():
