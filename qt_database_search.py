@@ -63,12 +63,30 @@ class Example(QMainWindow):
         entry0.setFrameShape(QFrame.Panel)
         entry0.setFrameShadow(QFrame.Sunken)
         entry0.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        grid.addWidget(entry0, r, 1)
+        grid.addWidget(entry0, r, 1, 1, 3)
 
         but0 = QPushButton('選択')
         but0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         but0.clicked.connect(lambda: self.click_db_create(entry0))
-        grid.addWidget(but0, r, 2)
+        grid.addWidget(but0, r, 5)
+
+        r += 1
+        lab10 = QLabel('検索キー')
+        lab10.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        grid.addWidget(lab10, r, 0)
+
+        lab11 = QLabel('都道府県')
+        lab11.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        grid.addWidget(lab11, r, 1)
+
+        lab12 = QLabel('市区町村')
+        lab12.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        grid.addWidget(lab12, r, 2)
+
+        lab13 = QLabel('住　　所')
+        lab13.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        grid.addWidget(lab13, r, 3)
+
 
     def click_db_create(self, ent: QLineEdit):
         dialog = QFileDialog()
