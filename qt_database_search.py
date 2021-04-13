@@ -29,7 +29,7 @@ class Example(QMainWindow):
         super().__init__()
 
         self.initUI()
-        self.setMinimumSize(QSize(600, 0))
+        self.setMinimumSize(QSize(800, 0))
         self.setWindowTitle('郵便番号検索')
         self.show()
 
@@ -85,13 +85,13 @@ class Example(QMainWindow):
 
         r += 1
         self.combo1 = QComboBox()
-        self.combo1.setMinimumWidth(80)
+        self.combo1.setMinimumWidth(100)
         self.combo1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.combo1.currentIndexChanged.connect(self.on_address_1_index_changed)
         grid.addWidget(self.combo1, r, 1)
 
         self.combo2 = QComboBox()
-        self.combo2.setMinimumWidth(150)
+        self.combo2.setMinimumWidth(200)
         self.combo2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.combo2.currentIndexChanged.connect(self.on_address_2_index_changed)
         grid.addWidget(self.combo2, r, 2)
