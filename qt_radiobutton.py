@@ -20,15 +20,21 @@ class Example(QWidget):
         self.show()
 
     def initUI(self):
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
+
         rb_A = QRadioButton('ラジオボタンＡ')
         # rad_A.toggle()
         rb_A.toggled.connect(self.checkboxChanged)
+        vbox.addWidget(rb_A)
 
         rb_B = QRadioButton('ラジオボタンＢ')
         rb_B.toggled.connect(self.checkboxChanged)
+        vbox.addWidget(rb_B)
 
         rb_C = QRadioButton('ラジオボタンＣ')
         rb_C.toggled.connect(self.checkboxChanged)
+        vbox.addWidget(rb_C)
 
         # Reference:
         # https://doc.qt.io/qtforpython/PySide6/QtWidgets/QRadioButton.html
@@ -42,13 +48,6 @@ class Example(QWidget):
         rb_group.addButton(rb_A)
         rb_group.addButton(rb_B)
         rb_group.addButton(rb_C)
-
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
-
-        vbox.addWidget(rb_A)
-        vbox.addWidget(rb_B)
-        vbox.addWidget(rb_C)
 
     def checkboxChanged(self, state):
         rb: QRadioButton = self.sender()
