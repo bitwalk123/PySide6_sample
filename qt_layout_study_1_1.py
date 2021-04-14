@@ -7,7 +7,6 @@ from PySide6.QtWidgets import (
     QGridLayout,
     QLabel,
     QLineEdit,
-    QSizePolicy,
     QWidget,
 )
 
