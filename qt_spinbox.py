@@ -19,15 +19,16 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
+
         sbox = QSpinBox()
         sbox.setRange(0, 100)
         sbox.setAlignment(Qt.AlignRight)
         sbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sbox.valueChanged.connect(self.show_value)
-
-        vbox = QVBoxLayout()
         vbox.addWidget(sbox)
-        self.setLayout(vbox)
+
         self.show()
 
     def show_value(self):
