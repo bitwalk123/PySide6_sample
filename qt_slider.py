@@ -18,15 +18,16 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
+
         slider = QSlider(orientation=Qt.Horizontal)
         slider.setTickPosition(QSlider.TicksBothSides)
         slider.setRange(0, 100)
         slider.setTickInterval(10)
         slider.valueChanged.connect(self.show_value)
-
-        vbox = QVBoxLayout()
         vbox.addWidget(slider)
-        self.setLayout(vbox)
+
         self.show()
 
     def show_value(self):
