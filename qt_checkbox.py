@@ -20,21 +20,20 @@ class Example(QWidget):
         self.show()
 
     def initUI(self):
-        cbox_A = QCheckBox('チェックボックスＡ')
-        cbox_A.toggle()
-        cbox_A.stateChanged.connect(self.checkboxChanged)
-
-        cbox_B = QCheckBox('チェックボックスＢ')
-        cbox_B.stateChanged.connect(self.checkboxChanged)
-
-        cbox_C = QCheckBox('チェックボックスＣ')
-        cbox_C.stateChanged.connect(self.checkboxChanged)
-
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
+        cbox_A = QCheckBox('チェックボックスＡ')
+        cbox_A.toggle()
+        cbox_A.stateChanged.connect(self.checkboxChanged)
         vbox.addWidget(cbox_A)
+
+        cbox_B = QCheckBox('チェックボックスＢ')
+        cbox_B.stateChanged.connect(self.checkboxChanged)
         vbox.addWidget(cbox_B)
+
+        cbox_C = QCheckBox('チェックボックスＣ')
+        cbox_C.stateChanged.connect(self.checkboxChanged)
         vbox.addWidget(cbox_C)
 
     def checkboxChanged(self, state):

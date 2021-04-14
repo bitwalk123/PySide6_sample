@@ -157,7 +157,7 @@ class Calculator(QWidget):
                 return math.sqrt(value)
             except Exception as e:
                 self.flag_error = True
-                #return e
+                # return e
                 return "Error"
 
     # -------------------------------------------------------------------------
@@ -244,7 +244,7 @@ class Calculator(QWidget):
             result = eval(expr)
         except Exception as e:
             self.flag_error = True
-            #result = e
+            # result = e
             result = "Error"
 
         disp_new = self.get_display_string(result)
