@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+
 class Example(QWidget):
     def __init__(self):
         super().__init__()
@@ -22,26 +23,25 @@ class Example(QWidget):
         self.show()
 
     def initUI(self):
+        hbox = QHBoxLayout()
+        self.setLayout(hbox)
+
         lab = QLabel('Name:')
         lab.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        hbox.addWidget(lab)
 
         self.line = QLineEdit()
         self.line.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        hbox.addWidget(self.line)
 
         but = QPushButton('OK')
         but.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         but.clicked.connect(self.clickMethod)
-
-        hbox = QHBoxLayout()
-        self.setLayout(hbox)
-
-        hbox.addWidget(lab)
-        hbox.addWidget(self.line)
         hbox.addWidget(but)
-
 
     def clickMethod(self):
         print('Your name: ' + self.line.text())
+
 
 def main():
     app = QApplication(sys.argv)
