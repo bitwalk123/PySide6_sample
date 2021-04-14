@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+
 class Example(QScrollArea):
     def __init__(self):
         super().__init__()
@@ -45,6 +46,7 @@ class Example(QScrollArea):
         ent2 = QLineEdit()
         grid.addWidget(ent2, row, 1)
         row += 1
+
 
 def main():
     app = QApplication(sys.argv)
