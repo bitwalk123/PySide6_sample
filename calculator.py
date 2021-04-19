@@ -359,7 +359,7 @@ class Register():
 
 def main():
     app = QApplication(sys.argv)
-    ex = Calculator()
+    calc = Calculator()
     sys.exit(app.exec_())
 
 
