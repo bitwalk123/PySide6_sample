@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+# coding: utf-8
+# reference
+# https://stackoverflow.com/questions/53252404/how-to-set-qlabel-using-base64-string-or-byte-array
+
+import sys
+from bz2 import decompress
+from PySide6.QtCore import QByteArray
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import (
+    QApplication,
+    QLabel,
+    QVBoxLayout,
+    QWidget,
+)
+
+
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+        self.setWindowTitle('Label')
+        self.show()
+
+    def initUI(self):
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
+
+        lab = QLabel()
+        lab.setPixmap(self.get_pixmap())
+        vbox.addWidget(lab)
+
+    def get_pixmap(self):
+        base64data = b'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'
+        byte_array = QByteArray.fromBase64(base64data)
+        pixmap = QPixmap()
+        pixmap.loadFromData(byte_array)
+
+        return pixmap
+
+
+def main():
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
