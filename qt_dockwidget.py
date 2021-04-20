@@ -2,9 +2,14 @@
 # Reference:
 # https://dungeonneko.hatenablog.com/entry/2015/07/19/123958
 import sys
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QAction
+from PySide6.QtWidgets import (
+    QApplication,
+    QDockWidget,
+    QMainWindow,
+    QTextEdit,
+)
 
 # entry point
 if __name__ == '__main__':
