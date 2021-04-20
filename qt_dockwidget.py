@@ -1,6 +1,6 @@
-# conding: utf-8
-# Reference:
-# https://dungeonneko.hatenablog.com/entry/2015/07/19/123958
+#!/usr/bin/env python
+# coding: utf-8
+
 import sys
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction
@@ -11,43 +11,55 @@ from PySide6.QtWidgets import (
     QTextEdit,
 )
 
-# entry point
+
+class Example(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+        self.setWindowTitle('DockWidget')
+        self.show()
+
+    def initUI(self):
+        main_te = QTextEdit()
+        dock_left = QDockWidget("Left")
+        dock_right = QDockWidget("Right")
+        dock_top = QDockWidget("Top")
+        dock_bottom = QDockWidget("Bottom")
+
+        self.setCentralWidget(main_te)
+        self.addDockWidget(Qt.LeftDockWidgetArea, dock_left)
+        self.addDockWidget(Qt.RightDockWidgetArea, dock_right)
+        self.addDockWidget(Qt.TopDockWidgetArea, dock_top)
+        self.addDockWidget(Qt.BottomDockWidgetArea, dock_bottom)
+        self.statusBar()
+
+        # Exit Action
+        action_exit = QAction('&Exit', self)
+        action_exit.setShortcut('Ctrl+Q')
+        action_exit.setStatusTip('Quit Application')
+        action_exit.triggered.connect(self.close)
+
+        mbar = self.menuBar()
+
+        menu1 = mbar.addMenu('&File')
+        menu1.addAction(action_exit)
+
+        # Window Menu: toggle widget's visibility
+        menu2 = mbar.addMenu('&Window')
+        menu2.addAction(dock_left.toggleViewAction())
+        menu2.addAction(dock_right.toggleViewAction())
+        menu2.addAction(dock_top.toggleViewAction())
+        menu2.addAction(dock_bottom.toggleViewAction())
+
+        tbar = self.addToolBar('Exit')
+        tbar.addAction(action_exit)
+
+
+def main():
+    app: QApplication = QApplication(sys.argv)
+    ex: Example = Example()
+    sys.exit(app.exec_())
+
+
 if __name__ == '__main__':
-    myapp = QApplication(sys.argv)
-    wnd = QMainWindow()
-
-    # Dock Widgets
-    wnd.__c = QTextEdit(wnd)
-    wnd.__l = QDockWidget("Left", wnd)
-    wnd.__r = QDockWidget("Right", wnd)
-    wnd.__t = QDockWidget("Top", wnd)
-    wnd.__b = QDockWidget("Bottom", wnd)
-
-    wnd.setCentralWidget(wnd.__c)
-    wnd.addDockWidget(Qt.LeftDockWidgetArea, wnd.__l)
-    wnd.addDockWidget(Qt.RightDockWidgetArea, wnd.__r)
-    wnd.addDockWidget(Qt.TopDockWidgetArea, wnd.__t)
-    wnd.addDockWidget(Qt.BottomDockWidgetArea, wnd.__b)
-    wnd.setWindowTitle('gui example')
-    wnd.statusBar()
-
-    # Exit Action
-    actionExit = QAction('&Exit', wnd)
-    actionExit.setShortcut('Ctrl+Q')
-    actionExit.setStatusTip('Quit application')
-    actionExit.triggered.connect(wnd.close)
-    m = wnd.menuBar().addMenu('&File')
-    m.addAction(actionExit)
-    t = wnd.addToolBar('Exit')
-    t.addAction(actionExit)
-
-    # Window Menu: toggle widget's visibility
-    m = wnd.menuBar().addMenu('&Window')
-    m.addAction(wnd.__l.toggleViewAction())
-    m.addAction(wnd.__r.toggleViewAction())
-    m.addAction(wnd.__t.toggleViewAction())
-    m.addAction(wnd.__b.toggleViewAction())
-
-    wnd.resize(640, 480)
-    wnd.show()
-    sys.exit(myapp.exec_())
+    main()
