@@ -24,20 +24,20 @@ class Hello(QWidget):
         print('Qt', PySide6.QtCore.__version__)
 
     def initUI(self):
+        layout = QVBoxLayout()
+        self.setLayout(layout)
+
         label = QLabel('こんにちは、世界！')
-        font: QFont = QFont()
+        font = QFont()
         font.setPointSize(24)
         label.setFont(font)
         label.setAlignment(QtCore.Qt.AlignCenter)
-
-        layout = QVBoxLayout()
         layout.addWidget(label)
-        self.setLayout(layout)
 
 
 def main():
-    app: QApplication = QApplication(sys.argv)
-    ex: Hello = Hello()
+    app = QApplication(sys.argv)
+    hello = Hello()
     sys.exit(app.exec_())
 
 
