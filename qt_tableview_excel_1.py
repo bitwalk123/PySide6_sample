@@ -5,13 +5,14 @@
 
 import pandas as pd
 import sys
-from typing import Any, List
+from typing import Any
 from PySide6.QtCore import (
     Qt,
     QModelIndex,
     QAbstractTableModel
 )
 from PySide6.QtGui import (
+    QFont,
     QPainter,
 )
 from PySide6.QtWidgets import (
@@ -81,10 +82,11 @@ class Example(QMainWindow):
         self.show()
 
     def initUI(self, df: pd.DataFrame):
-        table: QTableView = QTableView()
-        table.setWordWrap(False)
+        table = QTableView()
+        table.setStyleSheet('QHeaderView::section {color:#004; background-color:#ddf}')
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        table.setWordWrap(False)
 
         # table model
         table.setModel(ExampleTableModel(df))
