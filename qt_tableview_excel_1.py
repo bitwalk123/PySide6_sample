@@ -71,6 +71,15 @@ class Example(QMainWindow):
         # set table model
         headers = df.columns.values
         source = df.values.tolist()
+
+        a = source[0]
+        type_col = (list(map(type, a)))
+        if type_col[0] is str:
+            print('This is string')
+        else:
+            print('This is not string')
+
+
         table.setModel(SimpleTableModel(headers, source))
 
         self.setCentralWidget(table)
