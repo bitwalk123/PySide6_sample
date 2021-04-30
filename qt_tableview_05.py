@@ -4,12 +4,6 @@
 # http://www2.hawaii.edu/~takebaya/cent110/gui/qtablewidget.html
 
 import sys
-from PySide6.QtCore import (
-    Qt,
-    QModelIndex,
-    QAbstractTableModel
-)
-
 from PySide6.QtGui import (
     QAction,
 )
