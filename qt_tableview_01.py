@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
+# Reference:
+# https://pc-technique.info/2020/02/207/
 
 import sys
 from typing import Any
@@ -20,8 +22,8 @@ from PySide6.QtWidgets import (
 class SimpleTableModel(QAbstractTableModel):
     def __init__(self, source: list, headers: list):
         QAbstractTableModel.__init__(self)
-        self.source: list = source
-        self.headers: list = headers
+        self.source = source
+        self.headers = headers
 
     # QVariant QAbstractItemModel::data(const QModelIndex &index, int role = Qt::DisplayRole) const
     def data(self, index: QModelIndex, role: int) -> Any:
@@ -44,7 +46,7 @@ class SimpleTableModel(QAbstractTableModel):
 
 
 class Example(QMainWindow):
-    prefdata: list = [
+    prefdata = [
         ['茨城県', '310-8555 水戸市笠原町 978-6'],
         ['栃木県', '320-8501 宇都宮市塙田 1-1-20'],
         ['群馬県', '371-8570 前橋市大手町 1-1-1'],
@@ -53,7 +55,7 @@ class Example(QMainWindow):
         ['東京都', '163-8001 新宿区西新宿 2-8-1'],
         ['神奈川県', '231-8588 横浜市中区日本大通 1'],
     ]
-    header: list = ['都道府県', '県庁所在地']
+    header = ['都道府県', '県庁所在地']
 
     def __init__(self):
         super().__init__()
@@ -62,7 +64,7 @@ class Example(QMainWindow):
         self.show()
 
     def initUI(self):
-        table = QTableView()
+        table: QTableView = QTableView()
         table.setWordWrap(False)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -74,8 +76,8 @@ class Example(QMainWindow):
 
 
 def main():
-    app: QApplication = QApplication(sys.argv)
-    ex: QMainWindow = Example()
+    app = QApplication(sys.argv)
+    ex = Example()
     sys.exit(app.exec_())
 
 
