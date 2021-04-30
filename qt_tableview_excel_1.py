@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-
 # Reference:
 # https://pc-technique.info/2020/02/207/
 
@@ -30,7 +29,9 @@ class ExampleDelegate(QItemDelegate):
         type_cell = type(index.data())
         if type_cell is str:
             option.displayAlignment = Qt.AlignLeft
-        elif type_cell is int or type_cell is float:
+        elif type_cell is int:
+            option.displayAlignment = Qt.AlignRight
+        elif type_cell is float:
             option.displayAlignment = Qt.AlignRight
         else:
             option.displayAlignment = Qt.AlignCenter
@@ -39,18 +40,17 @@ class ExampleDelegate(QItemDelegate):
 
 
 class ExampleTableModel(QAbstractTableModel):
-    def __init__(self, headers: List, source: List):
+    def __init__(self, df: pd.DataFrame):
         super().__init__()
-        self.headers = headers
-        self.source = source
+        self.headers = df.columns.values
+        self.values = df.values.tolist()
 
-    # QVariant QAbstractItemModel::data(const QModelIndex &index, int role = Qt::DisplayRole) const
     def data(self, index: QModelIndex, role: int) -> Any:
         if role == Qt.DisplayRole:
-            return self.source[index.row()][index.column()]
+            return self.values[index.row()][index.column()]
 
     def rowCount(self, parent=QModelIndex()) -> int:
-        return len(self.source)
+        return len(self.values)
 
     def columnCount(self, parent=QModelIndex()) -> int:
         return len(self.headers)
@@ -80,18 +80,14 @@ class Example(QMainWindow):
         self.resize(400, 300)
         self.show()
 
-    def initUI(self, df):
+    def initUI(self, df: pd.DataFrame):
         table: QTableView = QTableView()
         table.setWordWrap(False)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
-        # set table model
-        headers = df.columns.values
-        source = df.values.tolist()
-
         # table model
-        table.setModel(ExampleTableModel(headers, source))
+        table.setModel(ExampleTableModel(df))
 
         # table item delegate
         table.setItemDelegate(ExampleDelegate())
