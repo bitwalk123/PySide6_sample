@@ -6,22 +6,40 @@
 
 import pandas as pd
 import sys
-from typing import Any
+from typing import Any, List
 from PySide6.QtCore import (
     Qt,
     QModelIndex,
     QAbstractTableModel
 )
+from PySide6.QtGui import (
+    QPainter,
+)
 from PySide6.QtWidgets import (
     QApplication,
     QHeaderView,
+    QItemDelegate,
     QMainWindow,
+    QStyleOptionViewItem,
     QTableView,
 )
 
 
-class SimpleTableModel(QAbstractTableModel):
-    def __init__(self, headers: list, source: list):
+class ExampleDelegate(QItemDelegate):
+    def paint(self, painter: QPainter, option: QStyleOptionViewItem, index: QModelIndex):
+        type_cell = type(index.data())
+        if type_cell is str:
+            option.displayAlignment = Qt.AlignLeft
+        elif type_cell is int or type_cell is float:
+            option.displayAlignment = Qt.AlignRight
+        else:
+            option.displayAlignment = Qt.AlignCenter
+
+        QItemDelegate.paint(self, painter, option, index)
+
+
+class ExampleTableModel(QAbstractTableModel):
+    def __init__(self, headers: List, source: List):
         super().__init__()
         self.headers = headers
         self.source = source
@@ -72,15 +90,11 @@ class Example(QMainWindow):
         headers = df.columns.values
         source = df.values.tolist()
 
-        a = source[0]
-        type_col = (list(map(type, a)))
-        if type_col[0] is str:
-            print('This is string')
-        else:
-            print('This is not string')
+        # table model
+        table.setModel(ExampleTableModel(headers, source))
 
-
-        table.setModel(SimpleTableModel(headers, source))
+        # table item delegate
+        table.setItemDelegate(ExampleDelegate())
 
         self.setCentralWidget(table)
 
