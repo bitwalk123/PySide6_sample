@@ -62,7 +62,7 @@ class Example(QMainWindow):
         self.show()
 
     def initUI(self):
-        table: QTableView = QTableView()
+        table = QTableView()
         table.setWordWrap(False)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
