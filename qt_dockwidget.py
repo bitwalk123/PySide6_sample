@@ -34,11 +34,9 @@ class Example(QMainWindow):
         self.statusBar()
 
         # Exit Action
-        action_exit = QAction('&Exit', self)
-        action_exit.setShortcut('Ctrl+Q')
-        action_exit.setStatusTip('Quit Application')
-        action_exit.triggered.connect(self.close)
+        action_exit = self.make_action_exit()
 
+        # Menu Bar
         mbar = self.menuBar()
 
         menu1 = mbar.addMenu('&File')
@@ -51,8 +49,16 @@ class Example(QMainWindow):
         menu2.addAction(dock_top.toggleViewAction())
         menu2.addAction(dock_bottom.toggleViewAction())
 
+        # Tool Bar
         tbar = self.addToolBar('Exit')
         tbar.addAction(action_exit)
+
+    def make_action_exit(self):
+        action_exit = QAction('&Exit', self)
+        action_exit.setShortcut('Ctrl+Q')
+        action_exit.setStatusTip('Quit Application')
+        action_exit.triggered.connect(self.close)
+        return action_exit
 
 
 def main():
