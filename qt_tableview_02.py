@@ -79,6 +79,7 @@ data_list = [
     ('XYLENES', 139.1, -47.8, 0.86)
 ]
 
+
 class MyTableModel(QAbstractTableModel):
     def __init__(self, parent, mylist, header, *args):
         QAbstractTableModel.__init__(self, parent, *args)
@@ -96,11 +97,13 @@ class MyTableModel(QAbstractTableModel):
             return None
         elif role != Qt.DisplayRole:
             return None
+
         return self.mylist[index.row()][index.column()]
 
     def headerData(self, col, orientation, role):
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:
             return self.header[col]
+
         return None
 
     def sort(self, col, order):
@@ -111,6 +114,7 @@ class MyTableModel(QAbstractTableModel):
         if order == Qt.DescendingOrder:
             self.mylist.reverse()
         self.emit(SIGNAL("layoutChanged()"))
+
 
 class Example(QWidget):
     def __init__(self, data_list, header):

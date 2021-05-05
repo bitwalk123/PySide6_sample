@@ -41,6 +41,7 @@ class CustomData:
         if str(name) != "":  # Non-empty string is OK.
             self.name = str(name)
             return True
+
         return False
 
     def validateAndSetAge(self, age) -> bool:
@@ -51,12 +52,14 @@ class CustomData:
                 return True
         except ValueError:
             pass  # Non-integer value is invalid.
+
         return False
 
     def validateAndSetCountry(self, country) -> bool:
         if str(country) in ["USA", "Japan", "US", "Russia", "Canada"]:  # Only 5 countries
             self.country = str(country)
             return True
+
         return False
 
 
