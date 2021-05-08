@@ -11,10 +11,7 @@ from PySide6.QtCore import (
     QModelIndex,
     QAbstractTableModel
 )
-from PySide6.QtGui import (
-    QFont,
-    QPainter,
-)
+from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QApplication,
     QHeaderView,
