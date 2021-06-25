@@ -1,3 +1,6 @@
+# Reference
+# https://realpython.com/python-pyqt-database/
+
 import sys
 from PySide6.QtSql import QSqlDatabase, QSqlQuery
 
