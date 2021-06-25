@@ -34,7 +34,7 @@ class Example(QMainWindow):
 
 
 # noinspection PyTypeChecker
-def createConnection():
+def create_connection():
     con = QSqlDatabase.addDatabase('QSQLITE')
     con.setDatabaseName('contacts.sqlite')
     if not con.open():
@@ -49,7 +49,7 @@ def createConnection():
 
 def main():
     app = QApplication(sys.argv)
-    if not createConnection():
+    if not create_connection():
         sys.exit(1)
     win = Example()
     win.show()
