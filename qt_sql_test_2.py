@@ -12,10 +12,10 @@ from PySide6.QtWidgets import (
 )
 
 
-class Contacts(QMainWindow):
+class Example(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle('QTableView Example')
+        self.setWindowTitle('QSqlQuery Example')
         self.resize(450, 250)
         # Set up the view and load the data
         self.view = QTableWidget()
@@ -47,9 +47,14 @@ def createConnection():
     return True
 
 
-app = QApplication(sys.argv)
-if not createConnection():
-    sys.exit(1)
-win = Contacts()
-win.show()
-sys.exit(app.exec_())
+def main():
+    app = QApplication(sys.argv)
+    if not createConnection():
+        sys.exit(1)
+    win = Example()
+    win.show()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
