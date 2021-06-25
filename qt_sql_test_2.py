@@ -33,6 +33,7 @@ class Contacts(QMainWindow):
         self.setCentralWidget(self.view)
 
 
+# noinspection PyTypeChecker
 def createConnection():
     con = QSqlDatabase.addDatabase('QSQLITE')
     con.setDatabaseName('contacts.sqlite')
