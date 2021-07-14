@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 import sys
 from PySide6.QtCore import (
     QSize,
@@ -10,6 +13,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QApplication,
     QGridLayout,
+    QLabel,
     QLineEdit,
     QPushButton,
     QScrollArea,
@@ -35,26 +39,52 @@ class Example(QScrollArea):
         grid = QGridLayout()
         base.setLayout(grid)
 
-        # Font Size
-        font_size: int = 24
-        # Font Pixel
-        font_pixel: int = int(font_size * QPaintDevice.physicalDpiY(self) / 72)
-        # Font object
-        font = QFont()
-        font.setPointSize(font_size)
-
         # QLineEdit (Entry)
-        ledit = QLineEdit()
-        ledit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        ledit.setFont(font)
-        grid.addWidget(ledit, 0, 0)
+        label_0 = QLabel('Sample for different font/icon sizes')
+        label_0.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        grid.addWidget(label_0, 0, 0, 1, 2)
 
-        # QPushButton
-        button = QPushButton()
-        button.setIcon(QIcon('pencil.png'))
-        button.setIconSize(QSize(font_pixel, font_pixel))
-        button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
-        grid.addWidget(button, 0, 1)
+        # Font Size - Large
+        font_size_1: int = 24
+        # Font Pixel
+        font_pixel_1: int = int(font_size_1 * QPaintDevice.physicalDpiY(self) / 72)
+        # Font object
+        font_1 = QFont()
+        font_1.setPointSize(font_size_1)
+
+        # QLineEdit (1)
+        ledit_1 = QLineEdit()
+        ledit_1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        ledit_1.setFont(font_1)
+        grid.addWidget(ledit_1, 1, 0)
+
+        # QPushButton (1)
+        button_1 = QPushButton()
+        button_1.setIcon(QIcon('pencil.png'))
+        button_1.setIconSize(QSize(font_pixel_1, font_pixel_1))
+        button_1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        grid.addWidget(button_1, 1, 1)
+
+        # Font Size - Small
+        font_size_2: int = 9
+        # Font Pixel
+        font_pixel_2: int = int(font_size_2 * QPaintDevice.physicalDpiY(self) / 72)
+        # Font object
+        font_2 = QFont()
+        font_2.setPointSize(font_size_2)
+
+        # QLineEdit (2)
+        ledit_2 = QLineEdit()
+        ledit_2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        ledit_2.setFont(font_2)
+        grid.addWidget(ledit_2, 2, 0)
+
+        # QPushButton (2)
+        button_2 = QPushButton()
+        button_2.setIcon(QIcon('pencil.png'))
+        button_2.setIconSize(QSize(font_pixel_1, font_pixel_2))
+        button_2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        grid.addWidget(button_2, 2, 1)
 
 
 def main():
