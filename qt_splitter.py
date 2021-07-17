@@ -21,6 +21,8 @@ class Example(QWidget):
     def __init__(self):
         super(Example, self).__init__()
         self.initUI()
+        self.setGeometry(300, 300, 300, 200)
+        self.setWindowTitle('QSplitter demo')
 
     def initUI(self):
         hbox = QHBoxLayout(self)
@@ -45,15 +47,12 @@ class Example(QWidget):
         self.setLayout(hbox)
         QApplication.setStyle(QStyleFactory.create('Cleanlooks'))
 
-        self.setGeometry(300, 300, 300, 200)
-        self.setWindowTitle('QSplitter demo')
-        self.show()
-
 
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

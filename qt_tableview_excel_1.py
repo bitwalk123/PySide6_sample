@@ -76,7 +76,6 @@ class Example(QMainWindow):
         self.initUI(df)
         self.setWindowTitle('TableView')
         self.resize(400, 300)
-        self.show()
 
     def initUI(self, df: pd.DataFrame):
         table = QTableView()
@@ -97,7 +96,8 @@ class Example(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

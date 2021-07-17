@@ -39,7 +39,6 @@ class Example(QWidget):
         vbox.addWidget(dial)
         vbox.addWidget(label)
         self.setLayout(vbox)
-        self.show()
 
     def dialer_changed(self, d: QDial, lab: QLabel):
         value = d.value()
@@ -61,7 +60,8 @@ def main():
     # print(QStyleFactory.keys())
     app.setStyle('Fusion')
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

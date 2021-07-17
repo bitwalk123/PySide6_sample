@@ -31,7 +31,6 @@ class Example(QMainWindow):
         self.initUI()
         self.setMinimumSize(QSize(800, 0))
         self.setWindowTitle('郵便番号検索')
-        self.show()
 
     def initUI(self):
         area = QScrollArea()
@@ -113,7 +112,7 @@ class Example(QMainWindow):
         filters: str = 'SQLite file (*.db *.sqlite *.sqlite3 *db3);; All (*.*)'
         dialog.setNameFilter(filters)
 
-        if dialog.exec_():
+        if dialog.exec():
             filename = dialog.selectedFiles()[0]
             ent.setText(filename)
             self.connect_database(filename)
@@ -126,7 +125,7 @@ class Example(QMainWindow):
             return
         query = QSqlQuery()
         sql = 'SELECT DISTINCT address_1 FROM postal ORDER BY id;'
-        if query.exec_(sql):
+        if query.exec(sql):
             self.combo1.clear()
             while query.next():
                 self.combo1.addItem(query.value(0))
@@ -139,7 +138,7 @@ class Example(QMainWindow):
         sql = 'SELECT DISTINCT address_2 FROM postal WHERE address_1 = ? ORDER BY id;'
         query.prepare(sql)
         query.addBindValue(address_1)
-        if query.exec_():
+        if query.exec():
             self.combo2.clear()
             while query.next():
                 self.combo2.addItem(query.value(0))
@@ -155,7 +154,7 @@ class Example(QMainWindow):
         query.prepare(sql)
         query.addBindValue(address_1)
         query.addBindValue(address_2)
-        if query.exec_():
+        if query.exec():
             self.combo3.clear()
             while query.next():
                 self.combo3.addItem(query.value(0))
@@ -174,7 +173,7 @@ class Example(QMainWindow):
         query.addBindValue(address_1)
         query.addBindValue(address_2)
         query.addBindValue(address_3)
-        if query.exec_():
+        if query.exec():
             while query.next():
                 self.zipcode.setText(query.value(0))
 
@@ -189,7 +188,8 @@ class Example(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

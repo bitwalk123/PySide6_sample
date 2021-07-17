@@ -16,7 +16,6 @@ class Example(QWidget):
         super().__init__()
         self.initUI()
         self.setWindowTitle("Combobox")
-        self.show()
 
     def initUI(self):
         cb = QComboBox(self)
@@ -38,7 +37,8 @@ class Example(QWidget):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

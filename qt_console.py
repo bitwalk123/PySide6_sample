@@ -219,4 +219,4 @@ if __name__ == '__main__':
     redirect = Redirect(console.errorwrite)
     with redirect_stdout(console), redirect_stderr(redirect):
         console.show()
-        sys.exit(app.exec_())
+        sys.exit(app.exec())

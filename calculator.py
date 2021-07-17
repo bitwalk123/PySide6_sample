@@ -61,7 +61,6 @@ class Calculator(QWidget):
         self.initUI()
         self.setWindowTitle('Calculator')
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
-        self.show()
 
     def initUI(self):
         grid = QGridLayout()
@@ -360,7 +359,8 @@ class Register():
 def main():
     app = QApplication(sys.argv)
     calc = Calculator()
-    sys.exit(app.exec_())
+    calc.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

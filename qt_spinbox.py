@@ -29,8 +29,6 @@ class Example(QWidget):
         sbox.valueChanged.connect(self.show_value)
         vbox.addWidget(sbox)
 
-        self.show()
-
     def show_value(self):
         spin: QSpinBox = self.sender()
         print(spin.value())
@@ -39,7 +37,8 @@ class Example(QWidget):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

@@ -16,7 +16,6 @@ class Example(QWidget):
         super().__init__()
         self.initUI()
         self.setWindowTitle('PushButton')
-        self.show()
 
     def initUI(self):
         vbox = QVBoxLayout()
@@ -33,9 +32,10 @@ class Example(QWidget):
 
 
 def main():
-    app: QApplication = QApplication(sys.argv)
-    ex: Example = Example()
-    sys.exit(app.exec_())
+    app = QApplication(sys.argv)
+    ex = Example()
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

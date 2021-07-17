@@ -17,7 +17,6 @@ class Example(QMainWindow):
         super().__init__()
         self.initUI()
         self.setWindowTitle('DockWidget')
-        self.show()
 
     def initUI(self):
         main_te = QTextEdit()
@@ -62,9 +61,10 @@ class Example(QMainWindow):
 
 
 def main():
-    app: QApplication = QApplication(sys.argv)
-    ex: Example = Example()
-    sys.exit(app.exec_())
+    app = QApplication(sys.argv)
+    ex = Example()
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

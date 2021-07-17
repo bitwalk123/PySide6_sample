@@ -122,7 +122,6 @@ class Example(QWidget):
         self.initUI(data_list, header)
         self.resize(600, 400)
         self.setWindowTitle("Click on column title to sort")
-        self.show()
 
     def initUI(self, data_list, header):
         table_view = QTableView()
@@ -146,7 +145,8 @@ class Example(QWidget):
 def main():
     app: QApplication = QApplication(sys.argv)
     ex = Example(data_list, header)
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

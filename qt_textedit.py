@@ -20,7 +20,6 @@ class Example(QMainWindow):
         self.initUI()
         self.setWindowTitle("QTextEdit")
         self.resize(300, 270)
-        self.show()
 
     def initUI(self):
         base = QWidget()
@@ -50,7 +49,8 @@ class Example(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

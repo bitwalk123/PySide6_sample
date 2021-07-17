@@ -22,8 +22,6 @@ class Example(QWidget):
         self.initUI()
         self.Button()
         self.setWindowTitle('Qt icons')
-        self.setGeometry(300, 300, 300, 300)
-        self.show()
 
     def initUI(self):
         style = self.style()
@@ -229,7 +227,8 @@ class Example(QWidget):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

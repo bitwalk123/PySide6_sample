@@ -22,7 +22,6 @@ class Example(QMainWindow):
         self.initUI()
         self.resize(700, 400)
         self.setWindowTitle("My GUI Program")
-        self.show()
 
     def initUI(self):
         self.initMenu()
@@ -61,7 +60,8 @@ class Example(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

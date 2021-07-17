@@ -27,7 +27,6 @@ class Example(QMainWindow):
 
         self.setWindowTitle('ProgressBar & Thread')
         self.resize(300, 100)
-        self.show()
 
     def initUI(self):
         self.but = QPushButton('START')
@@ -76,7 +75,8 @@ class TaskThread(QThread):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

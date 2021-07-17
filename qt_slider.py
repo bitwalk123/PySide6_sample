@@ -28,8 +28,6 @@ class Example(QWidget):
         slider.valueChanged.connect(self.show_value)
         vbox.addWidget(slider)
 
-        self.show()
-
     def show_value(self):
         sld: QSlider = self.sender()
         print(sld.value())
@@ -38,7 +36,8 @@ class Example(QWidget):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

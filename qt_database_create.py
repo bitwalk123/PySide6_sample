@@ -39,7 +39,6 @@ class Example(QMainWindow):
         self.initUI()
         self.setMinimumSize(QSize(600, 0))
         self.setWindowTitle('郵便番号データベース作成')
-        self.show()
 
     def initUI(self):
         area = QScrollArea()
@@ -194,7 +193,8 @@ class TaskThread(QThread):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

@@ -18,7 +18,6 @@ class Hello(QWidget):
         super().__init__()
         self.initUI()
         self.setWindowTitle('Hello World!')
-        self.show()
 
         print('PySide', PySide6.__version__)
         print('Qt', PySide6.QtCore.__version__)
@@ -38,7 +37,8 @@ class Hello(QWidget):
 def main():
     app = QApplication(sys.argv)
     hello = Hello()
-    sys.exit(app.exec_())
+    hello.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

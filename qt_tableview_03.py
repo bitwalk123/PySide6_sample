@@ -75,7 +75,6 @@ class Example(QMainWindow):
         super().__init__()
         self.initUI()
         self.setWindowTitle('Test of QTableView')
-        self.show()
 
     def initUI(self):
         self.root_widget: QWidget = QWidget()
@@ -90,7 +89,8 @@ class Example(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

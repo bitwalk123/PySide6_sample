@@ -20,7 +20,6 @@ class Example(QScrollArea):
 
         self.initUI()
         self.setWindowTitle('Layout 1.2')
-        self.show()
 
     def initUI(self):
         base = QWidget()
@@ -51,7 +50,8 @@ class Example(QScrollArea):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':
