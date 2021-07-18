@@ -15,10 +15,10 @@ from PySide6.QtCharts import (
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
         self.resize(500, 300)
 
-    def initUI(self):
+    def init_ui(self):
         self.series = QLineSeries()
         self.series.append(0, 6)
         self.series.append(2, 4)
@@ -30,6 +30,7 @@ class Example(QMainWindow):
         self.series.append(QPointF(17, 6))
         self.series.append(QPointF(18, 3))
         self.series.append(QPointF(20, 2))
+
         self.chart = QChart()
         self.chart.legend().hide()
         self.chart.addSeries(self.series)
