@@ -35,7 +35,7 @@ class LineChart(QChartView):
         chart.legend().hide()
         chart.addSeries(series)
         chart.createDefaultAxes()
-        chart.setTitle('Simple line chart example')
+        chart.setTitle('Simple linechart example')
 
         return chart
 
@@ -45,7 +45,7 @@ class Example(QMainWindow):
         super().__init__()
         linechart = LineChart()
         self.setCentralWidget(linechart)
-        self.resize(400, 300)
+        self.resize(500, 300)
         self.setWindowTitle('LineChart')
 
 
