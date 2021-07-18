@@ -8,7 +8,8 @@ from PySide6.QtCharts import (
     QLineSeries
 )
 
-
+# Reference
+#   https://doc.qt.io/qt-5/qtcharts-linechart-example.html
 class Example(QChartView):
     def __init__(self):
         super().__init__()
