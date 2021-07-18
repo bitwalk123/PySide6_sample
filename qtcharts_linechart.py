@@ -1,23 +1,25 @@
 import sys
-from PySide6.QtCore import QPointF
-from PySide6.QtGui import QPainter
-from PySide6.QtWidgets import QApplication
 from PySide6.QtCharts import (
     QChart,
     QChartView,
     QLineSeries
 )
+from PySide6.QtCore import QPointF
+from PySide6.QtGui import QPainter
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+)
+
 
 # Reference
 #   https://doc.qt.io/qt-5/qtcharts-linechart-example.html
-class Example(QChartView):
+class LineChart(QChartView):
     def __init__(self):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
         self.setRenderHint(QPainter.Antialiasing)
-        self.resize(400, 300)
-        self.setWindowTitle('LineChart')
 
     def init_ui(self):
         series = QLineSeries()
@@ -36,6 +38,15 @@ class Example(QChartView):
         chart.setTitle('Simple line chart example')
 
         return chart
+
+
+class Example(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        linechart = LineChart()
+        self.setCentralWidget(linechart)
+        self.resize(400, 300)
+        self.setWindowTitle('LineChart')
 
 
 def main():
