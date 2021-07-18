@@ -69,8 +69,8 @@ class BarChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        linechart = BarChart()
-        self.setCentralWidget(linechart)
+        barchart = BarChart()
+        self.setCentralWidget(barchart)
         self.resize(500, 300)
         self.setWindowTitle('BarChart')
 

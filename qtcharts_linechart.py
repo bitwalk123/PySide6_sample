@@ -2,7 +2,7 @@ import sys
 from PySide6.QtCharts import (
     QChart,
     QChartView,
-    QLineSeries
+    QLineSeries,
 )
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
