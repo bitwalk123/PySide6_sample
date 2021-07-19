@@ -25,19 +25,14 @@ class BoxPlot(QChartView):
         self.setRenderHint(QPainter.Antialiasing)
 
     def init_ui(self):
-        # acmeSeries = QBoxPlotSeries()
-        # acmeSeries.setName('Acme Ltd')
         acmeSeries = self.box_reader('acme_data.txt', 'Acme Ltd')
-
-        # boxWhiskSeries = QBoxPlotSeries()
-        # boxWhiskSeries.setName('BoxWhisk Inc')
         boxWhiskSeries = self.box_reader('boxwhisk_data.txt', 'BoxWhisk Inc')
 
         chart = QChart()
         chart.addSeries(acmeSeries)
         chart.addSeries(boxWhiskSeries)
         chart.setTitle('Acme Ltd and BoxWhisk Inc share deviation in 2012')
-        # chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setAnimationOptions(QChart.SeriesAnimations)
         chart.createDefaultAxes()
         chart.axes(Qt.Vertical)[0].setMin(15.0)
         chart.axes(Qt.Horizontal)[0].setMax(34.0)
