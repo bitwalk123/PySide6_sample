@@ -47,10 +47,10 @@ class BoxPlot(QChartView):
         series.setName(name_series)
 
         f = open(name_file, 'r')
-        datalist = f.readlines()
+        linedata = f.readlines()
         f.close()
 
-        for data in datalist:
+        for data in linedata:
             list_element = data.strip().split()
             if len(list_element) == 0:
                 continue
