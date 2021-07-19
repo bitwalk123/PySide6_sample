@@ -16,8 +16,8 @@ from PySide6.QtWidgets import (
 
 
 # Reference
-#   https://doc.qt.io/qt-5/qtcharts-linechart-example.html
-class Boxplot(QChartView):
+#   https://doc.qt.io/qt-5/qtcharts-boxplotchart-example.html
+class BoxPlot(QChartView):
     def __init__(self):
         super().__init__()
         chart = self.init_ui()
@@ -25,16 +25,17 @@ class Boxplot(QChartView):
         self.setRenderHint(QPainter.Antialiasing)
 
     def init_ui(self):
-        series = QBoxPlotSeries()
-        series.setName('Test')
+        # acmeSeries = QBoxPlotSeries()
+        # acmeSeries.setName('Acme Ltd')
+        acmeSeries = self.box_reader('acme_data.txt', 'Acme Ltd')
 
-        set01 = QBoxSet('Sample')
-        set01 << 27.74 << 27.28 << 27.86 << 28.05 << 28.64 << 27.47 << 28.30 << 28.22 << 28.72 << 26.50 << 26.62 << 26.50 << 26.15 << 26.47 << 26.41 << 25.78 << 24.82 << 24.89 << 24.88 << 24.60 << 23.85
-
-        series.append(set01)
+        # boxWhiskSeries = QBoxPlotSeries()
+        # boxWhiskSeries.setName('BoxWhisk Inc')
+        boxWhiskSeries = self.box_reader('boxwhisk_data.txt', 'BoxWhisk Inc')
 
         chart = QChart()
-        chart.addSeries(series)
+        chart.addSeries(acmeSeries)
+        chart.addSeries(boxWhiskSeries)
         chart.setTitle('Acme Ltd and BoxWhisk Inc share deviation in 2012')
         # chart.setAnimationOptions(QChart.SeriesAnimations)
         chart.createDefaultAxes()
@@ -46,14 +47,37 @@ class Boxplot(QChartView):
 
         return chart
 
+    def box_reader(self, name_file: str, name_series: str):
+        series = QBoxPlotSeries()
+        series.setName(name_series)
+
+        f = open(name_file, 'r')
+        datalist = f.readlines()
+        f.close()
+
+        for data in datalist:
+            list_element = data.strip().split()
+            if len(list_element) == 0:
+                continue
+            if list_element[0] == '#':
+                continue
+
+            boxset = QBoxSet(list_element[0])
+            for i in range(1, len(list_element)):
+                boxset.append(float(list_element[i]))
+
+            series.append(boxset)
+
+        return series
+
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        boxplot = Boxplot()
+        boxplot = BoxPlot()
         self.setCentralWidget(boxplot)
-        self.resize(500, 300)
-        self.setWindowTitle('LineChart')
+        self.resize(700, 400)
+        self.setWindowTitle('BoxPlot')
 
 
 def main():
