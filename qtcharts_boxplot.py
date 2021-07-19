@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 # Reference
-#   https://doc.qt.io/qt-5/qtcharts-boxplotchart-example.html
+#   https://doc.qt.io/qt-6/qtcharts-boxplotchart-example.html
 
 import sys
 from PySide6.QtCharts import (
@@ -24,15 +24,15 @@ def box_data_reader(name_file: str, name_series: str):
 
     with open(name_file) as f:
         for line in f:
-            list_data = line.strip().split()
-            if len(list_data) == 0:
+            values = line.strip().split()
+            if len(values) == 0:
                 continue
-            if list_data[0] == '#':
+            if values[0] == '#':
                 continue
 
-            boxset = QBoxSet(list_data[0])
-            for i in range(1, len(list_data)):
-                boxset.append(float(list_data[i]))
+            boxset = QBoxSet(values[0])
+            for i in range(1, len(values)):
+                boxset.append(float(values[i]))
 
             series.append(boxset)
 

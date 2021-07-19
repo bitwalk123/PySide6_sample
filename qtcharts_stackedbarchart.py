@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 # Reference
-#   https://doc.qt.io/qt-5/qtcharts-stackedbarchart-example.html
+#   https://doc.qt.io/qt-6/qtcharts-stackedbarchart-example.html
 import sys
 from PySide6.QtCharts import (
     QBarCategoryAxis,
