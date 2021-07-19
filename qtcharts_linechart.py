@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# coding: utf-8
+# Reference
+#   https://doc.qt.io/qt-5/qtcharts-linechart-example.html
 import sys
 from PySide6.QtCharts import (
     QChart,
@@ -12,8 +16,6 @@ from PySide6.QtWidgets import (
 )
 
 
-# Reference
-#   https://doc.qt.io/qt-5/qtcharts-linechart-example.html
 class LineChart(QChartView):
     def __init__(self):
         super().__init__()

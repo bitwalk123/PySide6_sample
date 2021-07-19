@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# coding: utf-8
+# Reference
+#   https://doc.qt.io/qt-5/qtcharts-lineandbar-example.html
 import sys
 from PySide6.QtCharts import (
     QBarCategoryAxis,
@@ -19,8 +23,6 @@ from PySide6.QtWidgets import (
 )
 
 
-# Reference
-#   https://doc.qt.io/qt-5/qtcharts-lineandbar-example.html
 class LineBarChart(QChartView):
     def __init__(self):
         super().__init__()

@@ -1,13 +1,16 @@
+#!/usr/bin/env python
+# coding: utf-8
+# Reference
+#   https://doc.qt.io/qt-5/qtcharts-boxplotchart-example.html
+
 import sys
 from PySide6.QtCharts import (
     QChart,
     QChartView,
     QBoxPlotSeries,
     QBoxSet,
-    QLineSeries,
-    QValueAxis,
 )
-from PySide6.QtCore import QPointF, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QApplication,
@@ -15,8 +18,27 @@ from PySide6.QtWidgets import (
 )
 
 
-# Reference
-#   https://doc.qt.io/qt-5/qtcharts-boxplotchart-example.html
+def box_data_reader(name_file: str, name_series: str):
+    series = QBoxPlotSeries()
+    series.setName(name_series)
+
+    with open(name_file) as f:
+        for line in f:
+            list_data = line.strip().split()
+            if len(list_data) == 0:
+                continue
+            if list_data[0] == '#':
+                continue
+
+            boxset = QBoxSet(list_data[0])
+            for i in range(1, len(list_data)):
+                boxset.append(float(list_data[i]))
+
+            series.append(boxset)
+
+    return series
+
+
 class BoxPlot(QChartView):
     def __init__(self):
         super().__init__()
@@ -25,12 +47,12 @@ class BoxPlot(QChartView):
         self.setRenderHint(QPainter.Antialiasing)
 
     def init_ui(self):
-        acmeSeries = self.box_reader('acme_data.txt', 'Acme Ltd')
-        boxWhiskSeries = self.box_reader('boxwhisk_data.txt', 'BoxWhisk Inc')
+        series_acme = box_data_reader('acme_data.txt', 'Acme Ltd')
+        series_boxwhisk = box_data_reader('boxwhisk_data.txt', 'BoxWhisk Inc')
 
         chart = QChart()
-        chart.addSeries(acmeSeries)
-        chart.addSeries(boxWhiskSeries)
+        chart.addSeries(series_acme)
+        chart.addSeries(series_boxwhisk)
         chart.setTitle('Acme Ltd and BoxWhisk Inc share deviation in 2012')
         chart.setAnimationOptions(QChart.SeriesAnimations)
         chart.createDefaultAxes()
@@ -41,29 +63,6 @@ class BoxPlot(QChartView):
         chart.legend().setAlignment(Qt.AlignBottom)
 
         return chart
-
-    def box_reader(self, name_file: str, name_series: str):
-        series = QBoxPlotSeries()
-        series.setName(name_series)
-
-        f = open(name_file, 'r')
-        linedata = f.readlines()
-        f.close()
-
-        for data in linedata:
-            list_element = data.strip().split()
-            if len(list_element) == 0:
-                continue
-            if list_element[0] == '#':
-                continue
-
-            boxset = QBoxSet(list_element[0])
-            for i in range(1, len(list_element)):
-                boxset.append(float(list_element[i]))
-
-            series.append(boxset)
-
-        return series
 
 
 class Example(QMainWindow):
