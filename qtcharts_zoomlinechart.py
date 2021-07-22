@@ -34,7 +34,7 @@ class ZoomLineChart(QChartView):
     def init_ui(self):
         series = QLineSeries()
         for i in range(500):
-            p = QPointF(i, math.sin(math.pi / 50 * i) * 100 + QRandomGenerator.global_().bounded(20))
+            p = QPointF(i, math.sin(math.pi / 50 * i) * 100 + QRandomGenerator.global_().bounded(50))
             series << p
 
         chart = QChart()
