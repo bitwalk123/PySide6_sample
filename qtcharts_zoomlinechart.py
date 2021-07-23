@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 # Reference
-#   https://doc.qt.io/qt-6/qtcharts-linechart-example.html
+#   hhttps://doc.qt.io/qt-6/qtcharts-zoomlinechart-example.html
 import math
 import sys
 from PySide6.QtCharts import (
