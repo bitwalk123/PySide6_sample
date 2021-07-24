@@ -10,7 +10,6 @@ from PySide6.QtCharts import (
     QLineSeries,
 )
 from PySide6.QtCore import (
-    QEvent,
     QPointF,
     QRandomGenerator
 )
