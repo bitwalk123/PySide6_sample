@@ -34,29 +34,29 @@ class ScatterChart(QChartView):
         self.setRenderHint(QPainter.Antialiasing)
 
     def init_ui(self):
-        series0 = QScatterSeries()
-        series0.setName('scatter1')
-        series0.setMarkerShape(QScatterSeries.MarkerShapeCircle)
-        series0.setMarkerSize(15.0)
-
         series1 = QScatterSeries()
-        series1.setName('scatter2')
-        series1.setMarkerShape(QScatterSeries.MarkerShapeRectangle)
-        series1.setMarkerSize(20.0)
+        series1.setName('scatter1')
+        series1.setMarkerShape(QScatterSeries.MarkerShapeCircle)
+        series1.setMarkerSize(15.0)
 
         series2 = QScatterSeries()
-        series2.setName('scatter3')
+        series2.setName('scatter2')
         series2.setMarkerShape(QScatterSeries.MarkerShapeRectangle)
-        series2.setMarkerSize(30.0)
+        series2.setMarkerSize(20.0)
 
-        series0.append(0, 6)
-        series0.append(2, 4)
-        series0.append(3, 8)
-        series0.append(7, 4)
-        series0.append(10, 5)
+        series3 = QScatterSeries()
+        series3.setName('scatter3')
+        series3.setMarkerShape(QScatterSeries.MarkerShapeRectangle)
+        series3.setMarkerSize(30.0)
 
-        series1 << QPointF(1, 1) << QPointF(3, 3) << QPointF(7, 6) << QPointF(8, 3) << QPointF(10, 2)
-        series2 << QPointF(1, 5) << QPointF(4, 6) << QPointF(6, 3) << QPointF(9, 5)
+        series1.append(0, 6)
+        series1.append(2, 4)
+        series1.append(3, 8)
+        series1.append(7, 4)
+        series1.append(10, 5)
+
+        series2 << QPointF(1, 1) << QPointF(3, 3) << QPointF(7, 6) << QPointF(8, 3) << QPointF(10, 2)
+        series3 << QPointF(1, 5) << QPointF(4, 6) << QPointF(6, 3) << QPointF(9, 5)
 
         starPath = QPainterPath()
         starPath.moveTo(28, 15)
@@ -75,13 +75,13 @@ class ScatterChart(QChartView):
         painter.drawPath(starPath)
         painter.end()
 
-        series2.setBrush(star)
-        series2.setPen(QColor(Qt.transparent))
+        series3.setBrush(star)
+        series3.setPen(QColor(Qt.transparent))
 
         chart = QChart()
-        chart.addSeries(series0)
         chart.addSeries(series1)
         chart.addSeries(series2)
+        chart.addSeries(series3)
 
         chart.setTitle('Simple scatterchart example')
         chart.createDefaultAxes()
