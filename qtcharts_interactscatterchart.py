@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 # Reference
-#   https://doc.qt.io/qt-6/qtcharts-scatterchart-example.html
+#   https://doc.qt.io/qt-6/qtcharts-scatterinteractions-example.html
 import math
 import sys
 from PySide6.QtCharts import (
