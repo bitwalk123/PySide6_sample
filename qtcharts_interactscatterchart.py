@@ -43,6 +43,7 @@ class InteractScatterChart(QChartView):
             for j in range(8):
                 y = 0.5 * (j + 1)
                 self.series1 << QPointF(x, y)
+        self.series1.clicked.connect(self.handleClickedPoint)
 
         self.series2.setName('scatter2')
         self.series2.setColor('magenta')
@@ -56,7 +57,6 @@ class InteractScatterChart(QChartView):
         chart.createDefaultAxes()
         chart.axes(Qt.Horizontal)[0].setRange(0, 4.5)
         chart.axes(Qt.Vertical)[0].setRange(0, 4.5)
-        self.series1.clicked.connect(self.handleClickedPoint)
 
         return chart
 
