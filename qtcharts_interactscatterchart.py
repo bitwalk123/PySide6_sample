@@ -26,7 +26,7 @@ from PySide6.QtWidgets import (
 )
 
 
-class ScatterChart(QChartView):
+class InteractScatterChart(QChartView):
     def __init__(self):
         super().__init__()
         self.series1 = QScatterSeries()
@@ -81,7 +81,7 @@ class ScatterChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        scatter = ScatterChart()
+        scatter = InteractScatterChart()
         self.setCentralWidget(scatter)
         self.resize(500, 300)
         self.setWindowTitle('ScatterChart')
