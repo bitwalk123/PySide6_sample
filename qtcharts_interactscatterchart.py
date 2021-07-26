@@ -37,6 +37,7 @@ class InteractScatterChart(QChartView):
 
     def init_ui(self):
         self.series1.setName('scatter1')
+        self.series1.setColor('cyan')
         for i in range(8):
             x = 0.5 * (i + 1)
             for j in range(8):
@@ -44,6 +45,7 @@ class InteractScatterChart(QChartView):
                 self.series1 << QPointF(x, y)
 
         self.series2.setName('scatter2')
+        self.series2.setColor('magenta')
 
         chart = QChart()
         chart.legend().hide()
