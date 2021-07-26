@@ -86,7 +86,7 @@ class Example(QMainWindow):
         scatter = InteractScatterChart()
         self.setCentralWidget(scatter)
         self.resize(500, 300)
-        self.setWindowTitle('ScatterChart')
+        self.setWindowTitle('InteractScatterChart')
 
 
 def main():
