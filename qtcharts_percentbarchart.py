@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 # Reference
-#   https://doc.qt.io/qt-6/qtcharts-stackedbarchart-example.html
+#   https://doc.qt.io/qt-6/qtcharts-percentbarchart-example.html
 import sys
 from PySide6.QtCharts import (
     QBarCategoryAxis,
@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 
-class StackedBarChart(QChartView):
+class PercentBarChart(QChartView):
     def __init__(self):
         super().__init__()
         chart = self.init_ui()
@@ -48,7 +48,7 @@ class StackedBarChart(QChartView):
 
         chart = QChart()
         chart.addSeries(series)
-        chart.setTitle('Simple stackedbarchart example')
+        chart.setTitle('Simple percentbarchart example')
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
@@ -70,10 +70,10 @@ class StackedBarChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        stackedbarchart = StackedBarChart()
+        stackedbarchart = PercentBarChart()
         self.setCentralWidget(stackedbarchart)
         self.resize(500, 300)
-        self.setWindowTitle('StackedBarChart')
+        self.setWindowTitle('PercentBarChart')
 
 
 def main():
