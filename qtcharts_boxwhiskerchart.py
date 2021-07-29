@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 
-def box_data_reader(name_file: str, name_series: str):
+def box_data_reader(name_file: str, name_series: str) -> QBoxPlotSeries:
     series = QBoxPlotSeries()
     series.setName(name_series)
 
