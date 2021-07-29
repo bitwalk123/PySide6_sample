@@ -39,7 +39,7 @@ def box_data_reader(name_file: str, name_series: str):
     return series
 
 
-class BoxPlot(QChartView):
+class BoxWhiskerChart(QChartView):
     def __init__(self):
         super().__init__()
         chart = self.init_ui()
@@ -68,7 +68,7 @@ class BoxPlot(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        boxplot = BoxPlot()
+        boxplot = BoxWhiskerChart()
         self.setCentralWidget(boxplot)
         self.resize(700, 400)
         self.setWindowTitle('BoxPlot')
