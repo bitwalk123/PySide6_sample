@@ -71,7 +71,7 @@ class Example(QMainWindow):
         boxplot = BoxWhiskerChart()
         self.setCentralWidget(boxplot)
         self.resize(700, 400)
-        self.setWindowTitle('BoxPlot')
+        self.setWindowTitle('Box & Whisker Chart')
 
 
 def main():
