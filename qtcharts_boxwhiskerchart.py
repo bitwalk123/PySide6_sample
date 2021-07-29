@@ -47,8 +47,8 @@ class BoxWhiskerChart(QChartView):
         self.setRenderHint(QPainter.Antialiasing)
 
     def init_ui(self):
-        series_acme = box_data_reader('acme_data.txt', 'Acme Ltd')
-        series_boxwhisk = box_data_reader('boxwhisk_data.txt', 'BoxWhisk Inc')
+        series_acme: QBoxPlotSeries = box_data_reader('acme_data.txt', 'Acme Ltd')
+        series_boxwhisk: QBoxPlotSeries = box_data_reader('boxwhisk_data.txt', 'BoxWhisk Inc')
 
         chart = QChart()
         chart.addSeries(series_acme)
