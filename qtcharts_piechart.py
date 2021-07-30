@@ -33,11 +33,11 @@ class PieChart(QChartView):
 
     def init_ui(self):
         series = QPieSeries()
-        series.append('Jane', 1)
-        series.append('Joe', 2)
-        series.append('Andy', 3)
+        series.append('Jane', 25)
+        series.append('Joe', 16)
+        series.append('Andy', 9)
         series.append('Barbara', 4)
-        series.append('Axel', 5)
+        series.append('Axel', 1)
 
         slice1 = series.slices()[1]
         slice1.setExploded()
