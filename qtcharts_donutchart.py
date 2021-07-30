@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 # Reference
-#   https://doc.qt.io/qt-6/qtcharts-piechart-example.html
+#   https://doc.qt.io/qt-6/qtcharts-donutchart-example.html
 import sys
 from PySide6.QtCharts import (
     QChart,
@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 
-class PieChart(QChartView):
+class DonutChart(QChartView):
     def __init__(self):
         super().__init__()
         chart = self.init_ui()
@@ -28,21 +28,20 @@ class PieChart(QChartView):
 
     def init_ui(self):
         series = QPieSeries()
-        series.append('Jane', 25)
-        series.append('Joe', 16)
-        series.append('Andy', 9)
-        series.append('Barbara', 4)
-        series.append('Axel', 1)
+        series.setHoleSize(0.35)
 
-        slice1 = series.slices()[1]
-        slice1.setExploded()
-        slice1.setLabelVisible()
-        slice1.setPen(QPen(Qt.darkGreen, 2))
-        slice1.setBrush(Qt.green)
+        series.append("Protein 4.2%", 4.2)
+
+        slice = series.append("Fat 15.6%", 15.6)
+        slice.setExploded()
+        slice.setLabelVisible()
+
+        series.append("Other 23.8%", 23.8)
+        series.append("Carbs 56.4%", 56.4)
 
         chart = QChart()
         chart.addSeries(series)
-        chart.setTitle('Simple piechart example')
+        chart.setTitle('Donut with a lemon glaze (100g)')
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         chart.legend().setVisible(True)
@@ -54,8 +53,8 @@ class PieChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        piechart = PieChart()
-        self.setCentralWidget(piechart)
+        donutchart = DonutChart()
+        self.setCentralWidget(donutchart)
         self.resize(500, 300)
         self.setWindowTitle('PieChart')
 
