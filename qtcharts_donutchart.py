@@ -55,8 +55,8 @@ class Example(QMainWindow):
         super().__init__()
         donutchart = DonutChart()
         self.setCentralWidget(donutchart)
-        self.resize(500, 300)
-        self.setWindowTitle('PieChart')
+        self.resize(550, 300)
+        self.setWindowTitle('DonutChart')
 
 
 def main():
