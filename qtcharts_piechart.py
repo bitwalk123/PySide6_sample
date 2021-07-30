@@ -61,7 +61,7 @@ class Example(QMainWindow):
         super().__init__()
         piechart = PieChart()
         self.setCentralWidget(piechart)
-        self.resize(400, 400)
+        self.resize(500, 300)
         self.setWindowTitle('PieChart')
 
 
