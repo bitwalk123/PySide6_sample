@@ -49,8 +49,8 @@ class SplineChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        linechart = SplineChart()
-        self.setCentralWidget(linechart)
+        splinechart = SplineChart()
+        self.setCentralWidget(splinechart)
         self.resize(500, 300)
         self.setWindowTitle('LineChart')
 

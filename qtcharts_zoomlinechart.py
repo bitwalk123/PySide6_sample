@@ -48,8 +48,8 @@ class ZoomLineChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        zoomlinechart = ZoomLineChart()
-        self.setCentralWidget(zoomlinechart)
+        linechart = ZoomLineChart()
+        self.setCentralWidget(linechart)
         self.resize(500, 300)
         self.setWindowTitle('ZoomLineChart')
 

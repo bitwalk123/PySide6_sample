@@ -70,8 +70,8 @@ class StackedBarChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        stackedbarchart = StackedBarChart()
-        self.setCentralWidget(stackedbarchart)
+        barchart = StackedBarChart()
+        self.setCentralWidget(barchart)
         self.resize(500, 300)
         self.setWindowTitle('StackedBarChart')
 

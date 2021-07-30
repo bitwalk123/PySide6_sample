@@ -70,8 +70,8 @@ class PercentBarChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        stackedbarchart = PercentBarChart()
-        self.setCentralWidget(stackedbarchart)
+        barchart = PercentBarChart()
+        self.setCentralWidget(barchart)
         self.resize(500, 300)
         self.setWindowTitle('PercentBarChart')
 
