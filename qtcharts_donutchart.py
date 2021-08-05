@@ -9,9 +9,7 @@ from PySide6.QtCharts import (
     QPieSeries,
 )
 from PySide6.QtCore import Qt
-from PySide6.QtGui import (
-    QPainter,
-)
+from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
