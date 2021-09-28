@@ -50,7 +50,7 @@ class Example(QMainWindow):
 
         label = QLabel("Geeksforgeeks Scatter Plot")
         label.setWordWrap(True)
-        label.setMinimumWidth(130)
+        label.setMinimumWidth(100)
         layout.addWidget(label, 1, 0)
 
         plot = pg.plot()
