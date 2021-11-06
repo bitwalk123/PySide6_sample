@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 # https://pythonrepo.com/repo/tlambert03-QtRangeSlider-python-graphical-user-interface-applications
+# pip install qtrangeslider
 from qtrangeslider import QRangeSlider
 
 
