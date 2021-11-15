@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
 )
-
+import numpy as np
 
 def datetime_data_reader(name_file):
     series = QLineSeries()
@@ -38,7 +38,7 @@ def datetime_data_reader(name_file):
 
             moment_in_time = QDateTime()
             moment_in_time.setDate(QDate(int(values[0]), int(values[1]), 15))
-            series.append(moment_in_time.toMSecsSinceEpoch(), float(values[2]))
+            series.append(np.int64(moment_in_time.toMSecsSinceEpoch()), float(values[2]))
 
     return series
 
