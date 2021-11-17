@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+import PySide6
 from PySide6.QtWidgets import (
     QApplication,
     QVBoxLayout,
@@ -22,6 +23,8 @@ class Example(QWidget):
         super().__init__()
         self.setWindowTitle('SPC Chart Example')
         self.init_ui()
+        print('PySide6', PySide6.__version__)
+        print('matplotlib', matplotlib.__version__)
 
     def init_ui(self):
         # Example dataframe
