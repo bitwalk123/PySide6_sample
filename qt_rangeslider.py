@@ -16,7 +16,7 @@ from qtrangeslider import QRangeSlider
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Slider')
+        self.setWindowTitle('RangeSlider')
         self.init_ui()
 
     def init_ui(self):
