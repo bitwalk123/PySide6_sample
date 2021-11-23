@@ -1,0 +1,135 @@
+AreaChart Example
+
+The example shows how to create a simple area chart.
+
+Audio Example
+This example shows the drawing of dynamic data (microphone input).
+
+BarChart Example
+The example shows how to create a bar chart.
+
+BarModelMapper Example
+This example shows how to use QAbstractItemModel derived model as the data for the bar series.
+
+Box and Whiskers Example
+The example shows how to create a box-and-whiskers chart.
+
+Callout Example
+This example shows how to draw an additional element (a callout) on top of the chart.
+
+Candlestick Chart Example
+Shows how to create a candlestick chart.
+
+Chart Themes Example
+The example shows the look and feel of the different built-in themes.
+
+Custom Chart Example
+This example shows how to customize the appearance of the different elements on a chart.
+
+DateTimeAxis Example
+The example shows how to use QLineChart with QDateTimeAxis.
+
+Donut Chart Breakdown Example
+This example shows how to use create a donut breakdown chart using QPieSeries API.
+
+Donutchart Example
+This example shows how to create a simple donut chart, and do some customizations to a slice.
+
+Dynamic Spline Example
+This example shows how to draw dynamic data.
+
+HorizontalBarChart Example
+The example shows how to create a horizontal bar chart.
+
+HorizontalPercentBarChart Example
+The example shows how to create a simple horizontal percent bar chart.
+
+HorizontalStackedBarChart Example
+The example shows how to create a simple stacked horizontal bar chart.
+
+Legend Example
+This example shows how to detach the legend from the chart and how to attach it back.
+
+LegendMarkers Example
+The example shows how to make use of legend markers.
+
+Line and BarChart Example
+The example shows how to combine different charts and set the axes.
+
+LineChart Example
+The example shows how to create a simple line chart.
+
+Logarithmic Axis Example
+The example shows how to use QLogValueAxis.
+
+Model Data Example
+This example shows how to use the QAbstractItemModel derived model as the data for the series.
+
+Multiple Axes Example
+The example shows how to create a simple chart with two vertical axes. One for each series.
+
+Nested Donuts Example
+This example shows how to create a nested donuts chart using the QPieSeries API.
+
+OpenGL Accelerated Series Example
+The example shows how to enable OpenGL acceleration for QLineSeries and QScatterSeries.
+
+PercentBarChart Example
+The example shows how to create a simple percent bar chart.
+
+Pie Chart Customization Example
+This example shows how the look and feel of a pie chart can be customized.
+
+Piechart Drilldown Example
+The example shows how to implement a piechart with drilldown effect.
+
+Piechart Example
+The example shows how to create a simple pie chart and do some customizations to a pie slice.
+
+Polar Chart Example
+The example shows how to create a simple polar chart with multiple different series.
+
+Qml Axes
+This is a demonstration of how to use axes in your QML application.
+
+Qml Charts Example
+This basic demonstration shows how to use the different chart types by using qml.
+
+Qml Custom Legend
+This example shows you how to create your own custom legend.
+
+Qml Customizations
+This application shows you how to customize different visual properties of a ChartView and series.
+
+Qml F1 Legends
+This application demonstrates how to use ListModel as a datasource for a Chart.
+
+Qml Oscilloscope
+The example shows how to implement application with strict performance requirements using the Qt Charts QML API.
+
+Qml Polar Chart
+This is a demonstration on how to use a polar chart in your QML application.
+
+Qml Weather
+This is a basic demonstration showing how to use the different chart types by using qml.
+
+Scatter Interactions Example
+This example shows how to create a simple scatter chart and how to interact with the chart.
+
+ScatterChart Example
+The example shows how to create a simple scatter chart.
+
+SplineChart Example
+The example shows how to create a simple spline chart.
+
+StackedBarChart Drilldown Example
+The example shows how to implement drilldown using a stacked barchart.
+
+StackedBarChart Example
+The example shows how to create a simple stacked bar chart.
+
+Temperature Records Example
+The example shows how to create a bar chart with negative bars.
+
+Zoom Line Example
+The example shows how to create your own custom zooming effect.
