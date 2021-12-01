@@ -41,7 +41,7 @@ def chart():
         minspanx=5, minspany=5, spancoords='pixels', interactive=True,
         props=dict(
             facecolor='pink',
-            edgecolor='black',
+            edgecolor='red',
             alpha=0.2,
             fill=True
         )
