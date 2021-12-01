@@ -2,6 +2,7 @@
 # coding: utf-8
 # Reference
 # https://matplotlib.org/stable/gallery/widgets/rectangle_selector.html
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
@@ -26,6 +27,30 @@ def toggle_selector(event):
     toggle_selector.RS.set_active(True)
 
 
+def chart():
+    fig, ax = plt.subplots()
+
+    x = np.random.rand(100)
+    y = np.random.rand(100)
+    ax = sns.scatterplot(x=x, y=y)
+    canvas = FigureCanvas(fig)
+
+    toggle_selector.RS = RectangleSelector(
+        ax, select_callback, useblit=True,
+        button=[1],  # disable middle & right buttons
+        minspanx=5, minspany=5, spancoords='pixels', interactive=True,
+        props=dict(
+            facecolor='pink',
+            edgecolor='black',
+            alpha=0.2,
+            fill=True
+        )
+    )
+    fig.canvas.mpl_connect('key_press_event', toggle_selector)
+
+    return canvas
+
+
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -33,39 +58,14 @@ class Example(QMainWindow):
         self.init_ui()
 
     def init_ui(self):
-        canvas = self.chart()
+        canvas = chart()
         self.setCentralWidget(canvas)
 
-        # --------------------------------------------------------------------------------------------------------------
-        # Bottom (Toolbar)
         navtoolbar = NavigationToolbar(canvas, self)
         self.addToolBar(
             Qt.BottomToolBarArea,
             navtoolbar
         )
-
-    def chart(self):
-        fig, ax = plt.subplots()
-
-        x = np.random.rand(100)
-        y = np.random.rand(100)
-        ax = sns.scatterplot(x=x, y=y)
-        canvas = FigureCanvas(fig)
-
-        toggle_selector.RS = RectangleSelector(
-            ax, select_callback, useblit=True,
-            button=[1],  # disable middle & right buttons
-            minspanx=5, minspany=5, spancoords='pixels', interactive=True,
-            props=dict(
-                facecolor='pink',
-                edgecolor='black',
-                alpha=0.2,
-                fill=True
-            )
-        )
-        fig.canvas.mpl_connect('key_press_event', toggle_selector)
-
-        return canvas
 
 
 def main():
