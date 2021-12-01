@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
+# Reference
+# https://matplotlib.org/stable/gallery/widgets/rectangle_selector.html
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
@@ -7,8 +9,6 @@ from PySide6.QtWidgets import (
 )
 import sys
 import numpy as np
-# Reference
-# https://qiita.com/hiroyuki_kageyama/items/cb87a0bee98c0262a35e
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
