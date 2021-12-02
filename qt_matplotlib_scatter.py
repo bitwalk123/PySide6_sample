@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
 )
 import sys
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
@@ -17,18 +18,19 @@ from matplotlib.widgets import EllipseSelector, RectangleSelector
 import seaborn as sns
 
 
-def toggle_selector(event):
-    toggle_selector.RS.set_acstive(True)
-
-
 class Example(QMainWindow):
+    RS = None
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Scatter')
         self.init_ui()
 
     def init_ui(self):
-        canvas = self.chart()
+        # sample data
+        df = pd.DataFrame(np.random.random(size=(100, 2)), columns=['X', 'Y'])
+
+        canvas = self.chart(df)
         self.setCentralWidget(canvas)
 
         navtoolbar = NavigationToolbar(canvas, self)
@@ -37,15 +39,13 @@ class Example(QMainWindow):
             navtoolbar
         )
 
-    def chart(self):
+    def chart(self, df):
         fig, ax = plt.subplots()
 
-        x = np.random.rand(100)
-        y = np.random.rand(100)
-        ax = sns.scatterplot(x=x, y=y)
+        ax = sns.scatterplot(data=df, x=df.columns[0], y=df.columns[1])
         canvas = FigureCanvas(fig)
 
-        toggle_selector.RS = RectangleSelector(
+        self.RS = RectangleSelector(
             ax, self.select_callback, useblit=True,
             button=[1],  # disable middle & right buttons
             minspanx=5, minspany=5, spancoords='pixels', interactive=True,
@@ -56,8 +56,6 @@ class Example(QMainWindow):
                 fill=True
             )
         )
-        fig.canvas.mpl_connect('key_press_event', toggle_selector)
-
         return canvas
 
     def select_callback(self, eclick, erelease):
