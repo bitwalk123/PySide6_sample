@@ -19,8 +19,6 @@ import seaborn as sns
 
 
 class Example(QMainWindow):
-    RS = None
-
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Scatter')
@@ -45,7 +43,7 @@ class Example(QMainWindow):
         ax = sns.scatterplot(data=df, x=df.columns[0], y=df.columns[1])
         canvas = FigureCanvas(fig)
 
-        self.RS = RectangleSelector(
+        plt.RS = RectangleSelector(
             ax, self.select_callback, useblit=True,
             button=[1],  # disable middle & right buttons
             minspanx=5, minspany=5, spancoords='pixels', interactive=True,
