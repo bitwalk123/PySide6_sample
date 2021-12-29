@@ -16,13 +16,13 @@ from PySide6.QtWidgets import (
 class Hello(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
         self.setWindowTitle('Hello World!')
 
         print('PySide', PySide6.__version__)
         print('Qt', PySide6.QtCore.__version__)
 
-    def initUI(self):
+    def init_ui(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
