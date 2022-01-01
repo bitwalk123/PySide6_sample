@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys
 
 from PySide6.QtGui import QPainter, QPixmap, QPen, QColor
