@@ -25,18 +25,19 @@ class Example(QMainWindow):
 
     def init_ui(self):
         but = QPushButton('START')
-        but.clicked.connect(lambda: self.task_start(but))
+        but.clicked.connect(self.task_start)
         self.setCentralWidget(but)
 
     def task_start(self, button):
+        button = self.sender()
+        button.setEnabled(False)
+
         progress = QProgressDialog(labelText='Working...', parent=self)
         progress.setWindowModality(Qt.WindowModal)
         progress.setCancelButton(None)
         progress.setRange(0, 0)
         progress.setWindowTitle('status')
         progress.show()
-
-        button.setEnabled(False)
 
         task = TaskThread(self)
         task.start()
