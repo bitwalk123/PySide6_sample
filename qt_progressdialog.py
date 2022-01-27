@@ -20,7 +20,7 @@ class Example(QMainWindow):
         super().__init__(parent)
 
         self.init_ui()
-        self.setWindowTitle('ProgressDialog & Thread (2)')
+        self.setWindowTitle('ProgressDialog & Thread')
         self.resize(300, 100)
 
     def init_ui(self):
@@ -32,13 +32,13 @@ class Example(QMainWindow):
         progress = QProgressDialog(labelText='Working...', parent=self)
         progress.setWindowModality(Qt.WindowModal)
         progress.setCancelButton(None)
-        progress.setRange(0, 0)
         progress.setWindowTitle('status')
         progress.show()
 
         button.setEnabled(False)
 
         task = TaskThread(self)
+        task.progressChanged.connect(progress.setValue)
         task.start()
         task.progressCompleted.connect(lambda: self.task_end(button, progress))
 
@@ -48,14 +48,17 @@ class Example(QMainWindow):
 
 
 class TaskThread(QThread):
+    progressChanged = Signal(int)
     progressCompleted = Signal()
 
     def run(self):
         for progress in range(0, 101):
             time.sleep(0.1)
+            self.progressChanged.emit(progress)
 
         time.sleep(0.5)
         self.progressCompleted.emit()
+        self.progressChanged.emit(0)
         self.exit(0)
 
 
