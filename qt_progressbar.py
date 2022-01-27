@@ -22,39 +22,36 @@ class Example(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.initUI()
-        self.task_gen()
-
+        self.init_ui()
         self.setWindowTitle('ProgressBar & Thread')
         self.resize(300, 100)
 
-    def initUI(self):
-        self.but = QPushButton('START')
-        self.but.clicked.connect(self.task_start)
-        self.setCentralWidget(self.but)
+    def init_ui(self):
+        but = QPushButton('START')
+        but.clicked.connect(lambda: self.task_start(but, progbar))
+        self.setCentralWidget(but)
 
         status_label = QLabel('Progress')
         status_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.progbar = QProgressBar()
-        self.progbar.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        progbar = QProgressBar()
+        progbar.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         status_bar = QStatusBar()
         status_bar.addWidget(status_label, 1)
-        status_bar.addWidget(self.progbar, 2)
+        status_bar.addWidget(progbar, 2)
 
         self.setStatusBar(status_bar)
 
-    def task_gen(self):
-        self.task = TaskThread()
-        self.task.progressChanged.connect(self.progbar.setValue)
+    def task_start(self, button, progbar):
+        task = TaskThread(self)
+        task.progressChanged.connect(progbar.setValue)
 
-    def task_start(self):
-        self.but.setEnabled(False)
-        self.task.start()
-        self.task.progressCompleted.connect(self.task_end)
+        button.setEnabled(False)
+        task.start()
+        task.progressCompleted.connect(lambda: self.task_end(button))
 
-    def task_end(self):
-        self.but.setEnabled(True)
+    def task_end(self, button):
+        button.setEnabled(True)
 
 
 class TaskThread(QThread):
