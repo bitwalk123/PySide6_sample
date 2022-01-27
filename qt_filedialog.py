@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
     QMainWindow,
-    QTextEdit,
+    QPlainTextEdit,
 )
 
 
@@ -22,7 +22,7 @@ class Example(QMainWindow):
         self.setWindowTitle('File dialog')
 
     def init_ui(self):
-        editor = QTextEdit()
+        editor = QPlainTextEdit()
         self.setCentralWidget(editor)
         self.statusBar()
 
@@ -39,10 +39,13 @@ class Example(QMainWindow):
         dialog = QFileDialog()
         if dialog.exec():
             filename = dialog.selectedFiles()[0]
-            f = open(filename, 'r')
-            with f:
-                data = f.read()
-                textedit.setText(data)
+            data = self.read_data(filename)
+            textedit.setPlainText(data)
+
+    def read_data(self, filename):
+        f = open(filename, 'r', encoding='UTF-8')
+        data = f.read()
+        return data
 
 
 def main():
