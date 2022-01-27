@@ -5,12 +5,9 @@ import sys
 import time
 from PySide6.QtWidgets import (
     QApplication,
-    QLabel,
     QMainWindow,
-    QProgressBar,
+    QProgressDialog,
     QPushButton,
-    QSizePolicy,
-    QStatusBar, QProgressDialog,
 )
 from PySide6.QtCore import (
     QThread,
