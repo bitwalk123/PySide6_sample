@@ -20,7 +20,7 @@ class Example(QMainWindow):
         super().__init__(parent)
 
         self.init_ui()
-        self.setWindowTitle('ProgressBar & Thread (2)')
+        self.setWindowTitle('ProgressBar & Thread (3)')
         self.resize(300, 100)
 
     def init_ui(self):
