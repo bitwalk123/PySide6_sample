@@ -14,21 +14,21 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
         self.setWindowTitle('PushButton')
 
-    def initUI(self):
+    def init_ui(self):
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
         btn = QPushButton('プッシュボタン')
         btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        btn.clicked.connect(self.buttonClicked)
+        btn.clicked.connect(self.button_clicked)
         vbox.addWidget(btn)
 
-    def buttonClicked(self):
+    def button_clicked(self):
         obj = self.sender()
-        print('「' + obj.text() + '」がクリックされました。')
+        print('「%s」がクリックされました。' % obj.text())
 
 
 def main():
