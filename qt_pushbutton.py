@@ -18,13 +18,13 @@ class Example(QWidget):
         self.setWindowTitle('PushButton')
 
     def init_ui(self):
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
+        layout = QVBoxLayout()
+        self.setLayout(layout)
 
         btn = QPushButton('プッシュボタン')
         btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         btn.clicked.connect(self.button_clicked)
-        vbox.addWidget(btn)
+        layout.addWidget(btn)
 
     def button_clicked(self):
         obj = self.sender()
