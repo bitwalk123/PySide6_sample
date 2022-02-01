@@ -16,7 +16,6 @@ class ExampleDlg(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Dialog')
-        dlgbtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
@@ -24,6 +23,7 @@ class ExampleDlg(QDialog):
         message = QLabel('ダイアログボックスを表示しました。')
         self.layout.addWidget(message)
 
+        dlgbtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         bbox = QDialogButtonBox(dlgbtn)
         bbox.accepted.connect(self.accept)
         bbox.rejected.connect(self.reject)
