@@ -40,7 +40,7 @@ class Example(QWidget):
         # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
         # SPC chart
         fig = plt.figure(dpi=100)
-        ax = fig.add_subplot(111, title=self.windowTitle())
+        ax = fig
         plt.subplots_adjust(bottom=0.2, left=0.2, right=0.8, top=0.9)
         ax.grid(True)
         # Horizontal Lines for SPC metrics
