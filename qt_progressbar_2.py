@@ -13,12 +13,16 @@ from PySide6.QtWidgets import (
     QStatusBar,
 )
 from PySide6.QtCore import (
+    QObject,
     QThread,
     Signal,
 )
 
 
 class Example(QMainWindow):
+    thread = None
+    worker = None
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -44,20 +48,29 @@ class Example(QMainWindow):
         self.setStatusBar(status_bar)
 
     def task_start(self, button, progbar):
-        task = TaskThread(self)
+        button.setEnabled(False)
         progbar.setRange(0, 0)
 
-        button.setEnabled(False)
-        task.start()
-        task.progressCompleted.connect(lambda: self.task_end(button, progbar))
+        self.thread = QThread()
+        self.worker = Worker()
+        self.worker.moveToThread(self.thread)
+
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progressCompleted.connect(lambda: self.task_end(button, progbar))
+
+        self.thread.start()
 
     def task_end(self, button, progbar):
         button.setEnabled(True)
         progbar.setRange(0, 1)
 
 
-class TaskThread(QThread):
+class Worker(QObject):
     progressCompleted = Signal()
+    finished = Signal()
 
     def run(self):
         for progress in range(0, 101):
@@ -65,7 +78,7 @@ class TaskThread(QThread):
 
         time.sleep(0.5)
         self.progressCompleted.emit()
-        self.exit(0)
+        self.finished.emit()
 
 
 def main():
