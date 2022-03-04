@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QPushButton,
 )
 from PySide6.QtCore import (
+    QObject,
     QThread,
     Signal, Qt,
 )
@@ -28,10 +29,7 @@ class Example(QMainWindow):
         but.clicked.connect(self.task_start)
         self.setCentralWidget(but)
 
-    def task_start(self, button):
-        button = self.sender()
-        button.setEnabled(False)
-
+    def task_start(self):
         progress = QProgressDialog(labelText='Working...', parent=self)
         progress.setWindowModality(Qt.WindowModal)
         progress.setCancelButton(None)
@@ -39,17 +37,28 @@ class Example(QMainWindow):
         progress.setWindowTitle('status')
         progress.show()
 
-        task = TaskThread(self)
-        task.start()
-        task.progressCompleted.connect(lambda: self.task_end(button, progress))
+        self.thread = QThread()
+        self.worker = Worker()
+        self.worker.moveToThread(self.thread)
 
-    def task_end(self, button, progress):
-        button.setEnabled(True)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progressCompleted.connect(lambda: self.task_end(progress))
+
+        self.thread.start()
+
+    def task_end(self, progress):
         progress.cancel()
 
 
-class TaskThread(QThread):
+class Worker(QObject):
     progressCompleted = Signal()
+    finished = Signal()
+
+    def __init__(self):
+        super().__init__()
 
     def run(self):
         for progress in range(0, 101):
@@ -57,7 +66,7 @@ class TaskThread(QThread):
 
         time.sleep(0.5)
         self.progressCompleted.emit()
-        self.exit(0)
+        self.finished.emit()
 
 
 def main():

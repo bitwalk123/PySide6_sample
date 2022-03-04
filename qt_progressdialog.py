@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QPushButton,
 )
 from PySide6.QtCore import (
+    QObject,
     QThread,
     Signal, Qt,
 )
@@ -38,19 +39,28 @@ class Example(QMainWindow):
         progress.setWindowTitle('status')
         progress.show()
 
-        task = TaskThread(self)
-        task.progressChanged.connect(progress.setValue)
-        task.start()
-        task.progressCompleted.connect(lambda: self.task_end(button, progress))
+        self.thread = QThread()
+        self.worker = Worker()
+        self.worker.moveToThread(self.thread)
+
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progressChanged.connect(progress.setValue)
+        self.worker.progressCompleted.connect(lambda: self.task_end(button, progress))
+
+        self.thread.start()
 
     def task_end(self, button, progress):
         button.setEnabled(True)
         progress.cancel()
 
 
-class TaskThread(QThread):
+class Worker(QObject):
     progressChanged = Signal(int)
     progressCompleted = Signal()
+    finished = Signal()
 
     def run(self):
         for progress in range(0, 101):
@@ -60,7 +70,7 @@ class TaskThread(QThread):
         time.sleep(0.5)
         self.progressCompleted.emit()
         self.progressChanged.emit(0)
-        self.exit(0)
+        self.finished.emit()
 
 
 def main():
