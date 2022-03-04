@@ -17,6 +17,9 @@ from PySide6.QtCore import (
 
 
 class Example(QMainWindow):
+    thread = None
+    worker = None
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
