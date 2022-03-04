@@ -28,10 +28,7 @@ class Example(QMainWindow):
         but.clicked.connect(self.task_start)
         self.setCentralWidget(but)
 
-    def task_start(self, button):
-        button = self.sender()
-        button.setEnabled(False)
-
+    def task_start(self):
         progress = QProgressDialog(labelText='Working...', parent=self)
         progress.setWindowModality(Qt.WindowModal)
         progress.setCancelButton(None)
@@ -41,15 +38,17 @@ class Example(QMainWindow):
 
         task = TaskThread(self)
         task.start()
-        task.progressCompleted.connect(lambda: self.task_end(button, progress))
+        task.progressCompleted.connect(lambda: self.task_end(progress))
 
-    def task_end(self, button, progress):
-        button.setEnabled(True)
+    def task_end(self, progress):
         progress.cancel()
 
 
 class TaskThread(QThread):
     progressCompleted = Signal()
+
+    def __init__(self, parent):
+        super().__init__(parent)
 
     def run(self):
         for progress in range(0, 101):
