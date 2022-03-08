@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 # reference : https://github.com/andriyantohalim/PySide2_Tutorial
-
+import functools
 import sys
+import time
 
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
@@ -13,8 +14,25 @@ from PySide6.QtWidgets import (
 )
 
 
-class Example(QMainWindow):
+def timeit(f):
+    """
+    Reference:
+    https://stackoverflow.com/questions/5478351/python-time-measure-function
+    """
 
+    def wrap(*args, **kwargs):
+        time_start = time.time()
+        ret = f(*args, **kwargs)
+        time_end = time.time()
+        msec_delta = (time_end - time_start) * 1000.0
+        print('{:s} function took {:.3f} ms'.format(f.__name__, msec_delta))
+
+        return ret
+
+    return wrap
+
+
+class Example(QMainWindow):
     def __init__(self):
         super().__init__()
         self.init_ui()
@@ -42,6 +60,7 @@ class Example(QMainWindow):
             data = self.read_data(filename)
             textedit.setPlainText(data)
 
+    @timeit
     def read_data(self, filename):
         f = open(filename, 'r', encoding='UTF-8')
         data = f.read()
