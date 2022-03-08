@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
-# reference : https://github.com/andriyantohalim/PySide2_Tutorial
-import functools
+# reference
+# https://github.com/andriyantohalim/PySide2_Tutorial
 import sys
 import time
 
@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 
-def timeit(f):
+def timeit(f: callable):
     """
     Reference:
     https://stackoverflow.com/questions/5478351/python-time-measure-function
@@ -24,8 +24,8 @@ def timeit(f):
         time_start = time.time()
         ret = f(*args, **kwargs)
         time_end = time.time()
-        msec_delta = (time_end - time_start) * 1000.0
-        print('{:s} function took {:.3f} ms'.format(f.__name__, msec_delta))
+        msec_elapsed = (time_end - time_start) * 1000.0
+        print('{:s} function took {:.3f} ms'.format(f.__name__, msec_elapsed))
 
         return ret
 
@@ -33,6 +33,8 @@ def timeit(f):
 
 
 class Example(QMainWindow):
+    editor = None
+
     def __init__(self):
         super().__init__()
         self.init_ui()
@@ -40,25 +42,25 @@ class Example(QMainWindow):
         self.setWindowTitle('File dialog')
 
     def init_ui(self):
-        editor = QPlainTextEdit()
-        self.setCentralWidget(editor)
+        self.editor = QPlainTextEdit()
+        self.setCentralWidget(self.editor)
         self.statusBar()
 
         open_file = QAction('Open', self)
         open_file.setShortcut('Ctrl+O')
         open_file.setStatusTip('Open new file.')
-        open_file.triggered.connect(lambda: self.show_dialog(editor))
+        open_file.triggered.connect(self.show_dialog)
 
         menubar = self.menuBar()
         file_menu = menubar.addMenu('&File')
         file_menu.addAction(open_file)
 
-    def show_dialog(self, textedit):
+    def show_dialog(self):
         dialog = QFileDialog()
         if dialog.exec():
             filename = dialog.selectedFiles()[0]
             data = self.read_data(filename)
-            textedit.setPlainText(data)
+            self.editor.setPlainText(data)
 
     @timeit
     def read_data(self, filename):
