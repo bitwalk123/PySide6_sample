@@ -58,11 +58,11 @@ class Calculator(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
         self.setWindowTitle('Calculator')
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
 
-    def initUI(self):
+    def init_ui(self):
         grid = QGridLayout()
         grid.setHorizontalSpacing(2)
         grid.setVerticalSpacing(2)
