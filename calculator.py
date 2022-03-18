@@ -6,6 +6,7 @@ import queue
 import re
 import sys
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QGridLayout,
@@ -60,6 +61,7 @@ class Calculator(QWidget):
         super().__init__()
         self.init_ui()
         self.setWindowTitle('Calculator')
+        self.setWindowIcon(QIcon('calculator.png'))
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
 
     def init_ui(self):
@@ -79,7 +81,7 @@ class Calculator(QWidget):
         self.lcd.setDigitCount(self.max_chars + 2)
         self.lcd.setSmallDecimalPoint(True)
         self.lcd.display(self.ent.get_text())
-        self.lcd.setStyleSheet("QLCDNumber {color:darkgreen;}")
+        self.lcd.setStyleSheet("QLCDNumber {background-color:darkgreen; color:yellow;}")
         self.lcd.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         grid.addWidget(self.lcd, 0, 0, 1, 4)
         grid.setRowMinimumHeight(0, 40)
@@ -89,7 +91,7 @@ class Calculator(QWidget):
             method_name = key['method']
             method = getattr(self, method_name)
             but.clicked.connect(method)
-            but.setStyleSheet("QPushButton {font-size:12pt; padding:5px 30px; color:#666;}")
+            but.setStyleSheet("QPushButton {font-size:12pt; padding:5px 30px; color:darkgreen;}")
             but.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             grid.addWidget(but, key['y'], key['x'], key['h'], key['w'])
 
