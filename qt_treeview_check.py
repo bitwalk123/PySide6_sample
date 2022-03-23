@@ -2,11 +2,10 @@
 # coding: utf-8
 
 import sys
-from PySide6.QtCore import QDir, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtWidgets import (
     QApplication,
-    QFileSystemModel,
     QMainWindow,
     QTreeView,
 )
