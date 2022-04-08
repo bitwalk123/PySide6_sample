@@ -24,24 +24,6 @@ def select_callback(eclick, erelease):
     print(f"({x1:3.2f}, {y1:3.2f}) --> ({x2:3.2f}, {y2:3.2f})")
 
 
-class Example(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle('Scatter')
-        self.init_ui()
-
-    def init_ui(self):
-        # sample data
-        df = pd.DataFrame(np.random.random(size=(100, 2)), columns=['X', 'Y'])
-
-        # plot
-        canvas: FigureCanvas = Scatter(df)
-        self.setCentralWidget(canvas)
-
-        navtoolbar = NavigationToolbar(canvas, self)
-        self.addToolBar(Qt.BottomToolBarArea, navtoolbar)
-
-
 class Scatter(FigureCanvas):
     fig = Figure()
 
@@ -64,6 +46,24 @@ class Scatter(FigureCanvas):
             minspanx=5, minspany=5, spancoords='pixels', interactive=True,
             props=dict(facecolor='pink', edgecolor='red', alpha=0.2, fill=True)
         )
+
+
+class Example(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Scatter')
+        self.init_ui()
+
+    def init_ui(self):
+        # sample data
+        df = pd.DataFrame(np.random.random(size=(100, 2)), columns=['X', 'Y'])
+
+        # plot
+        canvas: FigureCanvas = Scatter(df)
+        self.setCentralWidget(canvas)
+
+        navtoolbar = NavigationToolbar(canvas, self)
+        self.addToolBar(Qt.BottomToolBarArea, navtoolbar)
 
 
 def main():
