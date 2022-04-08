@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Reference
-# https://matplotlib.org/stable/gallery/widgets/rectangle_selector.html
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
-    QMainWindow, QSizePolicy
+    QMainWindow,
+    QSizePolicy,
 )
 import sys
 import numpy as np
