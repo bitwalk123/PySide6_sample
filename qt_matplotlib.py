@@ -22,9 +22,9 @@ class SPCChart(FigureCanvas):
 
     def __init__(self, df: pd.DataFrame, metrics: dict):
         super().__init__(self.fig)
-        self.init_plot(df, metrics)
+        self.init_chart(df, metrics)
 
-    def init_plot(self, df, metrics):
+    def init_chart(self, df, metrics):
         ax = self.fig.add_subplot(111)
         # chart title
         ax.set(title=metrics['title'])

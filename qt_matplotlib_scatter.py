@@ -23,9 +23,9 @@ class Scatter(FigureCanvas):
 
     def __init__(self, df):
         super().__init__(self.fig)
-        self.init_plot(df)
+        self.init_chart(df)
 
-    def init_plot(self, df):
+    def init_chart(self, df):
         # Seaborn Scatter
         ax = sns.scatterplot(data=df, x=df.columns[0], y=df.columns[1], ax=self.fig.add_subplot(111))
         ax.set(title='Scatter Sample')
