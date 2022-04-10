@@ -49,6 +49,12 @@ class Example(QMainWindow):
         self.setWindowTitle('Scatter example')
         self.init_ui()
 
+    def __del__(self):
+        # Reference:
+        # https://qiita.com/Masahiro_T/items/bdd0482a8efd84cdd270
+        plt.clf()
+        plt.close()
+
     def init_ui(self):
         # sample data
         df = pd.DataFrame(np.random.random(size=(100, 2)), columns=['X', 'Y'])
