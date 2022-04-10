@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
+# Reference:
+# https://stats.biopapyrus.jp/python/hist.html
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
