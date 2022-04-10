@@ -2,11 +2,7 @@
 # coding: utf-8
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QSizePolicy,
-)
+from PySide6.QtWidgets import QApplication, QMainWindow
 import sys
 import numpy as np
 import pandas as pd
@@ -21,11 +17,11 @@ import seaborn as sns
 class Scatter(FigureCanvas):
     fig = Figure()
 
-    def __init__(self, df):
+    def __init__(self, df: pd.DataFrame):
         super().__init__(self.fig)
         self.init_chart(df)
 
-    def init_chart(self, df):
+    def init_chart(self, df: pd.DataFrame):
         # Seaborn Scatter
         ax = sns.scatterplot(
             data=df, x=df.columns[0], y=df.columns[1],
