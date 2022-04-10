@@ -52,7 +52,7 @@ class Example(QMainWindow):
     def init_ui(self):
         # sample data
         df = pd.DataFrame(np.random.random(size=(100, 2)), columns=['X', 'Y'])
-        # plot
+        # chart
         canvas: FigureCanvas = Scatter(df)
         self.setCentralWidget(canvas)
         # navigation for plot

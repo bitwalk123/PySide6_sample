@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Reference:
-# https://stats.biopapyrus.jp/python/hist.html
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
@@ -11,7 +9,6 @@ from PySide6.QtWidgets import (
 import sys
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -26,13 +23,8 @@ class Histogram(FigureCanvas):
         self.init_chart(df)
 
     def init_chart(self, df: pd.Series):
-        sns.set()
         sns.set_style('whitegrid')
-
-        ax = self.fig.add_subplot(111)
-        ax.hist(df)
-        ax.set_xlabel('length [cm]')
-
+        ax = sns.histplot(data=df, kde=True, ax=self.fig.add_subplot(111))
         ax.set(title='Histogram Sample')
 
 
@@ -44,9 +36,8 @@ class Example(QMainWindow):
 
     def init_ui(self):
         # sample data
-        np.random.seed(2022)
-        df = pd.Series(np.random.normal(50, 10, 1000))
-        # plot
+        df = pd.Series(np.random.normal(50, 10, 1000), name='length [cm]')
+        # chart
         canvas: FigureCanvas = Histogram(df)
         self.setCentralWidget(canvas)
         # navigation for plot
