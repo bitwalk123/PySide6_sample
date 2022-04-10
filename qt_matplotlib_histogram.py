@@ -36,7 +36,7 @@ class Example(QMainWindow):
 
     def init_ui(self):
         # sample data
-        df = pd.Series(np.random.normal(50, 10, 1000), name='length [cm]')
+        df = pd.Series(np.random.normal(50, 10, 1000), name='X')
         # chart
         canvas: FigureCanvas = Histogram(df)
         self.setCentralWidget(canvas)
