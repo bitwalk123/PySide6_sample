@@ -6,6 +6,7 @@ from PySide6.QtCore import (
     Qt,
     Signal,
 )
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -66,7 +67,8 @@ class Example(QMainWindow):
 
     def init_ui(self):
         toolbar = QToolBar()
-        toolbar.addAction('plot', self.prep_start)
+        menu = QAction("plot", self, triggered=self.prep_start)
+        toolbar.addAction(menu)
         self.addToolBar(Qt.TopToolBarArea, toolbar)
 
     # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
