@@ -15,32 +15,52 @@ import seaborn as sns
 
 
 class Scatter(FigureCanvas):
+    df: pd.DataFrame = None
     fig = Figure()
 
     def __init__(self, df: pd.DataFrame):
         super().__init__(self.fig)
-        self.init_chart(df)
+        self.df = df
+        ax = self.init_chart()
 
-    def init_chart(self, df: pd.DataFrame):
-        # Seaborn Scatter
-        ax = sns.scatterplot(
-            data=df, x=df.columns[0], y=df.columns[1],
-            ax=self.fig.add_subplot(111)
-        )
-        ax.set(title='Scatter Sample')
         # Selector
         plt.RS = RectangleSelector(
-            ax, self.select_callback, useblit=True,
+            ax, self.selection, useblit=True,
             button=[1],  # disable middle & right buttons
             minspanx=5, minspany=5, spancoords='pixels', interactive=True,
             props=dict(facecolor='pink', edgecolor='red', alpha=0.2, fill=True)
         )
 
+    def init_chart(self):
+        # Seaborn Scatter
+        ax = sns.scatterplot(
+            data=self.df, x=self.df.columns[0], y=self.df.columns[1],
+            ax=self.fig.add_subplot(111)
+        )
+        return ax
+
     @staticmethod
-    def select_callback(eclick, erelease):
+    def selection(eclick, erelease):
         x1, y1 = eclick.xdata, eclick.ydata
         x2, y2 = erelease.xdata, erelease.ydata
         print(f"({x1: 3.2f}, {y1: 3.2f}) --> ({x2: 3.2f}, {y2: 3.2f})")
+
+
+class ScatterTest(Scatter):
+    title: str = None
+
+    def __init__(self, df: pd.DataFrame):
+        self.title = 'Scatter Sample'
+        super().__init__(df)
+
+    def init_chart(self):
+        # Seaborn Scatter
+        ax = sns.scatterplot(
+            data=self.df, x=self.df.columns[0], y=self.df.columns[1],
+            ax=self.fig.add_subplot(111)
+        )
+        ax.set(title=self.title)
+        return ax
 
 
 class Example(QMainWindow):
@@ -53,7 +73,7 @@ class Example(QMainWindow):
         # sample data
         df = pd.DataFrame(np.random.random(size=(100, 2)), columns=['X', 'Y'])
         # chart
-        canvas: FigureCanvas = Scatter(df)
+        canvas: FigureCanvas = ScatterTest(df)
         self.setCentralWidget(canvas)
         # navigation for plot
         navtoolbar = NavigationToolbar(canvas, self)
