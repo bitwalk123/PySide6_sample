@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
-
 import sys
+
 import PySide6
-from PySide6 import QtCore
-from PySide6.QtCore import QObject, Signal, QThread
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -12,10 +10,16 @@ from PySide6.QtWidgets import (
     QStatusBar,
 )
 
+from qt_thread_download import URLDownload
+from qt_thread_progress import EndlessProgressDialog
+
 
 class Example(QMainWindow):
     statusbar: QStatusBar = None
     msec = 3000
+    obj = None
+    # sample file to download
+    url = 'https://ftp.kddilabs.jp/Linux/distributions/PLD/iso/2.0/i386/pld-2.0-MINI.i386.iso'
 
     def __init__(self):
         super().__init__()
@@ -26,7 +30,7 @@ class Example(QMainWindow):
 
     def init_ui(self):
         # push button
-        button = QPushButton('Download KNOPPIX')
+        button = QPushButton('Download large file')
         button.clicked.connect(self.on_click)
         button.setStatusTip('click to start downloading')
         self.setCentralWidget(button)
@@ -36,49 +40,23 @@ class Example(QMainWindow):
         self.setStatusBar(self.statusbar)
 
     def on_click(self):
-        self.statusbar.showMessage('start downloading')
+        # show progress dialog
+        self.dlg = EndlessProgressDialog(self)
+        self.dlg.show()
+        # update status
+        self.statusbar.showMessage('downloading, ...')
+        # instance for download in thread
+        self.obj = URLDownload(self.url)
+        self.obj.completed.connect(self.download_finish)
+        self.obj.start()
 
-
-class URLDownload(QObject):
-    thread = None
-    worker = None
-
-    completed = Signal(bool)
-
-    def __init__(self):
-        super().__init__()
-
-    def start(self):
-        # threading
-        self.thread = QThread()
-        self.worker = Worker()
-        self.worker.moveToThread(self.thread)
-
-        # signal handling
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.downloadCompleted.connect(self.end)
-
-        # start threading
-        self.thread.start()
-
-    def end(self, success: bool):
-        self.completed.emit(success)
-
-
-class Worker(QObject):
-    downloadCompleted = Signal()
-    finished = Signal()
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        pass
-        self.downloadCompleted.emit(success)
-        self.finished.emit()
+    def download_finish(self, success: bool):
+        print(success)
+        # stop and delete dialog
+        self.dlg.cancel()
+        self.dlg.deleteLater()
+        # update status
+        self.statusbar.showMessage('finish downloading', self.msec)
 
 
 def main():
