@@ -54,7 +54,6 @@ class Example(QMainWindow):
         print(success)
         # stop and delete dialog
         self.dlg.cancel()
-        self.dlg.deleteLater()
         # update status
         self.statusbar.showMessage('finish downloading', self.msec)
 
