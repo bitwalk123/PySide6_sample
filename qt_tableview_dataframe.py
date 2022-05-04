@@ -19,7 +19,7 @@ class Example(QMainWindow):
         df = pd.read_csv('iris.csv')
         self.init_ui(df)
         self.setWindowTitle('QTableView')
-        self.resize(800, 500)
+        self.resize(800, 600)
 
     def init_ui(self, df: pd.DataFrame):
         view = QTableView()
