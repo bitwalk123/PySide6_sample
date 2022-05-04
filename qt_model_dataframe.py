@@ -24,7 +24,6 @@ class PandasModel(QAbstractTableModel):
         """
         if parent == QModelIndex():
             return len(self._dataframe)
-
         return 0
 
     def columnCount(self, parent=QModelIndex()) -> int:
