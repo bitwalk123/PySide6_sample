@@ -15,19 +15,20 @@ from PySide6.QtWidgets import (
 )
 
 
-def get_colored_icon(image: str, color: str):
+def get_colored_icon(file_image: str, name_color: str) -> QIcon:
     """
     get_colored_icon
-    :param image: file name of image
-    :param color: color code
+    :param file_image: file name of image
+    :param name_color: color code
     :return: QIcon filled with specified color
     """
-    pixmap = QPixmap(image)
+    pixmap = QPixmap(file_image)
     mask = pixmap.createMaskFromColor(QColor('transparent'), Qt.MaskInColor)
-    pixmap.fill(QColor(color))
+    pixmap.fill(QColor(name_color))
     pixmap.setMask(mask)
 
     return QIcon(pixmap)
+
 
 class Example(QWidget):
     def __init__(self):
