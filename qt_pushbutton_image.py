@@ -1,8 +1,18 @@
 import sys
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap, QColor, QIcon
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSizePolicy, QApplication
+from PySide6.QtGui import (
+    QColor,
+    QIcon,
+    QPixmap,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QPushButton,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 def get_colored_icon(image: str, color: str):
