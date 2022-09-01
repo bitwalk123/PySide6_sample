@@ -31,6 +31,7 @@ class Example(QMainWindow):
             QHeaderView.ResizeToContents
         )
         model = QStandardItemModel()
+        model.itemChanged.connect(self.on_check_item)
         tblview.setModel(model)
         self.setCentralWidget(tblview)
 
@@ -46,9 +47,12 @@ class Example(QMainWindow):
                     item.setEditable(False)
                 list_row.append(item)
             model.appendRow(list_row)
-        model.itemChanged.connect(self.on_check_item)
 
     def on_check_item(self, item: QStandardItem):
+        """
+        on_check_item
+        examine check status
+        """
         if item.isCheckable():
             row = item.row()
             col = item.column()
@@ -56,7 +60,6 @@ class Example(QMainWindow):
                 msg = 'checked'
             else:
                 msg = 'unchecked'
-
             print('(%d, %d) -> %s' % (row, col, msg))
 
 
