@@ -29,6 +29,7 @@ def get_colored_icon(image: str, color: str):
 
     return QIcon(pixmap)
 
+
 class Example(QWidget):
     def __init__(self):
         super().__init__()
