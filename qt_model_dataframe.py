@@ -58,6 +58,7 @@ class PandasModel(QAbstractTableModel):
                 return str(self._dataframe.columns[section])
 
             if orientation == Qt.Vertical:
-                return str(self._dataframe.index[section])
+                #return str(self._dataframe.index[section])
+                return None
 
         return None
