@@ -26,9 +26,7 @@ class CustomDelegate(QStyledItemDelegate):
 
 
 class MyTableModel(QAbstractTableModel):
-    # dataChanged = Signal(int, int)
-
-    def __init__(self, data:pd.DataFrame):
+    def __init__(self, data: pd.DataFrame):
         super(MyTableModel, self).__init__()
         self._data = data
         self.check_states = dict()
@@ -39,18 +37,8 @@ class MyTableModel(QAbstractTableModel):
     def columnCount(self, index: QModelIndex):
         return self._data.shape[1]
 
-    def data(self, index: QModelIndex, role:Qt.ItemDataRole):
-        row = index.row()
-        column = index.column()
-        value = self._data.iloc[row, column]
-
+    def data(self, index: QModelIndex, role: Qt.ItemDataRole):
         if role == Qt.DisplayRole:
-            row = index.row()
-            column = index.column()
-            value = self._data.iloc[row, column]
-            return value
-
-        if role == Qt.EditRole:
             row = index.row()
             column = index.column()
             value = self._data.iloc[row, column]
@@ -61,7 +49,7 @@ class MyTableModel(QAbstractTableModel):
             if value is not None:
                 return value
 
-    def setData(self, index: QModelIndex, value, role:Qt.ItemDataRole=Qt.EditRole):
+    def setData(self, index: QModelIndex, value, role: Qt.ItemDataRole = Qt.EditRole):
         if role == Qt.EditRole:
             row = index.row()
             column = index.column()
@@ -83,7 +71,7 @@ class MyTableModel(QAbstractTableModel):
                 | Qt.ItemIsUserCheckable
         )
 
-    def headerData(self, section, orientation, role:Qt.ItemDataRole):
+    def headerData(self, section: int, orientation: Qt.Orientation, role: Qt.ItemDataRole):
         # section is the index of the column/row.
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
@@ -104,9 +92,9 @@ class ProxyStyleCheckBoxCenter(QProxyStyle):
 class Example(QMainWindow):
     sample = pd.DataFrame({
         'name': ['A', 'B', 'C', 'D'],
-        'check(1)': [None, None, None, None],
-        'check(2)': [None, None, None, None],
-        'check(3)': [None, None, None, None]
+        'check(1)': None,
+        'check(2)': None,
+        'check(3)': None
     })
 
     def __init__(self, parent=None):
@@ -124,18 +112,17 @@ class Example(QMainWindow):
         table.horizontalHeader().setSectionResizeMode(
             QHeaderView.ResizeToContents
         )
+        # delegate custom
+        delegate = CustomDelegate(table)
+        for col in range(1, self.sample.shape[1]):
+            table.setItemDelegateForColumn(col, delegate)
         # set table model
         model = MyTableModel(self.sample)
         table.setModel(model)
-        # delegate custom
-        delegate = CustomDelegate(table)
-        for col in range(1, 4):
-            table.setItemDelegateForColumn(col, delegate)
 
 
 def main():
     app = QApplication(sys.argv)
-    # app.setStyle(ProxyStyle())
     ex = Example()
     ex.show()
     sys.exit(app.exec())
