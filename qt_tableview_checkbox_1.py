@@ -1,8 +1,8 @@
 # Reference:
 # https://stackoverflow.com/questions/62414356/add-a-checkbox-to-text-in-a-qtableview-cell-using-delegate
 import sys
+from typing import Any
 
-import pandas as pd
 from PySide6.QtCore import (
     Qt,
     QAbstractTableModel,
@@ -19,6 +19,33 @@ from PySide6.QtWidgets import (
 )
 
 
+class MyContents:
+    def __init__(self, list_labels: list, header_labels: list):
+        self.list_labels = list_labels
+        self.header_labels = header_labels
+
+    def getRows(self):
+        return len(self.list_labels[0])
+
+    def getCols(self):
+        return len(self.header_labels)
+
+    def getData(self, row: int, col: int):
+        if col < self.getCheckColStart():
+            return self.list_labels[col][row]
+        else:
+            return None
+
+    def getColumnHeader(self, index: int):
+        return self.header_labels[index]
+
+    def getRowIndex(self, index: int):
+        return str(index + 1)
+
+    def getCheckColStart(self):
+        return len(self.list_labels)
+
+
 class ProxyStyleCheckBoxCenter(QProxyStyle):
     def subElementRect(self, element, opt, widget=None):
         if element == self.SE_ItemViewItemCheckIndicator:
@@ -28,7 +55,7 @@ class ProxyStyleCheckBoxCenter(QProxyStyle):
         return super().subElementRect(element, opt, widget)
 
 
-class CustomDelegate(QStyledItemDelegate):
+class CheckBoxDelegate(QStyledItemDelegate):
     def initStyleOption(self, option, index: QModelIndex):
         value = index.data(Qt.CheckStateRole)
         if value is None:
@@ -38,22 +65,22 @@ class CustomDelegate(QStyledItemDelegate):
 
 
 class MyTableModel(QAbstractTableModel):
-    def __init__(self, data: pd.DataFrame):
+    def __init__(self, data: MyContents):
         super(MyTableModel, self).__init__()
         self._data = data
         self.check_states = dict()
 
-    def rowCount(self, index):
-        return self._data.shape[0]
+    def rowCount(self, index: QModelIndex):
+        return self._data.getRows()
 
-    def columnCount(self, index):
-        return self._data.shape[1]
+    def columnCount(self, index: QModelIndex):
+        return self._data.getCols()
 
-    def data(self, index, role):
+    def data(self, index: QModelIndex, role: Qt.ItemDataRole):
         if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
-            value = self._data.iloc[row, column]
+            value = self._data.getData(row, column)
             return value
 
         if role == Qt.CheckStateRole:
@@ -61,7 +88,7 @@ class MyTableModel(QAbstractTableModel):
             if value is not None:
                 return value
 
-    def setData(self, index, value, role=Qt.EditRole):
+    def setData(self, index: QModelIndex, value: Any, role: Qt.ItemDataRole = Qt.EditRole):
         if role == Qt.CheckStateRole:
             self.check_states[QPersistentModelIndex(index)] = value
             self.dataChanged.emit(index, index, (role,))
@@ -69,7 +96,7 @@ class MyTableModel(QAbstractTableModel):
 
         return False
 
-    def flags(self, index):
+    def flags(self, index: QModelIndex):
         return (
                 Qt.ItemIsEnabled
                 | Qt.ItemIsSelectable
@@ -80,27 +107,21 @@ class MyTableModel(QAbstractTableModel):
         # section is the index of the column/row.
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
-                return str(self._data.columns[section])
+                return self._data.getColumnHeader(section)
             elif orientation == Qt.Vertical:
-                return str(self._data.index[section] + 1)
+                return self._data.getRowIndex(section)
 
 
 class Example(QMainWindow):
-    sample = pd.DataFrame({
-        'NAME': ['TEST' + str(x + 1).zfill(5) for x in range(10000)],
-        'check(1)': None,
-        'check(2)': None,
-        'check(3)': None,
-        'check(4)': None,
-        'check(5)': None,
-        'check(6)': None,
-        'check(7)': None,
-        'check(8)': None,
-        'check(9)': None,
-    })
+    #  Sample Data preparation
+    num_data = 1000
+    names = ['TEST' + str(x + 1).zfill(5) for x in range(num_data)]
+    list_label_names = [names]
+    num_check = 10
+    col_labels = ['NAME'] + ['check(%d)' % (x + 1) for x in range(num_check)]
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self):
+        super().__init__()
         self.init_ui()
         self.setWindowTitle('TableView')
         self.resize(800, 400)
@@ -116,17 +137,27 @@ class Example(QMainWindow):
         )
         self.setCentralWidget(table)
         # delegate custom
-        delegate = CustomDelegate(table)
-        for col in range(1, self.sample.shape[1]):
+        delegate = CheckBoxDelegate(table)
+        for col in range(len(self.list_label_names), len(self.col_labels)):
             table.setItemDelegateForColumn(col, delegate)
         # set table model
-        model = MyTableModel(self.sample)
+        contents = MyContents(self.list_label_names, self.col_labels)
+        model = MyTableModel(contents)
         table.setModel(model)
+        # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
+        # WRITE/READ TEST for CheckBox status
+        # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
         # set default status
-        for row in range(self.sample.shape[0]):
-            for col in range(1, self.sample.shape[1]):
+        for row in range(contents.getRows()):
+            for col in range(contents.getCheckColStart(), contents.getCols()):
                 index = model.index(row, col)
                 model.setData(index, 2, role=Qt.CheckStateRole)
+        # get check status
+        for row in range(contents.getRows()):
+            for col in range(contents.getCheckColStart(), contents.getCols()):
+                index = model.index(row, col)
+                value = model.data(index, role=Qt.CheckStateRole)
+                print(row, col, value)
 
 
 def main():
