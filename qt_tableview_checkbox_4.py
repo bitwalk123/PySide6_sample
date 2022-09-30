@@ -1,92 +1,215 @@
-from dataclasses import dataclass, fields
-from typing import List
+# Reference:
+# https://www.pythonfixing.com/2022/03/fixed-update-object-when-checkbox.html
+import os
+import sys
+import random
 
-from PySide6.QtCore import QAbstractTableModel, Qt, QModelIndex
-from PySide6.QtWidgets import QApplication, QTableView, QMainWindow
+from PySide6.QtCore import (
+    Qt,
+    QAbstractTableModel,
+    QModelIndex,
+)
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QApplication,
+    QHBoxLayout,
+    QPushButton,
+    QTableView,
+    QVBoxLayout,
+    QWidget,
+)
 
 
-@dataclass
-class Item:
-    name: str
-    value: float
-    is_checked: bool
+class PlayblastJob(object):
+    def __init__(self, **kwargs):
+        super(PlayblastJob, self).__init__()
+
+        # instance properties
+        self.active = True
+        self.name = ''
+        self.camera = ''
+        self.renderWidth = 1920
+        self.renderHeight = 1080
+        self.renderScale = 1.0
+        self.status = ''
+
+        # initialize attribute values
+        for k, v in kwargs.items():
+            if hasattr(self, k):
+                setattr(self, k, v)
+
+    def getScaledRenderSize(self):
+        x = int(self.renderWidth * self.renderScale)
+        y = int(self.renderHeight * self.renderScale)
+        return (x, y)
 
 
-class Model(QAbstractTableModel):
+class JobModel(QAbstractTableModel):
+    HEADERS = ['Name', 'Camera', 'Resolution', 'Status']
+
     def __init__(self):
-        super().__init__()
+        super(JobModel, self).__init__()
         self.items = []
 
-    def setItems(self, items: List[Item]):
-        self.items = items
-        self.layoutChanged.emit()
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if orientation == Qt.Horizontal:
+            if role == Qt.DisplayRole:
+                return self.HEADERS[section]
+        return None
 
-    def setAllItemsSelected(self, selected: bool = True):
-        for r in self.items:
-            r.is_checked = selected
-        self.layoutChanged.emit()
+    def columnCount(self, parent=QModelIndex()):
+        return len(self.HEADERS)
 
     def rowCount(self, parent=QModelIndex()):
         return len(self.items)
 
-    def columnCount(self, parent=QModelIndex()):
-        return len(fields(Item)) - 1
+    def appendJob(self, *items):
+        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount() + len(items) - 1)
+        for item in items:
+            assert isinstance(item, PlayblastJob)
+            self.items.append(item)
+        self.endInsertRows()
+
+    def removeJobs(self, items):
+        rowsToRemove = []
+        for row, item in enumerate(self.items):
+            if item in items:
+                rowsToRemove.append(row)
+        for row in sorted(rowsToRemove, reverse=True):
+            self.beginRemoveRows(QModelIndex(), row, row)
+            self.items.pop(row)
+            self.endRemoveRows()
+
+    def clear(self):
+        self.beginRemoveRows(QModelIndex(), 0, self.rowCount())
+        self.items = []
+        self.endRemoveRows()
 
     def data(self, index, role=Qt.DisplayRole):
-        if role == Qt.DisplayRole:
-            if index.column() == 0:
-                value = self.items[index.row()].name
-            elif index.column() == 1:
-                value = self.items[index.row()].value
-            else:
-                value = ""
-            return value
-        elif role == Qt.CheckStateRole and index.column() == 0:
-            return Qt.Checked if self.items[index.row()].is_checked else Qt.Unchecked
-        else:
-            # return QVariant()
-            print('not recognised')
+        if not index.isValid():
+            return
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
-            if section == 0:
-                value = "Name"
-            elif section == 1:
-                value = "Value"
-            else:
-                value = ""
-            return value
-        elif role == Qt.DisplayRole and orientation == Qt.Vertical:
-            return section + 1
+        row = index.row()
+        col = index.column()
 
-    def flags(self, index):
-        fl = QAbstractTableModel.flags(self, index)
-        if index.column() == 0:
-            fl |= Qt.ItemIsEditable | Qt.ItemIsUserCheckable
-        return fl
-
-
-class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
-        super().__init__()
-        table = QTableView(self)
-        model = Model()
-        table.setModel(model)
-        self.setCentralWidget(table)
-
-        items = [
-            Item("Item 1", 10.0, False),
-            Item("Item 2", 20.0, False),
-            Item("Item 3", 30.0, True),
-            Item("Item 4", 40.0, True),
-            Item("Item 5", 50.0, True),
-        ]
-
-        model.setItems(items)
+        if 0 <= row < self.rowCount():
+            item = self.items[row]
+            if role == Qt.DisplayRole:
+                if col == 0:
+                    return item.name
+                elif col == 1:
+                    return item.camera
+                elif col == 2:
+                    width, height = item.getScaledRenderSize()
+                    return '{} x {}'.format(width, height)
+                elif col == 3:
+                    return item.status.title()
+            elif role == Qt.ForegroundRole:
+                if col == 3:
+                    if item.status == 'error':
+                        return QColor(255, 82, 82)
+                    elif item.status == 'success':
+                        return QColor(76, 175, 80)
+                    elif item.status == 'warning':
+                        return QColor(255, 193, 7)
+            elif role == Qt.TextAlignmentRole:
+                if col == 2:
+                    return Qt.AlignCenter
+                if col == 3:
+                    return Qt.AlignCenter
+            elif role == Qt.CheckStateRole:
+                if col == 0:
+                    if item.active:
+                        return Qt.Checked
+                    else:
+                        return Qt.Unchecked
+            elif role == Qt.UserRole:
+                return item
+        return None
 
 
-if __name__ == "__main__":
-    app = QApplication([])
-    wnd = MainWindow()
-    wnd.show()
+class JobQueue(QWidget):
+    '''
+    Description:
+        Widget that manages the Jobs Queue
+    '''
+
+    def __init__(self):
+        super(JobQueue, self).__init__()
+        self.resize(400, 600)
+
+        # controls
+        self.uiAddNewJob = QPushButton('Add New Job')
+        self.uiAddNewJob.setToolTip('Add new job')
+
+        self.uiRemoveSelectedJobs = QPushButton('Remove Selected')
+        self.uiRemoveSelectedJobs.setToolTip('Remove selected jobs')
+
+        self.jobModel = JobModel()
+        self.uiJobTableView = QTableView()
+        self.uiJobTableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.uiJobTableView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.uiJobTableView.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.uiJobTableView.setModel(self.jobModel)
+
+        self.jobSelection = self.uiJobTableView.selectionModel()
+
+        self.uiRandomize = QPushButton('Randomize Selected Values')
+        self.uiPrintJobs = QPushButton('Print Jobs')
+
+        # sub layouts
+        self.jobQueueToolsLayout = QHBoxLayout()
+        self.jobQueueToolsLayout.addWidget(self.uiAddNewJob)
+        self.jobQueueToolsLayout.addWidget(self.uiRemoveSelectedJobs)
+        self.jobQueueToolsLayout.addStretch()
+        self.jobQueueToolsLayout.addWidget(self.uiRandomize)
+
+        # layout
+        self.mainLayout = QVBoxLayout()
+        self.mainLayout.addLayout(self.jobQueueToolsLayout)
+        self.mainLayout.addWidget(self.uiJobTableView)
+        self.mainLayout.addWidget(self.uiPrintJobs)
+        self.setLayout(self.mainLayout)
+
+        # connections
+        self.uiAddNewJob.clicked.connect(self.addNewJob)
+        self.uiRemoveSelectedJobs.clicked.connect(self.removeSelectedJobs)
+        self.uiRandomize.clicked.connect(self.randomizeSelected)
+        self.uiPrintJobs.clicked.connect(self.printJobs)
+
+    # methods
+    def addNewJob(self):
+        name = random.choice(['Kevin', 'Melissa', 'Suzie', 'Eddie', 'Doug'])
+        job = PlayblastJob(name=name, camera='Camera001', startFrame=50)
+        self.jobModel.appendJob(job)
+
+    def removeSelectedJobs(self):
+        jobs = self.getSelectedJobs()
+        self.jobModel.removeJobs(jobs)
+
+    def getSelectedJobs(self):
+        jobs = [x.data(Qt.UserRole) for x in self.jobSelection.selectedRows()]
+        return jobs
+
+    def randomizeSelected(self):
+        jobs = self.getSelectedJobs()
+        for job in jobs:
+            job.camera = random.choice(['Canon', 'Nikon', 'Sony', 'Red'])
+            job.status = random.choice(['error', 'warning', 'success'])
+
+    def printJobs(self):
+        jobs = self.jobModel.items
+        for job in jobs:
+            print(vars(job))
+
+
+def main():
+    app = QApplication(sys.argv)
+    window = JobQueue()
+    window.show()
     app.exec()
+
+
+if __name__ == '__main__':
+    main()

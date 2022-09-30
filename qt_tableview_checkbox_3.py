@@ -1,214 +1,194 @@
 # Reference:
-# https://www.pythonfixing.com/2022/03/fixed-update-object-when-checkbox.html
-import os
+# https://www.pythonguis.com/faq/abstract-table-model-question/
 import sys
-import random
 
 from PySide6.QtCore import (
-    Qt,
     QAbstractTableModel,
     QModelIndex,
+    QSortFilterProxyModel,
 )
-from PySide6.QtGui import QColor
+from PySide6.QtGui import (
+    Qt,
+    QColor,
+    QIcon,
+    QPainter,
+    QPen,
+    QPixmap,
+)
 from PySide6.QtWidgets import (
+    QAbstractItemDelegate,
     QAbstractItemView,
     QApplication,
-    QHBoxLayout,
-    QPushButton,
+    QComboBox,
+    QStyledItemDelegate,
     QTableView,
     QVBoxLayout,
     QWidget,
 )
 
 
-class PlayblastJob(object):
-    def __init__(self, **kwargs):
-        super(PlayblastJob, self).__init__()
+class AssetDelegate(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        if isinstance(self.parent(), QAbstractItemView):
+            self.parent().openPersistentEditor(index)
+        QStyledItemDelegate.paint(self, painter, option, index)
 
-        # instance properties
-        self.active = True
-        self.name = ''
-        self.camera = ''
-        self.renderWidth = 1920
-        self.renderHeight = 1080
-        self.renderScale = 1.0
-        self.status = ''
+    def createEditor(self, parent, option, index):
+        combobox = QComboBox(parent)
+        combobox.addItems(index.data(AssetModel.ItemsRole))
+        combobox.currentIndexChanged.connect(self.onCurrentIndexChanged)
+        return combobox
 
-        # initialize attribute values
-        for k, v in kwargs.items():
-            if hasattr(self, k):
-                setattr(self, k, v)
+    def onCurrentIndexChanged(self, ix):
+        editor = self.sender()
+        self.commitData.emit(editor)
+        self.closeEditor.emit(editor, QAbstractItemDelegate.NoHint)
 
-    def getScaledRenderSize(self):
-        x = int(self.renderWidth * self.renderScale)
-        y = int(self.renderHeight * self.renderScale)
-        return (x, y)
+    def setEditorData(self, editor, index):
+        ix = index.data(AssetModel.ActiveRole)
+        editor.setCurrentIndex(ix)
+
+    def setModelData(self, editor, model, index):
+        ix = editor.currentIndex()
+        model.setData(index, ix, AssetModel.ActiveRole)
 
 
-class JobModel(QAbstractTableModel):
-    HEADERS = ['Name', 'Camera', 'Resolution', 'Status']
+class Asset(object):
+    def __init__(self, name, items=[], active=0):
+        self.active = active
+        self.name = name
+        self.items = items
 
-    def __init__(self):
-        super(JobModel, self).__init__()
-        self.items = []
+    @property
+    def status(self):
+        return self.active == len(self.items) - 1
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if orientation == Qt.Horizontal:
-            if role == Qt.DisplayRole:
-                return self.HEADERS[section]
-        return None
 
-    def columnCount(self, parent=QModelIndex()):
-        return len(self.HEADERS)
+class AssetModel(QAbstractTableModel):
+    attr = ["Name", "Options", "Extra"]
+    ItemsRole = Qt.UserRole + 1
+    ActiveRole = Qt.UserRole + 2
 
-    def rowCount(self, parent=QModelIndex()):
-        return len(self.items)
+    def __init__(self, *args, **kwargs):
+        QAbstractTableModel.__init__(self, *args, **kwargs)
+        self._items = []
 
-    def appendJob(self, *items):
-        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount() + len(items) - 1)
-        for item in items:
-            assert isinstance(item, PlayblastJob)
-            self.items.append(item)
-        self.endInsertRows()
-
-    def removeJobs(self, items):
-        rowsToRemove = []
-        for row, item in enumerate(self.items):
-            if item in items:
-                rowsToRemove.append(row)
-        for row in sorted(rowsToRemove, reverse=True):
-            self.beginRemoveRows(QModelIndex(), row, row)
-            self.items.pop(row)
-            self.endRemoveRows()
+    def flags(self, index):
+        fl = QAbstractTableModel.flags(self, index)
+        if index.column() == 1:
+            fl |= Qt.ItemIsEditable
+        return fl
 
     def clear(self):
-        self.beginRemoveRows(QModelIndex(), 0, self.rowCount())
-        self.items = []
-        self.endRemoveRows()
+        self.beginResetModel()
+        self._items = []
+        self.endResetModel()
+
+    def rowCount(self, index=QModelIndex()):
+        return len(self._items)
+
+    def columnCount(self, index=QModelIndex()):
+        return len(self.attr)
+
+    def addItem(self, sbsFileObject):
+        self.beginInsertRows(QModelIndex(),
+                             self.rowCount(), self.rowCount())
+        self._items.append(sbsFileObject)
+        self.endInsertRows()
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return AssetModel.attr[section]
+        return QAbstractTableModel.headerData(self, section, orientation, role)
 
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
-            return
+            return None
+        if 0 <= index.row() < self.rowCount():
+            item = self._items[index.row()]
+            col = index.column()
+            if role == AssetModel.ItemsRole:
+                return getattr(item, 'items')
 
-        row = index.row()
-        col = index.column()
+            if role == AssetModel.ActiveRole:
+                return getattr(item, 'active')
 
-        if 0 <= row < self.rowCount():
-            item = self.items[row]
-            if role == Qt.DisplayRole:
-                if col == 0:
-                    return item.name
-                elif col == 1:
-                    return item.camera
-                elif col == 2:
-                    width, height = item.getScaledRenderSize()
-                    return '{} x {}'.format(width, height)
-                elif col == 3:
-                    return item.status.title()
-            elif role == Qt.ForegroundRole:
-                if col == 3:
-                    if item.status == 'error':
-                        return QColor(255, 82, 82)
-                    elif item.status == 'success':
-                        return QColor(76, 175, 80)
-                    elif item.status == 'warning':
-                        return QColor(255, 193, 7)
-            elif role == Qt.TextAlignmentRole:
-                if col == 2:
-                    return Qt.AlignCenter
-                if col == 3:
-                    return Qt.AlignCenter
-            elif role == Qt.CheckStateRole:
-                if col == 0:
-                    if item.active:
-                        return Qt.Checked
-                    else:
-                        return Qt.Unchecked
-            elif role == Qt.UserRole:
-                return item
-        return None
+            if 0 <= col < self.columnCount():
+                if role == Qt.DisplayRole:
+                    if col == 0:
+                        return getattr(item, 'name', '')
+                    if col == 1:
+                        return getattr(item, 'items')[getattr(item, 'active')]
+                elif role == Qt.DecorationRole:
+                    if col == 0:
+                        status = getattr(item, 'status')
+                        col = QColor(Qt.red) if status else QColor(
+                            Qt.green)
+                        px = QPixmap(120, 120)
+                        px.fill(Qt.transparent)
+                        painter = QPainter(px)
+                        painter.setRenderHint(QPainter.Antialiasing)
+                        px_size = px.rect().adjusted(12, 12, -12, -12)
+                        painter.setBrush(col)
+                        painter.setPen(QPen(Qt.black, 4,
+                                                  Qt.SolidLine,
+                                                  Qt.RoundCap,
+                                                  Qt.RoundJoin))
+                        painter.drawEllipse(px_size)
+                        painter.end()
+
+                        return QIcon(px)
+
+    def setData(self, index, value, role=Qt.EditRole):
+        if 0 <= index.row() < self.rowCount():
+            item = self._items[index.row()]
+            if role == AssetModel.ActiveRole:
+                setattr(item, 'active', value)
+                return True
+        return QAbstractTableModel.setData(self, index, value, role)
 
 
-class JobQueue(QWidget):
-    '''
-    Description:
-        Widget that manages the Jobs Queue
-    '''
+class Example(QWidget):
 
     def __init__(self):
-        super(JobQueue, self).__init__()
-        self.resize(400, 600)
+        super(Example, self).__init__()
+        self.resize(400, 300)
 
         # controls
-        self.uiAddNewJob = QPushButton('Add New Job')
-        self.uiAddNewJob.setToolTip('Add new job')
+        asset_model = QSortFilterProxyModel()
+        asset_model.setSortCaseSensitivity(Qt.CaseInsensitive)
+        asset_model.setSourceModel(AssetModel())
 
-        self.uiRemoveSelectedJobs = QPushButton('Remove Selected')
-        self.uiRemoveSelectedJobs.setToolTip('Remove selected jobs')
+        self.ui_assets = QTableView()
+        self.ui_assets.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui_assets.setModel(asset_model)
+        self.ui_assets.verticalHeader().hide()
+        self.ui_assets.setItemDelegateForColumn(1, AssetDelegate(self.ui_assets))
 
-        self.jobModel = JobModel()
-        self.uiJobTableView = QTableView()
-        self.uiJobTableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.uiJobTableView.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.uiJobTableView.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.uiJobTableView.setModel(self.jobModel)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(self.ui_assets)
+        self.setLayout(main_layout)
 
-        self.jobSelection = self.uiJobTableView.selectionModel()
+        self.unit_test()
 
-        self.uiRandomize = QPushButton('Randomize Selected Values')
-        self.uiPrintJobs = QPushButton('Print Jobs')
+    def unit_test(self):
+        assets = [
+            Asset('Dev1', ['v01', 'v02', 'v03'], 0),
+            Asset('Dev2', ['v10', 'v11', 'v13'], 1),
+            Asset('Dev3', ['v11', 'v22', 'v53'], 2),
+            Asset('Dev4', ['v13', 'v21', 'v23'], 0)
+        ]
 
-        # sub layouts
-        self.jobQueueToolsLayout = QHBoxLayout()
-        self.jobQueueToolsLayout.addWidget(self.uiAddNewJob)
-        self.jobQueueToolsLayout.addWidget(self.uiRemoveSelectedJobs)
-        self.jobQueueToolsLayout.addStretch()
-        self.jobQueueToolsLayout.addWidget(self.uiRandomize)
-
-        # layout
-        self.mainLayout = QVBoxLayout()
-        self.mainLayout.addLayout(self.jobQueueToolsLayout)
-        self.mainLayout.addWidget(self.uiJobTableView)
-        self.mainLayout.addWidget(self.uiPrintJobs)
-        self.setLayout(self.mainLayout)
-
-        # connections
-        self.uiAddNewJob.clicked.connect(self.addNewJob)
-        self.uiRemoveSelectedJobs.clicked.connect(self.removeSelectedJobs)
-        self.uiRandomize.clicked.connect(self.randomizeSelected)
-        self.uiPrintJobs.clicked.connect(self.printJobs)
-
-    # methods
-    def addNewJob(self):
-        name = random.choice(['Kevin', 'Melissa', 'Suzie', 'Eddie', 'Doug'])
-        job = PlayblastJob(name=name, camera='Camera001', startFrame=50)
-        self.jobModel.appendJob(job)
-
-    def removeSelectedJobs(self):
-        jobs = self.getSelectedJobs()
-        self.jobModel.removeJobs(jobs)
-
-    def getSelectedJobs(self):
-        jobs = [x.data(Qt.UserRole) for x in self.jobSelection.selectedRows()]
-        return jobs
-
-    def randomizeSelected(self):
-        jobs = self.getSelectedJobs()
-        for job in jobs:
-            job.camera = random.choice(['Canon', 'Nikon', 'Sony', 'Red'])
-            job.status = random.choice(['error', 'warning', 'success'])
-
-    def printJobs(self):
-        jobs = self.jobModel.items
-        for job in jobs:
-            print(vars(job))
+        self.ui_assets.model().sourceModel().clear()
+        for i, obj in enumerate(assets):
+            self.ui_assets.model().sourceModel().addItem(obj)
 
 
 def main():
     app = QApplication(sys.argv)
-    window = JobQueue()
-    window.show()
-    app.exec()
+    ex = Example()
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

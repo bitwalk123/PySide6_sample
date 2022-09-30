@@ -1,187 +1,130 @@
 # Reference:
-# https://www.pythonguis.com/faq/abstract-table-model-question/
+# https://stackoverflow.com/questions/62414356/add-a-checkbox-to-text-in-a-qtableview-cell-using-delegate
 import sys
 
 from PySide6.QtCore import (
     QAbstractTableModel,
-    QModelIndex,
-    QSortFilterProxyModel,
-)
-from PySide6.QtGui import (
+    QPersistentModelIndex,
     Qt,
-    QColor,
-    QIcon,
-    QPainter,
-    QPen,
-    QPixmap,
 )
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
-    QAbstractItemDelegate,
-    QAbstractItemView,
     QApplication,
     QComboBox,
+    QMainWindow,
     QStyledItemDelegate,
     QTableView,
-    QVBoxLayout,
-    QWidget,
 )
 
 
-class AssetDelegate(QStyledItemDelegate):
-    def paint(self, painter, option, index):
-        if isinstance(self.parent(), QAbstractItemView):
-            self.parent().openPersistentEditor(index)
-        QStyledItemDelegate.paint(self, painter, option, index)
-
-    def createEditor(self, parent, option, index):
-        combobox = QComboBox(parent)
-        combobox.addItems(index.data(AssetModel.ItemsRole))
-        combobox.currentIndexChanged.connect(self.onCurrentIndexChanged)
-        return combobox
-
-    def onCurrentIndexChanged(self, ix):
-        editor = self.sender()
-        self.commitData.emit(editor)
-        self.closeEditor.emit(editor, QAbstractItemDelegate.NoHint)
-
-    def setEditorData(self, editor, index):
-        ix = index.data(AssetModel.ActiveRole)
-        editor.setCurrentIndex(ix)
-
-    def setModelData(self, editor, model, index):
-        ix = editor.currentIndex()
-        model.setData(index, ix, AssetModel.ActiveRole)
+class CustomDelegate(QStyledItemDelegate):
+    def initStyleOption(self, option, index):
+        value = index.data(Qt.CheckStateRole)
+        if value is None:
+            model = index.model()
+            model.setData(index, Qt.Unchecked, Qt.CheckStateRole)
+        super().initStyleOption(option, index)
+        option.direction = Qt.RightToLeft
+        option.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
 
 
-class Asset(object):
-    def __init__(self, name, items=[], active=0):
-        self.active = active
-        self.name = name
-        self.items = items
+class MyModel(QAbstractTableModel):
+    def __init__(self, materials=[[]], parent=None):
+        super().__init__()
+        self.materials = materials
 
-    @property
-    def status(self):
-        return self.active == len(self.items) - 1
+        self.check_states = dict()
 
+    def rowCount(self, parent):
+        return len(self.materials)
 
-class AssetModel(QAbstractTableModel):
-    attr = ["Name", "Options", "Extra"]
-    ItemsRole = Qt.UserRole + 1
-    ActiveRole = Qt.UserRole + 2
+    def columnCount(self, parent):
+        return len(self.materials[0])
 
-    def __init__(self, *args, **kwargs):
-        QAbstractTableModel.__init__(self, *args, **kwargs)
-        self._items = []
+    def data(self, index, role):
 
-    def flags(self, index):
-        fl = QAbstractTableModel.flags(self, index)
-        if index.column() == 1:
-            fl |= Qt.ItemIsEditable
-        return fl
+        if role == Qt.DisplayRole:
+            row = index.row()
+            column = index.column()
+            value = self.materials[row][column]
+            return value
 
-    def clear(self):
-        self.beginResetModel()
-        self._items = []
-        self.endResetModel()
+        if role == Qt.EditRole:
+            row = index.row()
+            column = index.column()
+            value = self.materials[row][column]
+            return value
 
-    def rowCount(self, index=QModelIndex()):
-        return len(self._items)
+        if role == Qt.FontRole:
+            if index.column() == 0:
+                boldfont = QFont()
+                boldfont.setBold(True)
+                return boldfont
 
-    def columnCount(self, index=QModelIndex()):
-        return len(self.attr)
-
-    def addItem(self, sbsFileObject):
-        self.beginInsertRows(QModelIndex(),
-                             self.rowCount(), self.rowCount())
-        self._items.append(sbsFileObject)
-        self.endInsertRows()
-
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            return AssetModel.attr[section]
-        return QAbstractTableModel.headerData(self, section, orientation, role)
-
-    def data(self, index, role=Qt.DisplayRole):
-        if not index.isValid():
-            return None
-        if 0 <= index.row() < self.rowCount():
-            item = self._items[index.row()]
-            col = index.column()
-            if role == AssetModel.ItemsRole:
-                return getattr(item, 'items')
-
-            if role == AssetModel.ActiveRole:
-                return getattr(item, 'active')
-
-            if 0 <= col < self.columnCount():
-                if role == Qt.DisplayRole:
-                    if col == 0:
-                        return getattr(item, 'name', '')
-                    if col == 1:
-                        return getattr(item, 'items')[getattr(item, 'active')]
-                elif role == Qt.DecorationRole:
-                    if col == 0:
-                        status = getattr(item, 'status')
-                        col = QColor(Qt.red) if status else QColor(
-                            Qt.green)
-                        px = QPixmap(120, 120)
-                        px.fill(Qt.transparent)
-                        painter = QPainter(px)
-                        painter.setRenderHint(QPainter.Antialiasing)
-                        px_size = px.rect().adjusted(12, 12, -12, -12)
-                        painter.setBrush(col)
-                        painter.setPen(QPen(Qt.black, 4,
-                                                  Qt.SolidLine,
-                                                  Qt.RoundCap,
-                                                  Qt.RoundJoin))
-                        painter.drawEllipse(px_size)
-                        painter.end()
-
-                        return QIcon(px)
+        if role == Qt.CheckStateRole:
+            value = self.check_states.get(QPersistentModelIndex(index))
+            if value is not None:
+                return value
 
     def setData(self, index, value, role=Qt.EditRole):
-        if 0 <= index.row() < self.rowCount():
-            item = self._items[index.row()]
-            if role == AssetModel.ActiveRole:
-                setattr(item, 'active', value)
-                return True
-        return QAbstractTableModel.setData(self, index, value, role)
+        if role == Qt.EditRole:
+            row = index.row()
+            column = index.column()
+            self.materials[row][column] = value
+            self.dataChanged.emit(index, index, (role,))
+            return True
+        if role == Qt.CheckStateRole:
+            self.check_states[QPersistentModelIndex(index)] = value
+            self.dataChanged.emit(index, index, (role,))
+            return True
+        return False
+
+    def flags(self, index):
+        return (
+                Qt.ItemIsEditable
+                | Qt.ItemIsEnabled
+                | Qt.ItemIsSelectable
+                | Qt.ItemIsUserCheckable
+        )
 
 
-class Example(QWidget):
+class Example(QMainWindow):
+    list = ["item_1", "item_2", "item_3"]
+    data = [
+        [1, "Blocks γ=500 GOST 31359-2007", list[0], 0.18, 0.22],
+        [2, "Blocks γ=600 GOST 31359-2008", list[0], 0.25, 0.27],
+        [3, "Insulation", list[0], 0.041, 0.042],
+        [3, "Insulation", list[0], 0.041, 0.042],
+    ]
+    model: MyModel = None
 
     def __init__(self):
-        super(Example, self).__init__()
-        self.resize(400, 300)
+        super().__init__()
+        self.init_ui()
+        self.resize(640, 480)
 
-        # controls
-        asset_model = QSortFilterProxyModel()
-        asset_model.setSortCaseSensitivity(Qt.CaseInsensitive)
-        asset_model.setSourceModel(AssetModel())
+    def init_ui(self):
+        table = QTableView()
+        self.setCentralWidget(table)
+        self.model = MyModel(self.data)
+        table.setModel(self.model)
+        table.setSelectionBehavior(table.SelectRows)
+        table.setSelectionMode(table.SingleSelection)
+        for row in range(len(self.model.materials)):
+            index = table.model().index(row, 2)
+            table.setIndexWidget(index, self.setting_combobox(index))
+        delegate = CustomDelegate(table)
+        table.setItemDelegateForColumn(4, delegate)
 
-        self.ui_assets = QTableView()
-        self.ui_assets.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.ui_assets.setModel(asset_model)
-        self.ui_assets.verticalHeader().hide()
-        self.ui_assets.setItemDelegateForColumn(1, AssetDelegate(self.ui_assets))
-
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(self.ui_assets)
-        self.setLayout(main_layout)
-
-        self.unit_test()
-
-    def unit_test(self):
-        assets = [
-            Asset('Dev1', ['v01', 'v02', 'v03'], 0),
-            Asset('Dev2', ['v10', 'v11', 'v13'], 1),
-            Asset('Dev3', ['v11', 'v22', 'v53'], 2),
-            Asset('Dev4', ['v13', 'v21', 'v23'], 0)
-        ]
-
-        self.ui_assets.model().sourceModel().clear()
-        for i, obj in enumerate(assets):
-            self.ui_assets.model().sourceModel().addItem(obj)
+    def setting_combobox(self, index):
+        widget = QComboBox()
+        list = self.list
+        widget.addItems(list)
+        widget.setCurrentIndex(0)
+        widget.currentTextChanged.connect(
+            lambda value: self.model.setData(index, value)
+        )
+        return widget
 
 
 def main():
