@@ -1,5 +1,3 @@
-# Reference:
-# https://stackoverflow.com/questions/62414356/add-a-checkbox-to-text-in-a-qtableview-cell-using-delegate
 import sys
 from typing import Any
 
@@ -20,15 +18,25 @@ from PySide6.QtWidgets import (
 
 
 class MyContents:
+    """
+    This class defines only column header and contents of label columns.
+    It is assumed that label columns are left side of columns and rest of columns are checkbox.
+    """
+    # CheckBox status used by QPersistentModelIndex
+    check_states = dict()
+
     def __init__(self, list_labels: list, header_labels: list):
         self.list_labels = list_labels
         self.header_labels = header_labels
 
-    def getRows(self):
-        return len(self.list_labels[0])
+    def getCheckColStart(self):
+        return len(self.list_labels)
 
     def getCols(self):
         return len(self.header_labels)
+
+    def getColumnHeader(self, index: int):
+        return self.header_labels[index]
 
     def getData(self, row: int, col: int):
         if col < self.getCheckColStart():
@@ -36,17 +44,14 @@ class MyContents:
         else:
             return None
 
-    def getColumnHeader(self, index: int):
-        return self.header_labels[index]
-
     def getRowIndex(self, index: int):
         return str(index + 1)
 
-    def getCheckColStart(self):
-        return len(self.list_labels)
+    def getRows(self):
+        return len(self.list_labels[0])
 
 
-class ProxyStyleCheckBoxCenter(QProxyStyle):
+class ProxyStyle4CheckBoxCenter(QProxyStyle):
     def subElementRect(self, element, opt, widget=None):
         if element == self.SE_ItemViewItemCheckIndicator:
             rect = super().subElementRect(element, opt, widget)
@@ -68,7 +73,7 @@ class MyTableModel(QAbstractTableModel):
     def __init__(self, data: MyContents):
         super(MyTableModel, self).__init__()
         self._data = data
-        self.check_states = dict()
+        # self.check_states = dict()
 
     def rowCount(self, index: QModelIndex):
         return self._data.getRows()
@@ -84,13 +89,13 @@ class MyTableModel(QAbstractTableModel):
             return value
 
         if role == Qt.CheckStateRole:
-            value = self.check_states.get(QPersistentModelIndex(index))
+            value = self._data.check_states.get(QPersistentModelIndex(index))
             if value is not None:
                 return value
 
     def setData(self, index: QModelIndex, value: Any, role: Qt.ItemDataRole = Qt.EditRole):
         if role == Qt.CheckStateRole:
-            self.check_states[QPersistentModelIndex(index)] = value
+            self._data.check_states[QPersistentModelIndex(index)] = value
             self.dataChanged.emit(index, index, (role,))
             return True
 
@@ -128,7 +133,7 @@ class Example(QMainWindow):
 
     def init_ui(self):
         table = QTableView()
-        table.setStyle(ProxyStyleCheckBoxCenter())
+        table.setStyle(ProxyStyle4CheckBoxCenter())
         table.setWordWrap(False)
         table.setAlternatingRowColors(True)
         table.verticalHeader().setDefaultAlignment(Qt.AlignRight)
