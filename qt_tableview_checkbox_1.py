@@ -75,10 +75,10 @@ class MyTableModel(QAbstractTableModel):
         self._data = data
         # self.check_states = dict()
 
-    def rowCount(self, index: QModelIndex):
+    def rowCount(self, index: QModelIndex=None):
         return self._data.getRows()
 
-    def columnCount(self, index: QModelIndex):
+    def columnCount(self, index: QModelIndex=None):
         return self._data.getCols()
 
     def data(self, index: QModelIndex, role: Qt.ItemDataRole):
