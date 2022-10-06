@@ -1,6 +1,7 @@
 # Reference:
 # https://gist.github.com/gdementen/21a78ac56258c07dbc1072b806a5097a
 
+
 # taken from
 # http://blindvic.blogspot.be/2010/12/frozen-column-example-pyqt4-python3.html
 # conversion to qtpy, russian comments removal and a few minor improvements done by Gaëtan de Menten
