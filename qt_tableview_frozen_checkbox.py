@@ -104,11 +104,6 @@ class MyTableModel(QAbstractTableModel):
         return self._data.getCheckColStart()
 
     def flags(self, index: QModelIndex):
-        # return (
-        #        Qt.ItemIsEnabled
-        #        | Qt.ItemIsSelectable
-        #        | Qt.ItemIsUserCheckable
-        # )
         if not index.isValid():
             return Qt.ItemIsEnabled
         elif index.column() >= self.getCheckColStart():
@@ -142,14 +137,10 @@ class FrozenTableView(QTableView):
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
 
 
-class FTableView(QTableView):
+class MyTableView(QTableView):
     def __init__(self, model, parent=None, *args):
         QTableView.__init__(self, parent, *args)
-
-        # set the table model
-        # tm = MyTableModel(self)
         self.setModel(model)
-
         self.setMinimumSize(800, 600)
         self.setEditTriggers(QAbstractItemView.SelectedClicked)
         self.setStyleSheet('font-family: monospace;')
@@ -158,6 +149,7 @@ class FTableView(QTableView):
         self.setAlternatingRowColors(True)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.verticalHeader().setDefaultAlignment(Qt.AlignRight)
         self.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
         # FrozenTableView
@@ -214,11 +206,11 @@ class FTableView(QTableView):
 class Example(QMainWindow):
     #  Sample Data preparation
     num_data = 1000
-    names = ['TEST' + str(x + 1).zfill(5) for x in range(num_data)]
-    units = ['unit' + str(x + 1).zfill(5) for x in range(num_data)]
-    list_label_names = [names, units]
+    names_a = ['A' + str(x + 1).zfill(5) for x in range(num_data)]
+    names_b = ['B' + str(x + 1).zfill(5) for x in range(num_data)]
+    list_label_names = [names_a, names_b]
     num_check = 20
-    col_labels = ['NAME', 'UNIT'] + ['check(%d)' % (x + 1) for x in range(num_check)]
+    col_labels = ['NAME_A', 'NAME_B'] + ['check(%d)' % (x + 1) for x in range(num_check)]
 
     def __init__(self):
         super().__init__()
@@ -226,23 +218,34 @@ class Example(QMainWindow):
         self.setWindowTitle('FrozenTableView')
 
     def init_ui(self):
-        # model = MyTableModel(self)
         contents = MyContents(self.list_label_names, self.col_labels)
         model = MyTableModel(contents)
-        table = FTableView(model)
+        table = MyTableView(model)
         table.setStyle(ProxyStyle4CheckBoxCenter())
         self.setCentralWidget(table)
-        # table.resizeColumnsToContents()
 
         head_horizontal = table.horizontalHeader()
         head_horizontal.setSectionResizeMode(QHeaderView.ResizeToContents)
 
-        # set table model
-        # table.setModel(SimpleTableModel(self.prefdata, self.header))
         # delegate custom
         delegate = CheckBoxDelegate(table)
         for col in range(len(self.list_label_names), len(self.col_labels)):
             table.setItemDelegateForColumn(col, delegate)
+
+        # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
+        # WRITE/READ TEST for CheckBox status
+        # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
+        # set default status
+        for row in range(contents.getRows()):
+            for col in range(contents.getCheckColStart(), contents.getCols()):
+                index = model.index(row, col)
+                model.setData(index, 2, role=Qt.CheckStateRole)
+        # get check status
+        for row in range(contents.getRows()):
+            for col in range(contents.getCheckColStart(), contents.getCols()):
+                index = model.index(row, col)
+                value = model.data(index, role=Qt.CheckStateRole)
+                print(row, col, value)
 
 
 def main():
