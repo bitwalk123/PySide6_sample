@@ -75,10 +75,10 @@ class MyTableModel(QAbstractTableModel):
         self._data = data
         # self.check_states = dict()
 
-    def rowCount(self, index: QModelIndex=None):
+    def rowCount(self, index: QModelIndex = None):
         return self._data.getRows()
 
-    def columnCount(self, index: QModelIndex=None):
+    def columnCount(self, index: QModelIndex = None):
         return self._data.getCols()
 
     def data(self, index: QModelIndex, role: Qt.ItemDataRole):
@@ -121,9 +121,10 @@ class Example(QMainWindow):
     #  Sample Data preparation
     num_data = 1000
     names = ['TEST' + str(x + 1).zfill(5) for x in range(num_data)]
-    list_label_names = [names]
+    units = ['unit' + str(x + 1).zfill(5) for x in range(num_data)]
+    list_label_names = [names, units]
     num_check = 10
-    col_labels = ['NAME'] + ['check(%d)' % (x + 1) for x in range(num_check)]
+    col_labels = ['NAME', 'UNIT'] + ['check(%d)' % (x + 1) for x in range(num_check)]
 
     def __init__(self):
         super().__init__()
@@ -133,6 +134,11 @@ class Example(QMainWindow):
 
     def init_ui(self):
         table = QTableView()
+        # set table model
+        contents = MyContents(self.list_label_names, self.col_labels)
+        model = MyTableModel(contents)
+        table.setModel(model)
+        #
         table.setStyle(ProxyStyle4CheckBoxCenter())
         table.setWordWrap(False)
         table.setAlternatingRowColors(True)
@@ -145,10 +151,6 @@ class Example(QMainWindow):
         delegate = CheckBoxDelegate(table)
         for col in range(len(self.list_label_names), len(self.col_labels)):
             table.setItemDelegateForColumn(col, delegate)
-        # set table model
-        contents = MyContents(self.list_label_names, self.col_labels)
-        model = MyTableModel(contents)
-        table.setModel(model)
         # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
         # WRITE/READ TEST for CheckBox status
         # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_

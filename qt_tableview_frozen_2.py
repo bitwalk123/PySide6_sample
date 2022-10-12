@@ -84,12 +84,12 @@ class FrozenTableView(QTableView):
 
 
 class FTableView(QTableView):
-    def __init__(self, parent=None, *args):
+    def __init__(self, model, parent=None, *args):
         QTableView.__init__(self, parent, *args)
 
         # set the table model
-        tm = MyTableModel(self)
-        self.setModel(tm)
+        #tm = MyTableModel(self)
+        self.setModel(model)
 
         self.setMinimumSize(800, 600)
         self.setEditTriggers(QAbstractItemView.SelectedClicked)
@@ -103,7 +103,7 @@ class FTableView(QTableView):
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
 
         self.frozenTableView = FrozenTableView(self)
-        self.frozenTableView.setModel(tm)
+        self.frozenTableView.setModel(model)
         self.frozenTableView.resizeColumnsToContents()
         self.viewport().stackUnder(self.frozenTableView)
         self.frozenTableView.show()
@@ -158,7 +158,8 @@ class Example(QMainWindow):
         self.setWindowTitle('FrozenTableView')
 
     def init_ui(self):
-        table = FTableView()
+        model = MyTableModel(self)
+        table = FTableView(model)
         # table.resizeColumnsToContents()
 
         head_horizontal = table.horizontalHeader()
