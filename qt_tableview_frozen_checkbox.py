@@ -239,13 +239,13 @@ class Example(QMainWindow):
         for row in range(contents.getRows()):
             for col in range(contents.getCheckColStart(), contents.getCols()):
                 index = model.index(row, col)
-                model.setData(index, 2, role=Qt.CheckStateRole)
+                model.setData(index, Qt.CheckState.Checked, role=Qt.CheckStateRole)
         # get check status
         for row in range(contents.getRows()):
             for col in range(contents.getCheckColStart(), contents.getCols()):
                 index = model.index(row, col)
                 value = model.data(index, role=Qt.CheckStateRole)
-                print(row, col, value)
+                print(row, col, int(value))
 
 
 def main():
