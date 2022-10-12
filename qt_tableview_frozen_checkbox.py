@@ -6,13 +6,18 @@ from typing import Any
 
 from PySide6.QtCore import (
     Qt,
-    QAbstractTableModel, QSortFilterProxyModel, QModelIndex, QPersistentModelIndex,
+    QAbstractTableModel,
+    QModelIndex,
+    QPersistentModelIndex,
 )
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QApplication,
     QHeaderView,
     QMainWindow,
-    QTableView, QAbstractItemView, QProxyStyle, QStyledItemDelegate,
+    QProxyStyle,
+    QStyledItemDelegate,
+    QTableView,
 )
 
 
