@@ -19,7 +19,7 @@ class MyTableModel(QAbstractTableModel):
     def __init__(self, parent=None, *args):
         QAbstractTableModel.__init__(self, parent, *args)
         self.colLabels = ['Col%02d' % i for i in range(1, 21)]
-        self.dataCached = [['cell%02d,%02d' % (i, j) for i in range(1, 21)]
+        self.dataCached = [['cell%04d,%04d' % (i, j) for i in range(1, 21)]
                            for j in range(1, 51)]
 
     def rowCount(self, parent):
@@ -70,85 +70,52 @@ class MyTableModel(QAbstractTableModel):
 
 
 class FrozenTableView(QTableView):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setAlternatingRowColors(True)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.setSelectionModel(QAbstractItemView.selectionModel(parent))
+        #
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.verticalHeader().hide()
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+
+
+class FTableView(QTableView):
     def __init__(self, parent=None, *args):
         QTableView.__init__(self, parent, *args)
 
-        self.setMinimumSize(800, 600)
-
         # set the table model
         tm = MyTableModel(self)
+        self.setModel(tm)
 
-        # set the proxy model
-        pm = QSortFilterProxyModel(self)
-        pm.setSourceModel(tm)
-
-        self.setModel(pm)
-
-        self.frozenTableView = QTableView(self)
-        self.frozenTableView.setModel(pm)
-        self.frozenTableView.verticalHeader().hide()
-        self.frozenTableView.setFocusPolicy(Qt.NoFocus)
-        self.frozenTableView.setStyleSheet('''border: none; background-color: #CCC''')
-        self.frozenTableView.setSelectionModel(QAbstractItemView.selectionModel(self))
-        self.frozenTableView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.frozenTableView.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-        self.viewport().stackUnder(self.frozenTableView)
-
+        self.setMinimumSize(800, 600)
         self.setEditTriggers(QAbstractItemView.SelectedClicked)
-
-        # hide grid
-        self.setShowGrid(False)
-
-        self.setStyleSheet('font: 10pt "Courier New"')
-
-        hh = self.horizontalHeader()
-        hh.setDefaultAlignment(Qt.AlignCenter)
-        hh.setStretchLastSection(True)
-
-        ncol = tm.columnCount(self)
-        for col in range(ncol):
-            if col == 0:
-                self.horizontalHeader().resizeSection(col, 60)
-                self.frozenTableView.setColumnWidth(col, self.columnWidth(col))
-            elif col == 1:
-                self.horizontalHeader().resizeSection(col, 150)
-                self.frozenTableView.setColumnWidth(col, self.columnWidth(col))
-            else:
-                self.horizontalHeader().resizeSection(col, 100)
-                self.frozenTableView.setColumnHidden(col, True)
-
-        self.frozenTableView.setSortingEnabled(True)
-        self.frozenTableView.sortByColumn(0, Qt.AscendingOrder)
-
+        self.setStyleSheet('font-family: monospace;')
+        self.horizontalHeader().setDefaultAlignment(Qt.AlignCenter)
+        self.resizeColumnsToContents()
         self.setAlternatingRowColors(True)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
 
-        vh = self.verticalHeader()
-        vh.setDefaultSectionSize(25)
-        vh.setDefaultAlignment(Qt.AlignCenter)
-        vh.setVisible(True)
-        self.frozenTableView.verticalHeader().setDefaultSectionSize(vh.defaultSectionSize())
-
+        self.frozenTableView = FrozenTableView(self)
+        self.frozenTableView.setModel(tm)
+        self.frozenTableView.resizeColumnsToContents()
+        self.viewport().stackUnder(self.frozenTableView)
         self.frozenTableView.show()
         self.updateFrozenTableGeometry()
 
-        self.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
-        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-        self.frozenTableView.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-
         # connect the headers and scrollbars of both tableviews together
-        self.horizontalHeader().sectionResized.connect(self.updateSectionWidth)
-        self.verticalHeader().sectionResized.connect(self.updateSectionHeight)
-        self.frozenTableView.verticalScrollBar().valueChanged.connect(self.verticalScrollBar().setValue)
-        self.verticalScrollBar().valueChanged.connect(self.frozenTableView.verticalScrollBar().setValue)
-
-    def updateSectionWidth(self, logicalIndex, oldSize, newSize):
-        if logicalIndex == 0 or logicalIndex == 1:
-            self.frozenTableView.setColumnWidth(logicalIndex, newSize)
-            self.updateFrozenTableGeometry()
-
-    def updateSectionHeight(self, logicalIndex, oldSize, newSize):
-        self.frozenTableView.setRowHeight(logicalIndex, newSize)
+        self.verticalScrollBar().valueChanged.connect(
+            self.frozenTableView.verticalScrollBar().setValue
+        )
+        self.frozenTableView.verticalScrollBar().valueChanged.connect(
+            self.verticalScrollBar().setValue
+        )
 
     def resizeEvent(self, event):
         QTableView.resizeEvent(self, event)
@@ -160,13 +127,19 @@ class FrozenTableView(QTableView):
 
     def updateFrozenTableGeometry(self):
         if self.verticalHeader().isVisible():
-            self.frozenTableView.setGeometry(self.verticalHeader().width() + self.frameWidth(),
-                                             self.frameWidth(), self.columnWidth(0) + self.columnWidth(1),
-                                             self.viewport().height() + self.horizontalHeader().height())
+            self.frozenTableView.setGeometry(
+                self.verticalHeader().width() + self.frameWidth(),
+                self.frameWidth(),
+                self.columnWidth(0) + self.columnWidth(1),
+                self.viewport().height() + self.horizontalHeader().height()
+            )
         else:
-            self.frozenTableView.setGeometry(self.frameWidth(),
-                                             self.frameWidth(), self.columnWidth(0) + self.columnWidth(1),
-                                             self.viewport().height() + self.horizontalHeader().height())
+            self.frozenTableView.setGeometry(
+                self.frameWidth(),
+                self.frameWidth(),
+                self.columnWidth(0) + self.columnWidth(1),
+                self.viewport().height() + self.horizontalHeader().height()
+            )
 
     def moveCursor(self, cursorAction, modifiers):
         current = QTableView.moveCursor(self, cursorAction, modifiers)
@@ -179,14 +152,15 @@ class FrozenTableView(QTableView):
 
 
 class Example(QMainWindow):
-
     def __init__(self):
         super().__init__()
         self.init_ui()
         self.setWindowTitle('FrozenTableView')
 
     def init_ui(self):
-        table = FrozenTableView()
+        table = FTableView()
+        # table.resizeColumnsToContents()
+
         head_horizontal = table.horizontalHeader()
         head_horizontal.setSectionResizeMode(QHeaderView.ResizeToContents)
 
