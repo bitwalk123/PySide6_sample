@@ -15,12 +15,13 @@ from PySide6.QtWidgets import (
     QTableView, QAbstractItemView, QProxyStyle, QStyledItemDelegate,
 )
 
+
 class MyContents:
     """
     This class defines only column header and contents of label columns.
     It is assumed that label columns are left side of columns and rest of columns are checkbox.
     """
-    # CheckBox status used by QPersistentModelIndex
+    # The CheckBox status is used by QPersistentModelIndex
     check_states = dict()
 
     def __init__(self, list_labels: list, header_labels: list):
@@ -67,59 +68,6 @@ class CheckBoxDelegate(QStyledItemDelegate):
         super().initStyleOption(option, index)
 
 
-class MyTableModel0(QAbstractTableModel):
-    def __init__(self, parent=None, *args):
-        QAbstractTableModel.__init__(self, parent, *args)
-        self.colLabels = ['Col%02d' % i for i in range(1, 21)]
-        self.dataCached = [['cell%04d,%04d' % (i, j) for i in range(1, 21)]
-                           for j in range(1, 51)]
-
-    def rowCount(self, parent):
-        return len(self.dataCached)
-
-    def columnCount(self, parent):
-        return len(self.colLabels)
-
-    def get_value(self, index):
-        i = index.row()
-        j = index.column()
-        return self.dataCached[i][j]
-
-    def data(self, index, role):
-        if not index.isValid():
-            return None
-        value = self.get_value(index)
-        if role == Qt.DisplayRole or role == Qt.EditRole:
-            return value
-        elif role == Qt.TextAlignmentRole:
-            return Qt.AlignCenter
-        return None
-
-    def setData(self, index, value, role):
-        if index.isValid() and role == Qt.EditRole:
-            self.dataCached[index.row()][index.column()] = value
-            self.dataChanged.emit(index, index)
-            return True
-        else:
-            return False
-
-    def headerData(self, section, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            header = self.colLabels[section]
-            return header
-        if orientation == Qt.Vertical and role == Qt.DisplayRole:
-            return str(section + 1)
-
-        return None
-
-    def flags(self, index):
-        if not index.isValid():
-            return Qt.ItemIsEnabled
-        elif index.column() > 1:
-            return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsEditable
-
-        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
-
 class MyTableModel(QAbstractTableModel):
     def __init__(self, data: MyContents):
         super(MyTableModel, self).__init__()
@@ -152,12 +100,26 @@ class MyTableModel(QAbstractTableModel):
 
         return False
 
+    def getCheckColStart(self):
+        return self._data.getCheckColStart()
+
     def flags(self, index: QModelIndex):
-        return (
-                Qt.ItemIsEnabled
-                | Qt.ItemIsSelectable
-                | Qt.ItemIsUserCheckable
-        )
+        # return (
+        #        Qt.ItemIsEnabled
+        #        | Qt.ItemIsSelectable
+        #        | Qt.ItemIsUserCheckable
+        # )
+        if not index.isValid():
+            return Qt.ItemIsEnabled
+        elif index.column() >= self.getCheckColStart():
+            # return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsEditable
+            return (
+                    Qt.ItemIsEnabled
+                    | Qt.ItemIsSelectable
+                    | Qt.ItemIsUserCheckable
+            )
+
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: Qt.ItemDataRole):
         # section is the index of the column/row.
@@ -169,12 +131,10 @@ class MyTableModel(QAbstractTableModel):
 
 
 class FrozenTableView(QTableView):
-    def __init__(self, parent=None):
+    def __init__(self, parent: QTableView = None):
         super().__init__(parent)
         self.setAlternatingRowColors(True)
         self.setFocusPolicy(Qt.NoFocus)
-        self.setSelectionModel(QAbstractItemView.selectionModel(parent))
-        #
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
         self.verticalHeader().hide()
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -200,9 +160,10 @@ class FTableView(QTableView):
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
         self.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-
+        # FrozenTableView
         self.frozenTableView = FrozenTableView(self)
         self.frozenTableView.setModel(model)
+        self.frozenTableView.setSelectionModel(QAbstractItemView.selectionModel(self))
         self.frozenTableView.resizeColumnsToContents()
         self.viewport().stackUnder(self.frozenTableView)
         self.frozenTableView.show()
@@ -265,7 +226,7 @@ class Example(QMainWindow):
         self.setWindowTitle('FrozenTableView')
 
     def init_ui(self):
-        #model = MyTableModel(self)
+        # model = MyTableModel(self)
         contents = MyContents(self.list_label_names, self.col_labels)
         model = MyTableModel(contents)
         table = FTableView(model)
@@ -282,7 +243,6 @@ class Example(QMainWindow):
         delegate = CheckBoxDelegate(table)
         for col in range(len(self.list_label_names), len(self.col_labels)):
             table.setItemDelegateForColumn(col, delegate)
-
 
 
 def main():
