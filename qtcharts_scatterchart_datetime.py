@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Reference
-#   https://doc.qt.io/qt-6/qtcharts-datetimeaxis-example.html
 import sys
 from PySide6.QtCharts import (
     QChart,
     QChartView,
     QDateTimeAxis,
-    QLineSeries,
+    QScatterSeries,
     QValueAxis,
 )
 from PySide6.QtCore import (
@@ -16,7 +14,7 @@ from PySide6.QtCore import (
     QLocale,
     Qt,
 )
-from PySide6.QtGui import QPainter, QColor
+from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -24,8 +22,8 @@ from PySide6.QtWidgets import (
 import numpy as np
 
 
-def datetime_data_reader(name_file) -> QLineSeries:
-    series = QLineSeries()
+def datetime_data_reader(name_file) -> QScatterSeries:
+    series = QScatterSeries()
 
     with open(name_file) as f:
         for line in f:
@@ -41,26 +39,22 @@ def datetime_data_reader(name_file) -> QLineSeries:
             moment_in_time.setDate(QDate(int(values[0]), int(values[1]), 15))
             series.append(np.int64(moment_in_time.toMSecsSinceEpoch()), float(values[2]))
 
+    series.setPointsVisible(True)
+    series.setMarkerSize(5.0)
+
     return series
 
 
-class LineChart(QChartView):
+class ScatterChart(QChartView):
     def __init__(self):
         super().__init__()
         QLocale.setDefault(QLocale.c())
-        chart = self.init_ui()
+        chart = self.init_chart()
         self.setChart(chart)
         self.setRenderHint(QPainter.Antialiasing)
 
-    def init_ui(self):
+    def init_chart(self):
         series = datetime_data_reader('sun_spots.txt')
-        pen = series.pen()
-        pen.setWidth(1)
-        pen.setColor('blue')
-        series.setPen(pen)
-        series.setPointsVisible(True)
-        series.setMarkerSize(5.0)
-        series.setColor(QColor('blue'))
 
         chart = QChart()
         chart.legend().hide()
@@ -87,10 +81,10 @@ class LineChart(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        linechart = LineChart()
+        linechart = ScatterChart()
         self.setCentralWidget(linechart)
-        self.resize(1000, 600)
-        self.setWindowTitle('LineChart (DateTime)')
+        self.resize(500, 300)
+        self.setWindowTitle('ScatterChart (DateTime)')
 
 
 def main():
