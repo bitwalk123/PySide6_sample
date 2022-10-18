@@ -134,6 +134,7 @@ class FrozenTableView(QTableView):
     def __init__(self, parent: QTableView = None):
         super().__init__(parent)
         self.setAlternatingRowColors(True)
+        self.setWordWrap(False)
         self.setFocusPolicy(Qt.NoFocus)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
         self.verticalHeader().hide()
@@ -226,6 +227,7 @@ class Example(QMainWindow):
         contents = MyContents(self.list_label_names, self.col_labels)
         model = MyTableModel(contents)
         table = MyTableView(model)
+        table.setStyleSheet('font-family: monospace;')
         table.setStyle(ProxyStyle4CheckBoxCenter())
         self.setCentralWidget(table)
 

@@ -62,11 +62,11 @@ class Example(QMainWindow):
 
     def initUI(self):
         table: QTableView = QTableView()
+        table.setModel(SimpleTableModel(self.prefdata, self.header))
         table.setWordWrap(False)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         # set table model
-        table.setModel(SimpleTableModel(self.prefdata, self.header))
         self.setCentralWidget(table)
 
 

@@ -36,7 +36,9 @@ class MyWindow(QWidget):
         # create table
         table = FreezeTableWidget(self)
         head_horizontal = table.horizontalHeader()
-        head_horizontal.setSectionResizeMode(QHeaderView.ResizeToContents)
+        #head_horizontal.setSectionResizeMode(QHeaderView.ResizeToContents)
+        #table.setColumnWidth(0, 300)
+        #table.setColumnWidth(1, 200)
 
         # layout
         layout = QVBoxLayout()
@@ -63,7 +65,7 @@ class FreezeTableWidget(QTableView):
         self.frozenTableView.setModel(pm)
         self.frozenTableView.verticalHeader().hide()
         self.frozenTableView.setFocusPolicy(Qt.NoFocus)
-        # self.frozenTableView.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.frozenTableView.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
         self.frozenTableView.setStyleSheet('''border: none; background-color: #CCC''')
         self.frozenTableView.setSelectionModel(QAbstractItemView.selectionModel(self))
         self.frozenTableView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -125,6 +127,7 @@ class FreezeTableWidget(QTableView):
         self.verticalHeader().sectionResized.connect(self.updateSectionHeight)
         self.frozenTableView.verticalScrollBar().valueChanged.connect(self.verticalScrollBar().setValue)
         self.verticalScrollBar().valueChanged.connect(self.frozenTableView.verticalScrollBar().setValue)
+
 
     def updateSectionWidth(self, logicalIndex, oldSize, newSize):
         if logicalIndex == 0 or logicalIndex == 1:

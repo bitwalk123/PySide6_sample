@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QProxyStyle,
     QStyledItemDelegate,
-    QTableView,
+    QTableView, QStyle,
 )
 
 
@@ -119,9 +119,9 @@ class MyTableModel(QAbstractTableModel):
 
 class Example(QMainWindow):
     #  Sample Data preparation
-    num_data = 1000
-    names = ['TEST' + str(x + 1).zfill(5) for x in range(num_data)]
-    units = ['unit' + str(x + 1).zfill(5) for x in range(num_data)]
+    num_data = 10000
+    names = ['TEST' + str(x * x + 1) for x in range(num_data)]
+    units = ['unit' + str(x + 1) for x in range(num_data)]
     list_label_names = [names, units]
     num_check = 10
     col_labels = ['NAME', 'UNIT'] + ['check(%d)' % (x + 1) for x in range(num_check)]
@@ -139,18 +139,22 @@ class Example(QMainWindow):
         model = MyTableModel(contents)
         table.setModel(model)
         #
-        table.setStyle(ProxyStyle4CheckBoxCenter())
-        table.setWordWrap(False)
         table.setAlternatingRowColors(True)
+        table.setWordWrap(False)
+        table.setStyleSheet('font-family:monospace; font-size:12pt;')
+        #table.setStyleSheet('font-family:monospace;')
+        table.setStyle(ProxyStyle4CheckBoxCenter())
+        table.resizeColumnsToContents()
         table.verticalHeader().setDefaultAlignment(Qt.AlignRight)
-        table.horizontalHeader().setSectionResizeMode(
-            QHeaderView.ResizeToContents
-        )
-        self.setCentralWidget(table)
+        #table.horizontalHeader().setSectionResizeMode(
+        #    QHeaderView.ResizeToContents
+        #)
         # delegate custom
         delegate = CheckBoxDelegate(table)
         for col in range(len(self.list_label_names), len(self.col_labels)):
             table.setItemDelegateForColumn(col, delegate)
+        self.setCentralWidget(table)
+        table.setColumnWidth(0, table.sizeHintForColumn(0))
         # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
         # WRITE/READ TEST for CheckBox status
         # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
@@ -166,6 +170,16 @@ class Example(QMainWindow):
                 value = model.data(index, role=Qt.CheckStateRole)
                 print(row, col, value)
 
+        #width = (
+        #        self.fontMetrics().horizontalAdvance('T')
+        #        + self.style().pixelMetric(QStyle.PM_ButtonMargin) * 2
+        #        + self.style().pixelMetric(QStyle.PM_DefaultFrameWidth) * 2
+        #) * 12
+        #print(width)
+        #width = self.fontMetrics().horizontalAdvance('T') * 12
+        width = table.fontMetrics().averageCharWidth() * (12 + 2)
+        print(width)
+        table.horizontalHeader().resizeSection(0, width)
 
 def main():
     app = QApplication(sys.argv)
