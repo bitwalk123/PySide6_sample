@@ -40,7 +40,7 @@ def datetime_data_reader(name_file) -> QScatterSeries:
             series.append(np.int64(moment_in_time.toMSecsSinceEpoch()), float(values[2]))
 
     series.setPointsVisible(True)
-    series.setMarkerSize(5.0)
+    series.setMarkerSize(10.0)
 
     return series
 
@@ -62,14 +62,14 @@ class ScatterChart(QChartView):
         chart.setTitle('Sunspots count (by Space Weather Prediction Center)')
 
         axis_x = QDateTimeAxis()
-        axis_x.setTickCount(10)
+        # axis_x.setTickCount(10)
         axis_x.setFormat('MMM yyyy')
         axis_x.setTitleText('Date')
         chart.addAxis(axis_x, Qt.AlignBottom)
         series.attachAxis(axis_x)
 
         axis_y = QValueAxis()
-        axis_y.setTickCount(10)
+        # axis_y.setTickCount(10)
         axis_y.setLabelFormat('%i')
         axis_y.setTitleText('Sunspots count')
         chart.addAxis(axis_y, Qt.AlignLeft)
@@ -83,7 +83,7 @@ class Example(QMainWindow):
         super().__init__()
         linechart = ScatterChart()
         self.setCentralWidget(linechart)
-        self.resize(500, 300)
+        self.resize(800, 400)
         self.setWindowTitle('ScatterChart (DateTime)')
 
 
