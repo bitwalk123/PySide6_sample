@@ -39,9 +39,6 @@ def datetime_data_reader(name_file) -> QScatterSeries:
             moment_in_time.setDate(QDate(int(values[0]), int(values[1]), 15))
             series.append(np.int64(moment_in_time.toMSecsSinceEpoch()), float(values[2]))
 
-    series.setPointsVisible(True)
-    series.setMarkerSize(10.0)
-
     return series
 
 
@@ -55,6 +52,7 @@ class ScatterChart(QChartView):
 
     def init_chart(self):
         series = datetime_data_reader('sun_spots.txt')
+        series.setMarkerSize(10.0)
 
         chart = QChart()
         chart.legend().hide()
