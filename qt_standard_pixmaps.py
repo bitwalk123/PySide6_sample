@@ -15,7 +15,7 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
-        self.setWindowTitle('Qt Standard Pixmap')
+        self.setWindowTitle('Qt Standard Pixmaps')
 
     def init_ui(self):
         icons = sorted([attr for attr in dir(QStyle.StandardPixmap) if attr.startswith("SP_")])
