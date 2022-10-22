@@ -19,22 +19,22 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
-        self.Button()
+        self.tray_icon = QSystemTrayIcon()
+        self.init_ui()
+        self.button_with_icon()
         self.setWindowTitle('Qt icons')
 
-    def initUI(self):
+    def init_ui(self):
         style = self.style()
         icon = style.standardIcon(QStyle.SP_TitleBarMenuButton)
-        self.tray_icon = QSystemTrayIcon()
         self.tray_icon.setIcon(QIcon(icon))
         self.setWindowIcon(QIcon(icon))
 
         for path in QIcon.themeSearchPaths():
             print("%s/%s" % (path, QIcon.themeName()))
 
-    def Button(self):
-        Styles = [
+    def button_with_icon(self):
+        styles = [
             QStyle.SP_TitleBarMinButton,
             QStyle.SP_TitleBarMenuButton,
             QStyle.SP_TitleBarMaxButton,
@@ -106,17 +106,17 @@ class Example(QWidget):
             QStyle.SP_MediaVolume,
             QStyle.SP_MediaVolumeMuted,
             QStyle.SP_LineEditClearButton,
-            #QStyle.SP_DialogYesToAllButton,
-            #QStyle.SP_DialogNoToAllButton,
-            #QStyle.SP_DialogSaveAllButton,
-            #QStyle.SP_DialogAbortButton,
-            #QStyle.SP_DialogRetryButton,
-            #QStyle.SP_DialogIgnoreButton,
-            #QStyle.SP_RestoreDefaultsButton,
-            #QStyle.SP_CustomBase,
+            QStyle.SP_DialogYesToAllButton,
+            QStyle.SP_DialogNoToAllButton,
+            QStyle.SP_DialogSaveAllButton,
+            QStyle.SP_DialogAbortButton,
+            QStyle.SP_DialogRetryButton,
+            QStyle.SP_DialogIgnoreButton,
+            QStyle.SP_RestoreDefaultsButton,
+            QStyle.SP_CustomBase,
         ]
 
-        StylesText = [
+        styles_text = [
             'SP_TitleBarMinButton',
             'SP_TitleBarMenuButton',
             'SP_TitleBarMaxButton',
@@ -188,30 +188,30 @@ class Example(QWidget):
             'SP_MediaVolume',
             'SP_MediaVolumeMuted',
             'SP_LineEditClearButton',
-            #'SP_DialogYesToAllButton',
-            #'SP_DialogNoToAllButton',
-            #'SP_DialogSaveAllButton',
-            #'SP_DialogAbortButton',
-            #'SP_DialogRetryButton',
-            #'SP_DialogIgnoreButton',
-            #'SP_RestoreDefaultsButton',
-            #'SP_CustomBase',
+            'SP_DialogYesToAllButton',
+            'SP_DialogNoToAllButton',
+            'SP_DialogSaveAllButton',
+            'SP_DialogAbortButton',
+            'SP_DialogRetryButton',
+            'SP_DialogIgnoreButton',
+            'SP_RestoreDefaultsButton',
+            'SP_CustomBase',
         ]
 
-        btn = [QToolButton(self) for i in range(len(Styles))]
+        btn = [QToolButton(self) for i in range(len(styles))]
 
-        self.myHLayout = QGridLayout()
+        layout = QGridLayout()
 
         j = 0
         k = 0
         style = self.style()
-        for i in range(len(Styles)):
-            btn[i].setText("%s" % (StylesText[i]))
+        for i in range(len(styles)):
+            btn[i].setText("%s" % (styles_text[i]))
             btn[i].setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-            icon = style.standardIcon(Styles[i])
+            icon = style.standardIcon(styles[i])
             btn[i].setIcon(QIcon(icon))
 
-            self.myHLayout.addWidget(btn[i], j, k)
+            layout.addWidget(btn[i], j, k)
 
             if i == 0:
                 pass
@@ -221,7 +221,7 @@ class Example(QWidget):
             else:
                 k += 1
 
-        self.setLayout(self.myHLayout)
+        self.setLayout(layout)
 
 
 def main():
