@@ -25,7 +25,7 @@ class Example(QWidget):
             btn = QPushButton(name)
             btn.setStyleSheet('text-align:left;')
 
-            pixmap_icon = getattr(QStyle, name)
+            pixmap_icon = getattr(QStyle.StandardPixmap, name)
             icon = self.style().standardIcon(pixmap_icon)
             btn.setIcon(icon)
             layout.addWidget(btn, n / 4, n % 4)
