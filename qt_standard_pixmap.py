@@ -19,8 +19,8 @@ class Example(QWidget):
 
     def init_ui(self):
         icons = sorted([attr for attr in dir(QStyle.StandardPixmap) if attr.startswith("SP_")])
-        print(icons)
         layout = QGridLayout()
+        self.setLayout(layout)
         for n, name in enumerate(icons):
             btn = QPushButton(name)
             btn.setStyleSheet('text-align:left;')
@@ -29,8 +29,6 @@ class Example(QWidget):
             icon = self.style().standardIcon(pixmap_icon)
             btn.setIcon(icon)
             layout.addWidget(btn, n / 4, n % 4)
-
-        self.setLayout(layout)
 
 
 def main():
