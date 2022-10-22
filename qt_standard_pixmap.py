@@ -29,6 +29,7 @@ class Example(QWidget):
             icon = self.style().standardIcon(pixmap_icon)
             btn.setIcon(icon)
             layout.addWidget(btn, n / 4, n % 4)
+
         self.setLayout(layout)
 
 
