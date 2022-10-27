@@ -10,8 +10,6 @@ import pandas as pd
 # https://qiita.com/hiroyuki_kageyama/items/cb87a0bee98c0262a35e
 import matplotlib
 
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
