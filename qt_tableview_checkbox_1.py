@@ -6,14 +6,18 @@ from PySide6.QtCore import (
     QAbstractTableModel,
     QModelIndex,
     QPersistentModelIndex,
+    QRect,
 )
 from PySide6.QtWidgets import (
     QApplication,
-    QHeaderView,
     QMainWindow,
     QProxyStyle,
+    QStyle,
     QStyledItemDelegate,
-    QTableView, QStyle,
+    QStyleOption,
+    QStyleOptionViewItem,
+    QTableView,
+    QWidget,
 )
 
 
@@ -52,7 +56,7 @@ class MyContents:
 
 
 class ProxyStyle4CheckBoxCenter(QProxyStyle):
-    def subElementRect(self, element, opt, widget=None):
+    def subElementRect(self, element: QStyle.SubElement, opt: QStyleOption, widget: QWidget = None) -> QRect:
         if element == self.SubElement.SE_ItemViewItemCheckIndicator:
             rect = super().subElementRect(element, opt, widget)
             rect.moveCenter(opt.rect.center())
@@ -61,7 +65,7 @@ class ProxyStyle4CheckBoxCenter(QProxyStyle):
 
 
 class CheckBoxDelegate(QStyledItemDelegate):
-    def initStyleOption(self, option, index: QModelIndex):
+    def initStyleOption(self, option: QStyleOptionViewItem, index: QModelIndex):
         value = index.data(Qt.CheckStateRole)
         if value is None:
             model = index.model()
@@ -164,10 +168,11 @@ class Example(QMainWindow):
             for col in range(contents.getCheckColStart(), contents.getCols()):
                 index = model.index(row, col)
                 value = model.data(index, role=Qt.CheckStateRole)
-                print(row, col, value)
+                # print(row, col, value)
 
         width = table.fontMetrics().averageCharWidth() * (12 + 2)
         table.horizontalHeader().resizeSection(0, width)
+
 
 def main():
     app = QApplication(sys.argv)
