@@ -41,9 +41,9 @@ class ExampleTableModel(QAbstractTableModel):
     def __init__(self, df: pd.DataFrame):
         super().__init__()
         self.headers = df.columns.values
-        self.values = df.values.tolist()
+        self.values = df.values
 
-    def data(self, index: QModelIndex, role: int) -> Any:
+    def data(self, index: QModelIndex, role: Qt.ItemDataRole = Qt.EditRole) -> Any:
         if role == Qt.DisplayRole:
             return self.values[index.row()][index.column()]
 

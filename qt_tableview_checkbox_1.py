@@ -53,7 +53,7 @@ class MyContents:
 
 class ProxyStyle4CheckBoxCenter(QProxyStyle):
     def subElementRect(self, element, opt, widget=None):
-        if element == self.SE_ItemViewItemCheckIndicator:
+        if element == self.SubElement.SE_ItemViewItemCheckIndicator:
             rect = super().subElementRect(element, opt, widget)
             rect.moveCenter(opt.rect.center())
             return rect
@@ -81,7 +81,7 @@ class MyTableModel(QAbstractTableModel):
     def columnCount(self, index: QModelIndex = None):
         return self._data.getCols()
 
-    def data(self, index: QModelIndex, role: Qt.ItemDataRole):
+    def data(self, index: QModelIndex, role: int = Qt.DisplayRole):
         if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
@@ -108,7 +108,7 @@ class MyTableModel(QAbstractTableModel):
                 | Qt.ItemIsUserCheckable
         )
 
-    def headerData(self, section: int, orientation: Qt.Orientation, role: Qt.ItemDataRole):
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> Any:
         # section is the index of the column/row.
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
@@ -142,13 +142,9 @@ class Example(QMainWindow):
         table.setAlternatingRowColors(True)
         table.setWordWrap(False)
         table.setStyleSheet('font-family:monospace; font-size:12pt;')
-        #table.setStyleSheet('font-family:monospace;')
         table.setStyle(ProxyStyle4CheckBoxCenter())
         table.resizeColumnsToContents()
         table.verticalHeader().setDefaultAlignment(Qt.AlignRight)
-        #table.horizontalHeader().setSectionResizeMode(
-        #    QHeaderView.ResizeToContents
-        #)
         # delegate custom
         delegate = CheckBoxDelegate(table)
         for col in range(len(self.list_label_names), len(self.col_labels)):
@@ -170,15 +166,7 @@ class Example(QMainWindow):
                 value = model.data(index, role=Qt.CheckStateRole)
                 print(row, col, value)
 
-        #width = (
-        #        self.fontMetrics().horizontalAdvance('T')
-        #        + self.style().pixelMetric(QStyle.PM_ButtonMargin) * 2
-        #        + self.style().pixelMetric(QStyle.PM_DefaultFrameWidth) * 2
-        #) * 12
-        #print(width)
-        #width = self.fontMetrics().horizontalAdvance('T') * 12
         width = table.fontMetrics().averageCharWidth() * (12 + 2)
-        print(width)
         table.horizontalHeader().resizeSection(0, width)
 
 def main():
