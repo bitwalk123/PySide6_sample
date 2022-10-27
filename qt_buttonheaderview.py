@@ -25,9 +25,14 @@ class ButtonHeaderView(QHeaderView):
         for i in range(self.count()):
             button = QPushButton(self)
             button.setCursor(Qt.ArrowCursor)
+            button.clicked.connect(self.show_button)
             self.m_buttons.append(button)
             self.update_data()
             self.adjustPositions()
+
+    def show_button(self):
+        obj: QPushButton = self.sender()
+        print('clicked!', obj.text())
 
     def setModel(self, model):
         super().setModel(model)
@@ -73,7 +78,7 @@ class Example(QTableWidget):
         )
         header_buttons = []
         for i in range(self.columnCount()):
-            header_button = '+'
+            header_button = '+ %d' % i
             header_buttons.append(header_button)
         self.setVerticalHeaderLabels(header_buttons)
 
