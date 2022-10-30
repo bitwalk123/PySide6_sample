@@ -5,14 +5,13 @@ import re
 from datetime import datetime
 
 city_code = '040010'
-url = "https://weather.tsukumijima.net/api/forecast/city/" + city_code
+url = 'https://weather.tsukumijima.net/api/forecast/city/' + city_code
 
 try:
     response = requests.get(url)
     response.raise_for_status()  # ステータスコード200番台以外は例外とする
 except requests.exceptions.RequestException as e:
-    print("Error:{}".format(e))
-
+    print('Error:{}'.format(e))
 else:
     weather_json = response.json()
     for key in weather_json.keys():
@@ -30,4 +29,4 @@ else:
     else:
         cor = weather_json['forecasts'][0]['chanceOfRain']['T18_24']
 
-    print("現在の降水確率 {}".format(cor))
+    print('現在の降水確率 {}'.format(cor))
