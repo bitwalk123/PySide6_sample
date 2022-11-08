@@ -36,17 +36,17 @@ class ScatterChart(QChartView):
     def init_ui(self):
         series1 = QScatterSeries()
         series1.setName('scatter1')
-        series1.setMarkerShape(QScatterSeries.MarkerShapeCircle)
+        series1.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeCircle)
         series1.setMarkerSize(15.0)
 
         series2 = QScatterSeries()
         series2.setName('scatter2')
-        series2.setMarkerShape(QScatterSeries.MarkerShapeRectangle)
+        series2.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeRectangle)
         series2.setMarkerSize(20.0)
 
         series3 = QScatterSeries()
         series3.setName('scatter3')
-        series3.setMarkerShape(QScatterSeries.MarkerShapeRectangle)
+        series3.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeRectangle)
         series3.setMarkerSize(30.0)
 
         series1.append(0, 6)
@@ -87,7 +87,7 @@ class ScatterChart(QChartView):
         chart.createDefaultAxes()
         chart.setDropShadowEnabled(False)
 
-        chart.legend().setMarkerShape(QLegend.MarkerShapeFromSeries)
+        chart.legend().setMarkerShape(QLegend.MarkerShape.MarkerShapeFromSeries)
 
         return chart
 
@@ -97,7 +97,7 @@ class Example(QMainWindow):
         super().__init__()
         scatter = ScatterChart()
         self.setCentralWidget(scatter)
-        self.resize(500, 300)
+        self.resize(500, 500)
         self.setWindowTitle('ScatterChart')
 
 

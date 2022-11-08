@@ -40,7 +40,7 @@ class SplineChart(QChartView):
         chart.legend().hide()
         chart.addSeries(series)
         chart.createDefaultAxes()
-        chart.axes(Qt.Vertical)[0].setRange(0, 10);
+        chart.axes(Qt.Vertical)[0].setRange(0, 10)
         chart.setTitle('Simple spline chart example')
 
         return chart

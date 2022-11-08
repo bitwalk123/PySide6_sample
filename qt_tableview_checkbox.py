@@ -28,7 +28,7 @@ class Example(QMainWindow):
         """
         tblview = QTableView()
         tblview.horizontalHeader().setSectionResizeMode(
-            QHeaderView.ResizeToContents
+            QHeaderView.ResizeMode.ResizeToContents
         )
         model = QStandardItemModel()
         model.itemChanged.connect(self.on_check_item)

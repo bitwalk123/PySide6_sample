@@ -63,7 +63,7 @@ class LineBarChart(QChartView):
         chart.addSeries(barseries)
         chart.addSeries(lineseries)
         chart.setTitle('Line and barchart example')
-        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
 
         categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         axisX = QBarCategoryAxis()
@@ -71,7 +71,7 @@ class LineBarChart(QChartView):
         chart.addAxis(axisX, Qt.AlignBottom)
         lineseries.attachAxis(axisX)
         barseries.attachAxis(axisX)
-        axisX.setRange('Jan', 'Jun');
+        axisX.setRange('Jan', 'Jun')
 
         axisY = QValueAxis()
         chart.addAxis(axisY, Qt.AlignLeft)

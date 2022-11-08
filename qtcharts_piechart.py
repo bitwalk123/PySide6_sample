@@ -43,7 +43,7 @@ class PieChart(QChartView):
         chart = QChart()
         chart.addSeries(series)
         chart.setTitle('Simple piechart example')
-        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
 
         chart.legend().setVisible(True)
         chart.legend().setAlignment(Qt.AlignBottom)
