@@ -38,7 +38,7 @@ class ScatterChart(QChartView):
     def init_ui(self):
         series1 = QScatterSeries()
         series1.setName('sample')
-        series1.setMarkerShape(QScatterSeries.MarkerShapeCircle)
+        series1.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeCircle)
         series1.setMarkerSize(10.0)
 
         df = pd.DataFrame(np.random.random(size=(1000, 2)), columns=['X', 'Y'])
@@ -55,7 +55,7 @@ class ScatterChart(QChartView):
         chart.createDefaultAxes()
         chart.setDropShadowEnabled(False)
 
-        chart.legend().setMarkerShape(QLegend.MarkerShapeFromSeries)
+        chart.legend().setMarkerShape(QLegend.MarkerShape.MarkerShapeFromSeries)
 
         return chart
 
