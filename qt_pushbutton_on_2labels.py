@@ -17,12 +17,12 @@ class ButtonOn2Labels(QPushButton):
             QSizePolicy.Policy.MinimumExpanding,
             QSizePolicy.Policy.MinimumExpanding
         )
-        layout_inner = QVBoxLayout()
-        self.setLayout(layout_inner)
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
         lab_upper = QLabel(titles[0])
         lab_lower = QLabel(titles[1])
-        layout_inner.addWidget(lab_upper)
-        layout_inner.addWidget(lab_lower)
+        vbox.addWidget(lab_upper)
+        vbox.addWidget(lab_lower)
 
 
 class Example(QWidget):
