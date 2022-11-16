@@ -54,7 +54,7 @@ class BoxWhiskerChart(QChartView):
         chart.addSeries(series_acme)
         chart.addSeries(series_boxwhisk)
         chart.setTitle('Acme Ltd and BoxWhisk Inc share deviation in 2012')
-        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
         chart.createDefaultAxes()
         chart.axes(Qt.Vertical)[0].setMin(15.0)
         chart.axes(Qt.Horizontal)[0].setMax(34.0)

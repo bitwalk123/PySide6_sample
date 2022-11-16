@@ -39,7 +39,7 @@ class DonutChart(QChartView):
         chart = QChart()
         chart.addSeries(series)
         chart.setTitle('Donut with a lemon glaze (100g)')
-        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
 
         chart.legend().setVisible(True)
         chart.legend().setAlignment(Qt.AlignBottom)

@@ -148,9 +148,9 @@ class JobQueue(QWidget):
 
         self.jobModel = JobModel()
         self.uiJobTableView = QTableView()
-        self.uiJobTableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.uiJobTableView.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.uiJobTableView.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.uiJobTableView.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.uiJobTableView.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.uiJobTableView.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.uiJobTableView.setModel(self.jobModel)
 
         self.jobSelection = self.uiJobTableView.selectionModel()

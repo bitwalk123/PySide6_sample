@@ -49,7 +49,7 @@ class PercentBarChart(QChartView):
         chart = QChart()
         chart.addSeries(series)
         chart.setTitle('Simple percentbarchart example')
-        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
 
         categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         axisX = QBarCategoryAxis()

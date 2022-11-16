@@ -64,8 +64,8 @@ class Example(QMainWindow):
         table: QTableView = QTableView()
         table.setModel(SimpleTableModel(self.prefdata, self.header))
         table.setWordWrap(False)
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         # set table model
         self.setCentralWidget(table)
 
