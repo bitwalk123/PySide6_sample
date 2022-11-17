@@ -23,7 +23,7 @@ class ExampleDlg(QDialog):
         message = QLabel('ダイアログボックスを表示しました。')
         self.layout.addWidget(message)
 
-        dlgbtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        dlgbtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
         bbox = QDialogButtonBox(dlgbtn)
         bbox.accepted.connect(self.accept)
         bbox.rejected.connect(self.reject)
