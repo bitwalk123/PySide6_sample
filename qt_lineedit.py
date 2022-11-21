@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 import sys
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QDoubleValidator
 from PySide6.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -30,6 +31,10 @@ class Example(QWidget):
         hbox.addWidget(lab)
 
         self.line = QLineEdit()
+        #self.line.setAlignment(Qt.AlignmentFlag.AlignRight)
+        #validator = QDoubleValidator()
+        #validator.setBottom(0.0)
+        #self.line.setValidator(validator)
         self.line.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         hbox.addWidget(self.line)
 
