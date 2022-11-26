@@ -43,6 +43,7 @@ class Example(QMainWindow):
 
         self.webEngineView = QWebEngineView()
         self.setCentralWidget(self.webEngineView)
+
         initialUrl = 'http://qt.io'
         self.addressLineEdit.setText(initialUrl)
         self.webEngineView.load(QUrl(initialUrl))
