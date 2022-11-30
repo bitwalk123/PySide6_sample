@@ -103,16 +103,16 @@ class Calculator(QWidget):
 
         return pixmap
 
-    # -------------------------------------------------------------------------
-    #  get_display_string
-    #
-    #  argument
-    #    value : value to display
-    #
-    #  return
-    #    string to display
-    # -------------------------------------------------------------------------
     def get_display_string(self, value):
+        """
+        get_display_string
+
+        Argument
+          value : value to display
+
+        Return
+          string to display
+        """
         if self.flag_error:
             return value
 
@@ -146,17 +146,17 @@ class Calculator(QWidget):
 
         return str_value
 
-    # -------------------------------------------------------------------------
-    #  get_function_result
-    #
-    #  arguments
-    #    text  : function operator
-    #    value : value of function parameter
-    #
-    #  return
-    #    value calculated specified function
-    # -------------------------------------------------------------------------
     def get_function_result(self, text, value):
+        """
+        get_function_result
+
+        Arguments
+          text  : function operator
+          value : value of function parameter
+
+        Return
+          value calculated specified function
+        """
         # sign
         if text == "±":
             return value * -1
@@ -169,16 +169,16 @@ class Calculator(QWidget):
                 # return e
                 return "Error"
 
-    # -------------------------------------------------------------------------
-    #  get_operator
-    #
-    #  argument
-    #    text : label string of calculator key pad
-    #
-    #  return
-    #    operator string
-    # -------------------------------------------------------------------------
     def get_operator(self, text):
+        """
+        get_operator
+
+        Argument
+          text : label string of calculator key pad
+
+        Return
+          operator string
+        """
         if text == "＋":
             return "+"
         if text == "−":
@@ -188,35 +188,35 @@ class Calculator(QWidget):
         if text == "÷":
             return "/"
 
-    # -------------------------------------------------------------------------
-    #  set_display
-    #
-    #  argument
-    #    text : string to display
-    # -------------------------------------------------------------------------
     def set_display(self, text):
+        """
+        set_display
+
+        Argument
+          text : string to display
+        """
         self.lcd.display(text)
 
-    # -------------------------------------------------------------------------
-    #  zenkaku_to_hankaku
-    #
-    #  argument
-    #    text : zenkaku string
-    #
-    #  return
-    #    hankaku (ascii) string
-    # -------------------------------------------------------------------------
     def zenkaku_to_hankaku(self, text):
+        """
+        zenkaku_to_hankaku
+
+        Argument
+          text : zenkaku string
+
+        Return
+          hankaku (ascii) string
+        """
         # ref: https://qiita.com/YuukiMiyoshi/items/6ce77bf402a29a99f1bf
         return text.translate(str.maketrans({chr(0xFF01 + i): chr(0x21 + i) for i in range(94)}))
 
     # =========================================================================
     #  BINDINGS
     # =========================================================================
-    # -------------------------------------------------------------------------
-    #  on_clear
-    # -------------------------------------------------------------------------
     def on_clear(self):
+        """
+        on_clear
+        """
         # display
         self.ent.init()
         self.set_display(self.ent.get_text())
@@ -226,20 +226,20 @@ class Calculator(QWidget):
         self.flag_operation = False
         self.flag_error = False
 
-    # -------------------------------------------------------------------------
-    #  on_dot
-    # -------------------------------------------------------------------------
     def on_dot(self):
+        """
+        on_dot
+        """
         if self.flag_error:
             return
 
         # flag
         self.flag_dot = True
 
-    # -------------------------------------------------------------------------
-    #  on_equal
-    # -------------------------------------------------------------------------
     def on_equal(self):
+        """
+        on_equal
+        """
         if self.flag_error:
             return
 
@@ -264,10 +264,10 @@ class Calculator(QWidget):
         # flag
         self.flag_operation = True
 
-    # -------------------------------------------------------------------------
-    #  on_function
-    # -------------------------------------------------------------------------
     def on_function(self):
+        """
+        on_function
+        """
         button = self.sender()
         if self.flag_error:
             return
@@ -287,10 +287,10 @@ class Calculator(QWidget):
         # flag
         self.flag_operation = True
 
-    # -------------------------------------------------------------------------
-    #  on_operation
-    # -------------------------------------------------------------------------
     def on_operation(self):
+        """
+        on_operation
+        """
         button = self.sender()
         if self.flag_error:
             return
@@ -307,10 +307,10 @@ class Calculator(QWidget):
         self.flag_operation = True
         self.flag_dot = False
 
-    # -------------------------------------------------------------------------
-    #  on_number
-    # -------------------------------------------------------------------------
     def on_number(self):
+        """
+        on_number
+        """
         button = self.sender()
         if self.flag_error:
             return
