@@ -31,13 +31,13 @@ class Example(QWidget):
         layout.addWidget(combo)
 
     def selection_changed(self, i):
-        sender = self.sender()
+        cb: QComboBox = self.sender()
 
         print("Items in the list are :")
-        for count in range(sender.count()):
-            print(sender.itemText(count))
+        for count in range(cb.count()):
+            print(cb.itemText(count))
 
-        print("Current index", i, "selection changed ", sender.currentText())
+        print("Current index", i, "selection changed ", cb.currentText())
 
 
 def main():
