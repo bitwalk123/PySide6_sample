@@ -15,7 +15,7 @@ class Window(QWidget):
     def __init__(self):
         super(Window, self).__init__()
 
-        icons = sorted([attr for attr in dir(QStyle) if attr.startswith("SP_")])
+        icons = sorted([attr for attr in dir(QStyle.StandardPixmap) if attr.startswith("SP_")])
         layout = QGridLayout()
 
         for n, name in enumerate(icons):
