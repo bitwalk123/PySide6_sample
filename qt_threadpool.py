@@ -4,13 +4,20 @@
 import sys
 import time
 
-from PySide6.QtCore import QRunnable, Signal, Slot, QObject, QThreadPool
+from PySide6.QtCore import (
+    QObject,
+    QRunnable,
+    QThreadPool,
+    Signal,
+    Slot,
+)
 from PySide6.QtWidgets import (
     QApplication,
+    QPlainTextEdit,
     QPushButton,
     QSizePolicy,
     QVBoxLayout,
-    QWidget, QPlainTextEdit,
+    QWidget,
 )
 
 
@@ -71,6 +78,7 @@ class Example(QWidget):
 
     def thread_complete(self):
         self.show_log('Thread completed!')
+
     def show_log(self, msg: str):
         self.log.insertPlainText(msg + '\n')
 
