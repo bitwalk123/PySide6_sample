@@ -7,31 +7,37 @@ import sys
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
-    QWidget
+    QVBoxLayout,
+    QWidget,
 )
 
 
 class Example(QWidget):
     def __init__(self, parent=None):
         super().__init__()
-        self.initUI()
+        self.init_ui()
         self.setWindowTitle("Combobox")
 
-    def initUI(self):
-        cb = QComboBox(self)
-        cb.addItem("C")
-        cb.addItem("C++")
-        cb.addItems(["Java", "C#", "Python"])
-        cb.currentIndexChanged.connect(self.selectionchange)
+    def init_ui(self):
+        layout = QVBoxLayout()
+        self.setLayout(layout)
 
-    def selectionchange(self, i):
-        sender = self.sender()
+        combo = QComboBox(self)
+        combo.addItem("C")
+        combo.addItem("C++")
+        combo.addItems(["Java", "C#", "Python"])
+        combo.currentIndexChanged.connect(self.selection_changed)
+
+        layout.addWidget(combo)
+
+    def selection_changed(self, i):
+        cb: QComboBox = self.sender()
 
         print("Items in the list are :")
-        for count in range(sender.count()):
-            print(sender.itemText(count))
+        for count in range(cb.count()):
+            print(cb.itemText(count))
 
-        print("Current index", i, "selection changed ", sender.currentText())
+        print("Current index", i, "selection changed ", cb.currentText())
 
 
 def main():
