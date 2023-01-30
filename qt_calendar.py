@@ -13,10 +13,10 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
         self.setWindowTitle('Calendar')
 
-    def initUI(self):
+    def init_ui(self):
         calendar = QCalendarWidget()
 
         vbox = QVBoxLayout()
