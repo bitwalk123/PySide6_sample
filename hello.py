@@ -20,7 +20,6 @@ class Hello(QWidget):
         self.setWindowTitle('Hello World!')
 
         print('PySide', PySide6.__version__)
-        print('Qt', PySide6.QtCore.__version__)
 
     def init_ui(self):
         layout = QVBoxLayout()
@@ -30,7 +29,7 @@ class Hello(QWidget):
         font = QFont()
         font.setPointSize(24)
         label.setFont(font)
-        label.setAlignment(QtCore.Qt.AlignCenter)
+        label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
 
