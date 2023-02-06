@@ -13,6 +13,10 @@ from PySide6.QtCharts import (
 
 
 class Example(QMainWindow):
+    series: QLineSeries = 0
+    chart: QChart = None
+    chartView: QChartView = None
+
     def __init__(self):
         super().__init__()
         self.init_ui()
