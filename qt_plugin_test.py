@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
     QMainWindow,
+    QPushButton,
     QVBoxLayout,
     QWidget,
 )
@@ -15,10 +16,11 @@ from PySide6.QtWidgets import (
 
 class Example(QMainWindow):
     layout: QVBoxLayout = None
-    module_name = 'Plugin'
+    class_name = 'Plugin'
 
     def __init__(self):
         super().__init__()
+        self.counter_plugin = 0
         self.init_ui()
         self.setWindowTitle('Plugin Test')
 
@@ -43,19 +45,34 @@ class Example(QMainWindow):
     def plugin_read_dialog(self):
         dialog = QFileDialog()
         if dialog.exec():
-            file_path = dialog.selectedFiles()[0]
-            obj = self.add_module(file_path)
+            filename = dialog.selectedFiles()[0]
+            print(filename)
+            obj = self.add_module(filename)
             self.layout.addWidget(obj)
 
-    def add_module(self, file_path):
-        # Reference:
-        # https://docs.python.org/3/library/importlib.html
-        spec = importlib.util.spec_from_file_location(self.module_name, file_path)
+    def add_module(self, file_path: str) -> QPushButton:
+        """Add module as plugin.
+
+        Args:
+            file_path: script path to load as plugin
+
+        Returns:
+            QPushButton: plugin widget to add main application
+
+        Note:
+            https://docs.python.org/3/library/importlib.html
+        """
+        module_name = 'plugin_%d' % self.counter_plugin
+        self.counter_plugin += 1
+
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
         module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
         spec.loader.exec_module(module)
 
         # example: obj = module.Plugin()
-        obj = eval('module.%s()' % self.module_name)
+        obj = eval('module.%s()' % self.class_name)
+        print(type(obj))
         return obj
 
 
