@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 )
 
 
-def add_module(module_name: str, file_path: str, class_name) -> Any:
+def add_module(module_name: str, file_path: str, class_name: str) -> Any:
     """Add module
 
     Args:
