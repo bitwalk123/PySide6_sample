@@ -37,7 +37,7 @@ class Example(QMainWindow):
         button.setEnabled(False)
 
         progress = QProgressDialog(labelText='Working...', parent=self)
-        progress.setWindowModality(Qt.WindowModal)
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
         progress.setCancelButton(None)
         progress.setWindowTitle('status')
         progress.show()
