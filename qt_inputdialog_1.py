@@ -41,6 +41,7 @@ class ExampleDlg(QDialog):
         self.sbox = QDoubleSpinBox()
         self.sbox.setValue(self.value)
         self.sbox.setDecimals(3)
+        self.sbox.setSingleStep(0.1)
         self.sbox.setAlignment(Qt.AlignRight)
         layout.addWidget(self.sbox)
         dlgbtn = QDialogButtonBox.StandardButton.Ok
