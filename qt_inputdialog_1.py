@@ -4,6 +4,7 @@
 import sys
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QDialog,
@@ -11,6 +12,7 @@ from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QPushButton,
     QSizePolicy,
+    QStyle,
     QVBoxLayout,
     QWidget,
 )
@@ -20,6 +22,13 @@ class ExampleDlg(QDialog):
     def __init__(self, value: float = 1):
         super().__init__()
         self.setWindowTitle('Dialog')
+        self.setWindowIcon(
+            QIcon(
+                self.style().standardIcon(
+                    QStyle.StandardPixmap.SP_MessageBoxQuestion
+                )
+            )
+        )
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
