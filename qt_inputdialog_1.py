@@ -64,6 +64,7 @@ class Example(QWidget):
         dlg = ExampleDlg()
         dlg.exec()
         print(dlg.sbox.value())
+        dlg.deleteLater()
 
 
 def main():
