@@ -19,8 +19,11 @@ from PySide6.QtWidgets import (
 
 
 class ExampleDlg(QDialog):
+    sbox: QDoubleSpinBox = None
+
     def __init__(self, value: float = 1):
         super().__init__()
+        self.value = value
         self.setWindowTitle('Dialog')
         self.setWindowIcon(
             QIcon(
@@ -30,20 +33,23 @@ class ExampleDlg(QDialog):
             )
         )
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
+        self.init_ui()
 
+    def init_ui(self):
+        layout = QVBoxLayout()
+        self.setLayout(layout)
         self.sbox = QDoubleSpinBox()
-        self.sbox.setValue(value)
+        self.sbox.setValue(self.value)
         self.sbox.setDecimals(3)
         self.sbox.setAlignment(Qt.AlignRight)
-        self.layout.addWidget(self.sbox)
-
+        layout.addWidget(self.sbox)
         dlgbtn = QDialogButtonBox.StandardButton.Ok
         bbox = QDialogButtonBox(dlgbtn)
         bbox.accepted.connect(self.accept)
-        self.layout.addWidget(bbox)
+        layout.addWidget(bbox)
 
+    def getValue(self):
+        return self.sbox.value()
 
 class Example(QWidget):
     def __init__(self):
@@ -63,7 +69,7 @@ class Example(QWidget):
     def button_clicked(self):
         dlg = ExampleDlg()
         dlg.exec()
-        print(dlg.sbox.value())
+        print(dlg.getValue())
         dlg.deleteLater()
 
 
