@@ -1,4 +1,3 @@
-# Reference:
 # https://doc.qt.io/qtforpython/examples/example_webenginewidgets__simplebrowser.html
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
@@ -29,11 +28,15 @@ class Example(QMainWindow):
         self.toolBar = QToolBar()
         self.addToolBar(self.toolBar)
         self.backButton = QPushButton()
-        self.backButton.setIcon(QIcon(':/qt-project.org/styles/commonstyle/images/left-32.png'))
+        self.backButton.setIcon(
+            QIcon(':/qt-project.org/styles/commonstyle/images/left-32.png')
+        )
         self.backButton.clicked.connect(self.back)
         self.toolBar.addWidget(self.backButton)
         self.forwardButton = QPushButton()
-        self.forwardButton.setIcon(QIcon(':/qt-project.org/styles/commonstyle/images/right-32.png'))
+        self.forwardButton.setIcon(
+            QIcon(':/qt-project.org/styles/commonstyle/images/right-32.png')
+        )
         self.forwardButton.clicked.connect(self.forward)
         self.toolBar.addWidget(self.forwardButton)
 
@@ -58,12 +61,10 @@ class Example(QMainWindow):
 
     @Slot()
     def back(self):
-        # self.webEngineView.page().triggerAction(QWebEnginePage.Back)
         self.webEngineView.page().triggerAction(QWebEnginePage.WebAction.Back)
 
     @Slot()
     def forward(self):
-        # self.webEngineView.page().triggerAction(QWebEnginePage.Forward)
         self.webEngineView.page().triggerAction(QWebEnginePage.WebAction.Forward)
 
     @Slot(QUrl)
