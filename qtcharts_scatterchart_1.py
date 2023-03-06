@@ -10,7 +10,7 @@ from PySide6.QtCharts import (
     QChart,
     QChartView,
     QLegend,
-    QScatterSeries,
+    QScatterSeries, QValueAxis,
 )
 from PySide6.QtCore import (
     QPointF,
@@ -20,7 +20,7 @@ from PySide6.QtGui import (
     QColor,
     QImage,
     QPainter,
-    QPainterPath,
+    QPainterPath, QPen,
 )
 from PySide6.QtWidgets import (
     QApplication,
@@ -36,26 +36,34 @@ class ScatterChart(QChartView):
         self.setRenderHint(QPainter.Antialiasing)
 
     def init_ui(self):
-        series1 = QScatterSeries()
-        series1.setName('sample')
-        series1.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeCircle)
-        series1.setMarkerSize(10.0)
-
-        df = pd.DataFrame(np.random.random(size=(1000, 2)), columns=['X', 'Y'])
-        series1.append(0, 6)
-        series1.append(2, 4)
-        series1.append(3, 8)
-        series1.append(7, 4)
-        series1.append(10, 5)
-
         chart = QChart()
-        chart.addSeries(series1)
-
-        chart.setTitle('Simple scatterchart example')
-        chart.createDefaultAxes()
+        chart.setTitle('Scatter Chart')
         chart.setDropShadowEnabled(False)
+        chart.legend().hide()
 
-        chart.legend().setMarkerShape(QLegend.MarkerShape.MarkerShapeFromSeries)
+        axis_x = QValueAxis()
+        chart.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
+
+        axis_y = QValueAxis()
+        chart.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
+
+        list_sample = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+
+        for sample in list_sample:
+            series = QScatterSeries()
+            series.setName(sample)
+            series.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeCircle)
+            series.setMarkerSize(5)
+            series.setPen(QPen(Qt.PenStyle.NoPen))
+
+            df = pd.DataFrame(np.random.random(size=(100, 2)), columns=['X', 'Y'])
+            for r in range(len(df)):
+                xy_pair = df.iloc[r, :].to_list()
+                series.append(*xy_pair)
+
+            chart.addSeries(series)
+            series.attachAxis(axis_x)
+            series.attachAxis(axis_y)
 
         return chart
 
