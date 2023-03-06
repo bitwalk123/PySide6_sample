@@ -1,26 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Reference
-#   https://doc.qt.io/qt-6/qtcharts-scatterchart-example.html
-import math
 import sys
 import numpy as np
 import pandas as pd
 from PySide6.QtCharts import (
     QChart,
     QChartView,
-    QLegend,
-    QScatterSeries, QValueAxis,
+    QScatterSeries,
+    QValueAxis,
 )
-from PySide6.QtCore import (
-    QPointF,
-    Qt,
-)
+from PySide6.QtCore import Qt
 from PySide6.QtGui import (
-    QColor,
-    QImage,
     QPainter,
-    QPainterPath, QPen,
+    QPen,
 )
 from PySide6.QtWidgets import (
     QApplication,
