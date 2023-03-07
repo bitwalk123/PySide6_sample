@@ -41,6 +41,8 @@ class ScatterChart(QChartView):
 
         list_sample = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
 
+        list_x = list()
+        list_y = list()
         for sample in list_sample:
             series = QScatterSeries()
             series.setName(sample)
@@ -52,11 +54,15 @@ class ScatterChart(QChartView):
             for r in range(len(df)):
                 xy_pair = df.iloc[r, :].to_list()
                 series.append(*xy_pair)
+                list_x.append(xy_pair[0])
+                list_y.append(xy_pair[1])
 
             chart.addSeries(series)
             series.attachAxis(axis_x)
             series.attachAxis(axis_y)
 
+        axis_x.setRange(min(list_x), max(list_x))
+        axis_y.setRange(min(list_y), max(list_y))
         return chart
 
 
