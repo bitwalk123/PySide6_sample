@@ -26,15 +26,14 @@ from PySide6.QtWidgets import (
 class ScatterChart(QChartView):
     def __init__(self):
         super().__init__()
-        chart = self.init_ui()
-        self.setChart(chart)
+        self.init_ui()
         self.setRenderHint(QPainter.Antialiasing)
-
         self._value_pos = QPoint()
         self.setMouseTracking(True)
 
     def init_ui(self):
         chart = QChart()
+        self.setChart(chart)
         chart.setTitle('Scatter Chart')
         chart.setDropShadowEnabled(False)
         chart.legend().hide()
@@ -61,8 +60,6 @@ class ScatterChart(QChartView):
         chart.addSeries(series)
         series.attachAxis(axis_x)
         series.attachAxis(axis_y)
-
-        return chart
 
     def drawForeground(self, painter, rect):
         super().drawForeground(painter, rect)
