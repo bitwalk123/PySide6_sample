@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
+
+# Reference:
+# https://stackoverflow.com/questions/64446378/how-to-add-a-crosshair-to-a-pyqt5-graph
 import random
 import sys
 from PySide6.QtCharts import (
@@ -8,10 +11,11 @@ from PySide6.QtCharts import (
     QScatterSeries,
     QValueAxis,
 )
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QPointF, QPoint
 from PySide6.QtGui import (
+    QMouseEvent,
     QPainter,
-    QPen,
+    QPen, QColor,
 )
 from PySide6.QtWidgets import (
     QApplication,
@@ -25,6 +29,9 @@ class ScatterChart(QChartView):
         chart = self.init_ui()
         self.setChart(chart)
         self.setRenderHint(QPainter.Antialiasing)
+
+        self._value_pos = QPoint()
+        self.setMouseTracking(True)
 
     def init_ui(self):
         chart = QChart()
@@ -44,7 +51,6 @@ class ScatterChart(QChartView):
         series.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeCircle)
         series.setMarkerSize(5)
         series.setPen(QPen(Qt.PenStyle.NoPen))
-        series.clicked.connect(self.handle)
 
         # Data prep.
         list_xy_pair = [[random.random(), random.random()] for i in range(100)]
@@ -58,11 +64,38 @@ class ScatterChart(QChartView):
 
         return chart
 
-    def handle(self, event):
-        print(event)
+    def drawForeground(self, painter, rect):
+        super().drawForeground(painter, rect)
+        if self.chart() is None or self._value_pos.isNull():
+            return
 
-    def mousePressEvent(self, event):
-        print(event)
+        pen = QPen(QColor('salmon'))
+        pen.setWidth(1)
+        painter.setPen(pen)
+
+        area = self.chart().plotArea()
+        sp = self.chart().mapToPosition(self._value_pos)
+        x1 = QPointF(area.left() + pen.width() / 2, sp.y())
+        x2 = QPointF(area.right() - pen.width() / 2, sp.y())
+        y1 = QPointF(sp.x(), area.top() + pen.width() / 2)
+        y2 = QPointF(sp.x(), area.bottom() - pen.width() / 2)
+
+        if area.left() <= sp.x() <= area.right():
+            painter.drawLine(y1, y2)
+        if area.top() < sp.y() < area.bottom():
+            painter.drawLine(x1, x2)
+
+    def mousePressEvent(self, event: QMouseEvent):
+        super().mouseMoveEvent(event)
+        if self.chart() is None:
+            return
+        sp = self.mapToScene(event.pos())
+        if self.chart().plotArea().contains(sp):
+            self._value_pos = self.chart().mapToValue(sp)
+            self.setCursor(Qt.CursorShape.PointingHandCursor)
+        else:
+            self.unsetCursor()
+        self.update()
 
 
 class Example(QMainWindow):
