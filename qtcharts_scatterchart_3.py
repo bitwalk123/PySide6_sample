@@ -11,11 +11,18 @@ from PySide6.QtCharts import (
     QScatterSeries,
     QValueAxis,
 )
-from PySide6.QtCore import Qt, QPointF, QPoint
+from PySide6.QtCore import (
+    QPoint,
+    QPointF,
+    QRect,
+    QRectF,
+    Qt,
+)
 from PySide6.QtGui import (
+    QColor,
     QMouseEvent,
     QPainter,
-    QPen, QColor,
+    QPen,
 )
 from PySide6.QtWidgets import (
     QApplication,
@@ -23,85 +30,99 @@ from PySide6.QtWidgets import (
 )
 
 
-class ScatterChart(QChartView):
-    def __init__(self):
+class ScatterView(QChartView):
+    def __init__(self, list_data):
         super().__init__()
+        self.list_data = list_data
         self.init_ui()
         self.setRenderHint(QPainter.Antialiasing)
         self._value_pos = QPoint()
         self.setMouseTracking(True)
 
-    def init_ui(self):
-        chart = QChart()
-        self.setChart(chart)
-        chart.setTitle('Scatter Chart')
-        chart.setDropShadowEnabled(False)
-        chart.legend().hide()
-
-        axis_x = QValueAxis()
-        axis_x.setRange(0, 1)
-        chart.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
-
-        axis_y = QValueAxis()
-        axis_y.setRange(0, 1)
-        chart.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
-
+    def generate_scatter_series(self):
         series = QScatterSeries()
         series.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeCircle)
-        series.setMarkerSize(5)
+        series.setMarkerSize(10)
         series.setPen(QPen(Qt.PenStyle.NoPen))
+        for xy in self.list_data:
+            series.append(*xy)
+        return series
 
-        # Data prep.
-        list_xy_pair = [[random.random(), random.random()] for i in range(100)]
+    def generate_value_axis(self):
+        axis = QValueAxis()
+        axis.setRange(0, 1)
+        return axis
 
-        for xy_pair in list_xy_pair:
-            series.append(*xy_pair)
+    def init_ui(self):
+        chrt = QChart()
+        self.setChart(chrt)
+        chrt.setTitle('Scatter Plot example')
+        chrt.setDropShadowEnabled(False)
+        chrt.legend().hide()
 
-        chart.addSeries(series)
+        # X axis
+        axis_x = self.generate_value_axis()
+        chrt.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
+
+        # Y axis
+        axis_y = self.generate_value_axis()
+        chrt.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
+
+        # Series
+        series = self.generate_scatter_series()
         series.attachAxis(axis_x)
         series.attachAxis(axis_y)
+        chrt.addSeries(series)
 
-    def drawForeground(self, painter, rect):
+    # _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
+    # Override methods
+    def drawForeground(self, painter: QPainter, rect: QRectF):
         super().drawForeground(painter, rect)
         if self.chart() is None or self._value_pos.isNull():
             return
 
-        pen = QPen(QColor('salmon'))
+        pen = QPen(QColor('red'))
         pen.setWidth(1)
         painter.setPen(pen)
 
-        area = self.chart().plotArea()
-        sp = self.chart().mapToPosition(self._value_pos)
-        x1 = QPointF(area.left() + pen.width() / 2, sp.y())
-        x2 = QPointF(area.right() - pen.width() / 2, sp.y())
-        y1 = QPointF(sp.x(), area.top() + pen.width() / 2)
-        y2 = QPointF(sp.x(), area.bottom() - pen.width() / 2)
+        area: QRect = self.chart().plotArea()
+        pointf: QPointF = self.chart().mapToPosition(self._value_pos)
+        horiz_1 = QPointF(area.left() + pen.width() / 2, pointf.y())
+        horiz_2 = QPointF(area.right() - pen.width() / 2, pointf.y())
+        vert_1 = QPointF(pointf.x(), area.top() + pen.width() / 2)
+        vert_2 = QPointF(pointf.x(), area.bottom() - pen.width() / 2)
 
-        if area.left() <= sp.x() <= area.right():
-            painter.drawLine(y1, y2)
-        if area.top() < sp.y() < area.bottom():
-            painter.drawLine(x1, x2)
+        if area.left() <= pointf.x() <= area.right():
+            painter.drawLine(vert_1, vert_2)
+        if area.top() < pointf.y() < area.bottom():
+            painter.drawLine(horiz_1, horiz_2)
 
-    def mousePressEvent(self, event: QMouseEvent):
+    def mouseMoveEvent(self, event: QMouseEvent):
         super().mouseMoveEvent(event)
         if self.chart() is None:
             return
-        sp = self.mapToScene(event.pos())
-        if self.chart().plotArea().contains(sp):
-            self._value_pos = self.chart().mapToValue(sp)
+        point_item: QPoint = event.position().toPoint()
+        point_scene: QPointF = self.mapToScene(point_item)
+        if self.chart().plotArea().contains(point_scene):
+            self._value_pos = self.chart().mapToValue(point_scene)
             self.setCursor(Qt.CursorShape.PointingHandCursor)
         else:
             self.unsetCursor()
+
         self.update()
 
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        scatter = ScatterChart()
+
+        # Data prep.
+        list_xy_pair = [[random.random(), random.random()] for i in range(100)]
+
+        scatter = ScatterView(list_xy_pair)
         self.setCentralWidget(scatter)
         self.resize(500, 500)
-        self.setWindowTitle('ScatterChart')
+        self.setWindowTitle('ScatterView')
 
 
 def main():
