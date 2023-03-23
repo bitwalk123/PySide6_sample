@@ -86,16 +86,16 @@ class ScatterView(QChartView):
         painter.setPen(pen)
 
         area: QRect = self.chart().plotArea()
-        pointf: QPointF = self.chart().mapToPosition(self._value_pos)
-        horiz_1 = QPointF(area.left() + pen.width() / 2, pointf.y())
-        horiz_2 = QPointF(area.right() - pen.width() / 2, pointf.y())
-        vert_1 = QPointF(pointf.x(), area.top() + pen.width() / 2)
-        vert_2 = QPointF(pointf.x(), area.bottom() - pen.width() / 2)
+        point: QPointF = self.chart().mapToPosition(self._value_pos)
+        horiz_left = QPointF(area.left() + pen.width() / 2, point.y())
+        horiz_right = QPointF(area.right() - pen.width() / 2, point.y())
+        vert_top = QPointF(point.x(), area.top() + pen.width() / 2)
+        vert_bottom = QPointF(point.x(), area.bottom() - pen.width() / 2)
 
-        if area.left() <= pointf.x() <= area.right():
-            painter.drawLine(vert_1, vert_2)
-        if area.top() < pointf.y() < area.bottom():
-            painter.drawLine(horiz_1, horiz_2)
+        if area.left() <= point.x() <= area.right():
+            painter.drawLine(vert_top, vert_bottom)
+        if area.top() < point.y() < area.bottom():
+            painter.drawLine(horiz_left, horiz_right)
 
     def mouseMoveEvent(self, event: QMouseEvent):
         super().mouseMoveEvent(event)
@@ -103,6 +103,7 @@ class ScatterView(QChartView):
             return
         point_item: QPoint = event.position().toPoint()
         point_scene: QPointF = self.mapToScene(point_item)
+        print(point_scene.x(), point_scene.y())
         if self.chart().plotArea().contains(point_scene):
             self._value_pos = self.chart().mapToValue(point_scene)
             self.setCursor(Qt.CursorShape.PointingHandCursor)
