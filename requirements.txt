@@ -1,4 +1,7 @@
+openpyxl
 pip-chill
 pip-review
 pyside6
+requests
+scikit-learn
 seaborn

@@ -16,7 +16,6 @@ from PySide6.QtWidgets import (
     QApplication,
     QHeaderView,
     QItemDelegate,
-    QMainWindow,
     QStyleOptionViewItem,
     QTableView,
 )
@@ -62,7 +61,7 @@ class ExampleTableModel(QAbstractTableModel):
             return "{}".format(section + 1)
 
 
-class Example(QMainWindow):
+class Example(QTableView):
     def __init__(self):
         super().__init__()
 
@@ -75,22 +74,18 @@ class Example(QMainWindow):
 
         self.initUI(df)
         self.setWindowTitle('TableView')
-        self.resize(400, 300)
 
     def initUI(self, df: pd.DataFrame):
-        table = QTableView()
-        table.setStyleSheet('QHeaderView::section {color:#004; background-color:#ddf}')
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        table.setWordWrap(False)
+        self.setStyleSheet('QHeaderView::section {color:#004; background-color:#ddf}')
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.setWordWrap(False)
 
         # table model
-        table.setModel(ExampleTableModel(df))
+        self.setModel(ExampleTableModel(df))
 
         # table item delegate
-        table.setItemDelegate(ExampleDelegate())
-
-        self.setCentralWidget(table)
+        self.setItemDelegate(ExampleDelegate())
 
 
 def main():
