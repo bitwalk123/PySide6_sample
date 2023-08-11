@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
 
 
 class ScatterSample(QChart):
-    def __init__(self):
+    def __init__(self, list_data: list):
         super().__init__()
 
         self.setTitle('Scatter Chart')
@@ -41,68 +41,76 @@ class ScatterSample(QChart):
             Qt.AlignmentFlag.AlignLeft
         )
 
-        list_sample = ['Sample 1']
-        for sample in list_sample:
-            series = QScatterSeries()
-            series.setName(sample)
-            series.setMarkerShape(
-                QScatterSeries.MarkerShape.MarkerShapeCircle
-            )
-            series.setMarkerSize(5)
-            series.setPen(QPen(Qt.PenStyle.NoPen))
+        series = QScatterSeries()
+        series.setMarkerShape(
+            QScatterSeries.MarkerShape.MarkerShapeCircle
+        )
+        series.setMarkerSize(10)
+        series.setPen(QPen(Qt.PenStyle.NoPen))
 
-            for r in range(100):
-                xy_pair = [random.random(), random.random()]
-                series.append(*xy_pair)
+        for xy_pair in list_data:
+            series.append(*xy_pair)
 
-            self.addSeries(series)
-            series.attachAxis(axis_x)
-            series.attachAxis(axis_y)
+        self.addSeries(series)
+        series.attachAxis(axis_x)
+        series.attachAxis(axis_y)
 
         axis_x.setRange(0, 1)
         axis_y.setRange(0, 1)
 
 
 class ChartView(QChartView):
-    origin = None
-
-    def __init__(self):
+    def __init__(self, list_data: list):
         super().__init__()
-
-        chart = ScatterSample()
-        self.setChart(chart)
+        self.origin = None
+        self.mouseReleased = False
         self.rubberBand = QRubberBand(QRubberBand.Shape.Rectangle, self)
+        self.rubberBand.show()
+
+        chart = ScatterSample(list_data)
+        self.setChart(chart)
         self.setRenderHint(QPainter.Antialiasing)
 
     def mousePressEvent(self, event):
         self.origin = event.position()
-        self.rubberBand.setGeometry(
-            QRect(self.origin.toPoint(), QSize())
-        )
-        self.rubberBand.show()
+        self.mouseReleased = False
 
     def mouseMoveEvent(self, event):
         if self.origin is None:
             return
 
+        if self.mouseReleased:
+            return
+
         self.rubberBand.setGeometry(
-            QRect(self.origin.toPoint(), event.position().toPoint()).normalized()
+            QRect(
+                self.origin.toPoint(),
+                event.position().toPoint()
+            ).normalized()
         )
 
     def mouseReleaseEvent(self, event):
-        self.rubberBand.hide()
-        QRect(self.origin.toPoint(), event.position().toPoint())
-        # determine selection, for example using QRect::intersects()
-        # and QRect::contains().
+        self.mouseReleased = True
 
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        scatter = ChartView()
-        self.setCentralWidget(scatter)
+        self.init_ui()
+
         self.resize(500, 500)
         self.setWindowTitle('ScatterChart')
+
+    def init_ui(self):
+        # Plot data
+        list_data = list()
+        for r in range(100):
+            xy_pair = [random.random(), random.random()]
+            list_data.append(xy_pair)
+
+        # ChartView widget
+        cview = ChartView(list_data)
+        self.setCentralWidget(cview)
 
 
 def main():
