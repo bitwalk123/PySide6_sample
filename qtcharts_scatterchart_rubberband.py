@@ -10,14 +10,14 @@ from PySide6.QtCharts import (
     QScatterSeries,
     QValueAxis,
 )
-from PySide6.QtCore import Qt, QRect, QSize
+from PySide6.QtCore import Qt, QRect, QSize, Signal, QPointF
 from PySide6.QtGui import (
     QPainter,
     QPen,
 )
 from PySide6.QtWidgets import (
     QApplication,
-    QMainWindow, QRubberBand,
+    QMainWindow, QRubberBand, QDockWidget, QWidget, QVBoxLayout, QPushButton, QSizePolicy,
 )
 
 
@@ -29,15 +29,15 @@ class ScatterSample(QChart):
         self.setDropShadowEnabled(False)
         self.legend().hide()
 
-        axis_x = QValueAxis()
+        self.axis_x = QValueAxis()
         self.addAxis(
-            axis_x,
+            self.axis_x,
             Qt.AlignmentFlag.AlignBottom
         )
 
-        axis_y = QValueAxis()
+        self.axis_y = QValueAxis()
         self.addAxis(
-            axis_y,
+            self.axis_y,
             Qt.AlignmentFlag.AlignLeft
         )
 
@@ -52,26 +52,45 @@ class ScatterSample(QChart):
             series.append(*xy_pair)
 
         self.addSeries(series)
-        series.attachAxis(axis_x)
-        series.attachAxis(axis_y)
+        series.attachAxis(self.axis_x)
+        series.attachAxis(self.axis_y)
 
-        axis_x.setRange(0, 1)
-        axis_y.setRange(0, 1)
+        self.axis_x.setRange(0, 1)
+        self.axis_y.setRange(0, 1)
+
+        self.series_selected = QScatterSeries()
+        self.series_selected.setMarkerShape(
+            QScatterSeries.MarkerShape.MarkerShapeCircle
+        )
+        self.series_selected.setBrush(Qt.GlobalColor.red)
+        self.series_selected.setMarkerSize(10)
+        self.series_selected.setPen(QPen(Qt.PenStyle.NoPen))
+
+        self.addSeries(self.series_selected)
+        self.series_selected.attachAxis(self.axis_x)
+        self.series_selected.attachAxis(self.axis_y)
+
+    def highlightSelectedPoints(self, list_selected):
+        for xy_pair in list_selected:
+            self.series_selected.append(*xy_pair)
 
 
 class ChartView(QChartView):
     def __init__(self, list_data: list):
         super().__init__()
+        self.rect = None
         self.origin = None
         self.mouseReleased = False
         self.rubberBand = QRubberBand(QRubberBand.Shape.Rectangle, self)
         self.rubberBand.show()
 
-        chart = ScatterSample(list_data)
-        self.setChart(chart)
+        self.chart = ScatterSample(list_data)
+        self.setChart(self.chart)
         self.setRenderHint(QPainter.Antialiasing)
+        self.setMaximumSize(500, 500)
 
     def mousePressEvent(self, event):
+        self.rubberBand.hide()
         self.origin = event.position()
         self.mouseReleased = False
 
@@ -82,6 +101,7 @@ class ChartView(QChartView):
         if self.mouseReleased:
             return
 
+        self.rubberBand.show()
         self.rubberBand.setGeometry(
             QRect(
                 self.origin.toPoint(),
@@ -91,29 +111,113 @@ class ChartView(QChartView):
 
     def mouseReleaseEvent(self, event):
         self.mouseReleased = True
+        self.rect = QRect(
+            self.origin.toPoint(),
+            event.position().toPoint()
+        ).normalized()
+
+    def getSelectedArea(self):
+        # print(self.rect.x(), self.rect.y())
+        # print(self.rect)
+        if not self.mouseReleased:
+            return list()
+
+        p1 = self.chart.mapToValue(
+            QPointF(
+                self.rect.x(),
+                self.rect.y()
+            )
+        )
+        p2 = self.chart.mapToValue(
+            QPointF(
+                self.rect.x() + self.rect.width(),
+                self.rect.y() + self.rect.height()
+            )
+        )
+        return [p1.x(), p1.y(), p2.x(), p2.y()]
+
+    def addSelectedPoins(self, list_selected):
+        self.chart.highlightSelectedPoints(list_selected)
+
+class DockControl(QDockWidget):
+    selected = Signal()
+
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+
+    def init_ui(self):
+        base = QWidget()
+        self.setWidget(base)
+        layout = QVBoxLayout()
+        base.setLayout(layout)
+
+        but_sel = QPushButton('Select')
+        but_sel.clicked.connect(self.on_click_selected)
+        layout.addWidget(but_sel)
+
+        vpad = QWidget()
+        vpad.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Expanding
+        )
+        layout.addWidget(vpad)
+
+    def on_click_selected(self):
+        self.selected.emit()
 
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.cview = None
         self.list_data = None
         self.init_ui()
 
-        self.resize(500, 500)
+        # self.resize(600, 500)
         self.setWindowTitle('ScatterChart')
 
     def init_ui(self):
         # ChartView widget
         self.list_data = self.data_prep()
-        cview = ChartView(self.list_data)
-        self.setCentralWidget(cview)
+        self.cview = ChartView(self.list_data)
+        self.setCentralWidget(self.cview)
+        # right dock
+        dockWidget = DockControl()
+        dockWidget.selected.connect(self.on_click_selected)
+        dockWidget.setAllowedAreas(
+            Qt.DockWidgetArea.LeftDockWidgetArea |
+            Qt.DockWidgetArea.RightDockWidgetArea
+        )
+        # dockWidget.setWidget(dockWidgetContents)
+        self.addDockWidget(
+            Qt.DockWidgetArea.RightDockWidgetArea,
+            dockWidget
+        )
 
-    def data_prep(self):
+    @staticmethod
+    def data_prep():
         list_data = list()
         for r in range(100):
             xy_pair = [random.random(), random.random()]
             list_data.append(xy_pair)
         return list_data
+
+    def on_click_selected(self):
+        area_selected = self.cview.getSelectedArea()
+        if len(area_selected) > 0:
+            self.points_in_area(area_selected)
+        else:
+            print('area not selected!')
+
+    def points_in_area(self, area):
+        x1, y1, x2, y2 = area
+        list_selected = list()
+        for x, y in self.list_data:
+            if x1 <= x and x2 >= x and y1 >= y and y2 <= y:
+                xypair = [x, y]
+                list_selected.append(xypair)
+        self.cview.addSelectedPoins(list_selected)
 
 
 def main():
