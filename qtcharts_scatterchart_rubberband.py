@@ -14,7 +14,7 @@ from PySide6.QtCore import (
     QPointF,
     QRect,
     Qt,
-    Signal,
+    Signal, QEvent,
 )
 from PySide6.QtGui import (
     QPainter,
