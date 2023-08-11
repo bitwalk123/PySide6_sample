@@ -36,7 +36,6 @@ class ScatterPlot(QChart):
     def __init__(self, list_data: list):
         super().__init__()
 
-        self.setTitle('Scatter Chart')
         self.setDropShadowEnabled(False)
         self.legend().hide()
 
@@ -52,6 +51,7 @@ class ScatterPlot(QChart):
             Qt.AlignmentFlag.AlignLeft
         )
 
+        # all plot data
         series = QScatterSeries()
         series.setMarkerShape(
             QScatterSeries.MarkerShape.MarkerShapeCircle
@@ -69,6 +69,7 @@ class ScatterPlot(QChart):
         self.axis_x.setRange(0, 1)
         self.axis_y.setRange(0, 1)
 
+        # for selected data
         self.series_selected = QScatterSeries()
         self.series_selected.setMarkerShape(
             QScatterSeries.MarkerShape.MarkerShapeCircle
@@ -92,11 +93,11 @@ class ScatterPlot(QChart):
 class ChartView(QChartView):
     def __init__(self, list_data: list):
         super().__init__()
+
         self.rect = None
         self.origin = None
         self.mouseReleased = False
         self.rubberBand = QRubberBand(QRubberBand.Shape.Rectangle, self)
-        self.rubberBand.show()
 
         self.chart = ScatterPlot(list_data)
         self.setChart(self.chart)
@@ -133,9 +134,7 @@ class ChartView(QChartView):
     def clearSelected(self):
         self.chart.clearSelected()
 
-    def getSelectedArea(self):
-        # print(self.rect.x(), self.rect.y())
-        # print(self.rect)
+    def getSelectedArea(self) -> list:
         if not self.mouseReleased:
             return list()
 
@@ -202,29 +201,29 @@ class Example(QMainWindow):
         self.init_ui()
 
         # self.resize(600, 500)
-        self.setWindowTitle('ScatterChart')
+        self.setWindowTitle('Scatter Plot')
 
     def init_ui(self):
         # ChartView widget
         self.list_data = self.data_prep()
         self.cview = ChartView(self.list_data)
         self.setCentralWidget(self.cview)
+
         # right dock
         dockWidget = DockControl()
-        dockWidget.selected.connect(self.on_click_selected)
-        dockWidget.clear.connect(self.on_click_clear)
         dockWidget.setAllowedAreas(
             Qt.DockWidgetArea.LeftDockWidgetArea |
             Qt.DockWidgetArea.RightDockWidgetArea
         )
-        # dockWidget.setWidget(dockWidgetContents)
+        dockWidget.selected.connect(self.on_click_selected)
+        dockWidget.clear.connect(self.on_click_clear)
         self.addDockWidget(
             Qt.DockWidgetArea.RightDockWidgetArea,
             dockWidget
         )
 
     @staticmethod
-    def data_prep():
+    def data_prep() -> list:
         list_data = list()
         for r in range(100):
             xy_pair = [random.random(), random.random()]
