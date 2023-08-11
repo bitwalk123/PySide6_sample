@@ -91,6 +91,7 @@ class ChartView(QChartView):
 
     def mouseReleaseEvent(self, event):
         self.rubberBand.hide()
+        QRect(self.origin.toPoint(), event.position().toPoint())
         # determine selection, for example using QRect::intersects()
         # and QRect::contains().
 
