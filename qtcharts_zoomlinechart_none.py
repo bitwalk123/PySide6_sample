@@ -78,8 +78,16 @@ class ZoomLineChart(QChartView):
             self.m_drawRubberBand = False
             self.save_current_rubber_band()
 
+    def resizeEvent(self, event: QResizeEvent):
+        # self.resizeEvent(event)
+        super().resizeEvent(event)
+
+        if self.m_rubberBand.isVisible():
+            self.restore_rubber_band()
+
+        self.apply_nice_numbers()
+
     def update_rubber_band(self, event: QMouseEvent):
-        print('DEBUG!')
         rect: QRect = self.chart().plotArea().toRect()
         width: int = event.pos().x() - self.m_rubberBandOrigin.x()
         height: int = event.pos().y() - self.m_rubberBandOrigin.y()
@@ -110,15 +118,6 @@ class ZoomLineChart(QChartView):
 
         chart_bottom_right: QPointF = self.point_to_chart(rect.bottomRight());
         self.m_chartRectF.setBottomRight(chart_bottom_right);
-
-    def resizeEvent(self, event: QResizeEvent):
-        # self.resizeEvent(event)
-        super().resizeEvent(event)
-
-        if self.m_rubberBand.isVisible():
-            self.restore_rubber_band()
-
-        self.apply_nice_numbers()
 
     def restore_rubber_band(self):
         view_top_left: QPoint = self.chart_to_view_point(self.m_chartRectF.topLeft())
