@@ -96,21 +96,24 @@ class ChartView(QChartView):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.list_data = None
         self.init_ui()
 
         self.resize(500, 500)
         self.setWindowTitle('ScatterChart')
 
     def init_ui(self):
-        # Plot data
+        # ChartView widget
+        self.list_data = self.data_prep()
+        cview = ChartView(self.list_data)
+        self.setCentralWidget(cview)
+
+    def data_prep(self):
         list_data = list()
         for r in range(100):
             xy_pair = [random.random(), random.random()]
             list_data.append(xy_pair)
-
-        # ChartView widget
-        cview = ChartView(list_data)
-        self.setCentralWidget(cview)
+        return list_data
 
 
 def main():
