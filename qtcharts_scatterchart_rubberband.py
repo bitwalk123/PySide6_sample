@@ -74,6 +74,9 @@ class ScatterSample(QChart):
         for xy_pair in list_selected:
             self.series_selected.append(*xy_pair)
 
+    def clearSelected(self):
+        self.series_selected.clear()
+
 
 class ChartView(QChartView):
     def __init__(self, list_data: list):
@@ -116,6 +119,9 @@ class ChartView(QChartView):
             event.position().toPoint()
         ).normalized()
 
+    def clearSelected(self):
+        self.chart.clearSelected()
+
     def getSelectedArea(self):
         # print(self.rect.x(), self.rect.y())
         # print(self.rect)
@@ -138,9 +144,12 @@ class ChartView(QChartView):
 
     def addSelectedPoins(self, list_selected):
         self.chart.highlightSelectedPoints(list_selected)
+        self.rubberBand.hide()
+
 
 class DockControl(QDockWidget):
     selected = Signal()
+    clear = Signal()
 
     def __init__(self):
         super().__init__()
@@ -156,6 +165,10 @@ class DockControl(QDockWidget):
         but_sel.clicked.connect(self.on_click_selected)
         layout.addWidget(but_sel)
 
+        but_clr = QPushButton('Clear')
+        but_clr.clicked.connect(self.on_click_clear)
+        layout.addWidget(but_clr)
+
         vpad = QWidget()
         vpad.setSizePolicy(
             QSizePolicy.Policy.Fixed,
@@ -165,6 +178,9 @@ class DockControl(QDockWidget):
 
     def on_click_selected(self):
         self.selected.emit()
+
+    def on_click_clear(self):
+        self.clear.emit()
 
 
 class Example(QMainWindow):
@@ -185,6 +201,7 @@ class Example(QMainWindow):
         # right dock
         dockWidget = DockControl()
         dockWidget.selected.connect(self.on_click_selected)
+        dockWidget.clear.connect(self.on_click_clear)
         dockWidget.setAllowedAreas(
             Qt.DockWidgetArea.LeftDockWidgetArea |
             Qt.DockWidgetArea.RightDockWidgetArea
@@ -218,6 +235,9 @@ class Example(QMainWindow):
                 xypair = [x, y]
                 list_selected.append(xypair)
         self.cview.addSelectedPoins(list_selected)
+
+    def on_click_clear(self):
+        self.cview.clearSelected()
 
 
 def main():
