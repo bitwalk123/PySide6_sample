@@ -10,18 +10,29 @@ from PySide6.QtCharts import (
     QScatterSeries,
     QValueAxis,
 )
-from PySide6.QtCore import Qt, QRect, QSize, Signal, QPointF
+from PySide6.QtCore import (
+    QPointF,
+    QRect,
+    Qt,
+    Signal,
+)
 from PySide6.QtGui import (
     QPainter,
     QPen,
 )
 from PySide6.QtWidgets import (
     QApplication,
-    QMainWindow, QRubberBand, QDockWidget, QWidget, QVBoxLayout, QPushButton, QSizePolicy,
+    QDockWidget,
+    QMainWindow,
+    QPushButton,
+    QRubberBand,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
 )
 
 
-class ScatterSample(QChart):
+class ScatterPlot(QChart):
     def __init__(self, list_data: list):
         super().__init__()
 
@@ -87,7 +98,7 @@ class ChartView(QChartView):
         self.rubberBand = QRubberBand(QRubberBand.Shape.Rectangle, self)
         self.rubberBand.show()
 
-        self.chart = ScatterSample(list_data)
+        self.chart = ScatterPlot(list_data)
         self.setChart(self.chart)
         self.setRenderHint(QPainter.Antialiasing)
         self.setMaximumSize(500, 500)
