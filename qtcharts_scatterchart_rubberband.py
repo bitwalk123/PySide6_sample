@@ -40,22 +40,14 @@ class ScatterPlot(QChart):
         self.legend().hide()
 
         self.axis_x = QValueAxis()
-        self.addAxis(
-            self.axis_x,
-            Qt.AlignmentFlag.AlignBottom
-        )
+        self.addAxis(self.axis_x, Qt.AlignmentFlag.AlignBottom)
 
         self.axis_y = QValueAxis()
-        self.addAxis(
-            self.axis_y,
-            Qt.AlignmentFlag.AlignLeft
-        )
+        self.addAxis(self.axis_y, Qt.AlignmentFlag.AlignLeft)
 
         # all plot data
         series = QScatterSeries()
-        series.setMarkerShape(
-            QScatterSeries.MarkerShape.MarkerShapeCircle
-        )
+        series.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeCircle)
         series.setMarkerSize(10)
         series.setPen(QPen(Qt.PenStyle.NoPen))
 
