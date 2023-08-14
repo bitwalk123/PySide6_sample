@@ -3,15 +3,15 @@
 # Reference
 # https://stackoverflow.com/questions/60599812/how-can-i-customize-mplfinance-plot
 import matplotlib.pyplot as plt
+import mplfinance as mpf
+import pandas as pd
+import sys
+
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar,
 )
 from matplotlib.figure import Figure
-
-import mplfinance as mpf
-import pandas as pd
-import sys
 from PySide6 import QtCore
 from PySide6.QtWidgets import (
     QApplication,
@@ -32,7 +32,7 @@ class Example(QMainWindow):
         df = pd.read_csv(filename, index_col=0, parse_dates=True)
 
         fig = Figure()
-        grid = plt.GridSpec(3, 1, wspace=0.45, hspace=0.45)
+        grid = plt.GridSpec(3, 1, wspace=0, hspace=0.0)
 
         ax1 = fig.add_subplot(grid[0:2, 0])
         ax2 = fig.add_subplot(grid[2, 0], sharex=ax1)
