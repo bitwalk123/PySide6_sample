@@ -1,3 +1,4 @@
+mplfinance
 openpyxl
 pip-chill
 pip-review
