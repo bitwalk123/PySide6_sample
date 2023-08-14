@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Reference
-# https://stackoverflow.com/questions/60599812/how-can-i-customize-mplfinance-plot
 import matplotlib.pyplot as plt
 import mplfinance as mpf
 import pandas as pd
