@@ -25,27 +25,29 @@ class Example(QMainWindow):
         self.initUI()
         self.resize(800, 600)
         self.setWindowTitle('Candlestick Chart on PySide6')
-        self.show()
 
     def initUI(self):
         # sample dataset
         filename = 'candlestick_sample_data.csv'
         df = pd.read_csv(filename, index_col=0, parse_dates=True)
 
-        sty = mpf.make_mpf_style(base_mpf_style='binance', rc={'font.size': 8})
-        fig = mpf.figure(dpi=100, style=sty)
+        fig = Figure()
         grid = plt.GridSpec(3, 3, wspace=0.45, hspace=0.45)
+
         ax1 = fig.add_subplot(grid[0:2, 0:])
         ax2 = fig.add_subplot(grid[2, 0:], sharex=ax1)
         mpf.plot(
             df,
+            style='binance',
             type='candle',
             mav=(14, 28),
             show_nontrading=False,
-            datetime_format='%m-%d',
+            datetime_format='%m/%d',
             ax=ax1,
             volume=ax2
         )
+        ax1.grid()
+        ax2.grid()
         canvas = FigureCanvas(fig)
 
         self.setCentralWidget(canvas)
@@ -58,6 +60,7 @@ class Example(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
+    ex.show()
     sys.exit(app.exec())
 
 
