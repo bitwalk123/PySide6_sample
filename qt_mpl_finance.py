@@ -32,10 +32,10 @@ class Example(QMainWindow):
         df = pd.read_csv(filename, index_col=0, parse_dates=True)
 
         fig = Figure()
-        grid = plt.GridSpec(3, 3, wspace=0.45, hspace=0.45)
+        grid = plt.GridSpec(3, 1, wspace=0.45, hspace=0.45)
 
-        ax1 = fig.add_subplot(grid[0:2, 0:])
-        ax2 = fig.add_subplot(grid[2, 0:], sharex=ax1)
+        ax1 = fig.add_subplot(grid[0:2, 0])
+        ax2 = fig.add_subplot(grid[2, 0], sharex=ax1)
         mpf.plot(
             df,
             style='binance',
