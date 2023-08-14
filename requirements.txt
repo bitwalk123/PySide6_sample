@@ -3,5 +3,6 @@ pip-chill
 pip-review
 pyside6
 requests
+scikit-image
 scikit-learn
 seaborn
