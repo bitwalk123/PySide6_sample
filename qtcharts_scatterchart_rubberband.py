@@ -45,7 +45,6 @@ class ScatterPlot(QChart):
         self.axis_y = QValueAxis()
         self.addAxis(self.axis_y, Qt.AlignmentFlag.AlignLeft)
 
-        # all plot data
         series = QScatterSeries()
         series.setMarkerShape(QScatterSeries.MarkerShape.MarkerShapeCircle)
         series.setMarkerSize(10)
