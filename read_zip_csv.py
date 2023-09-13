@@ -1,4 +1,5 @@
 import os
+from sys import stdout
 
 import pandas as pd
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
@@ -63,7 +64,8 @@ def main():
     dbModel = QSqlTableModel()
     dbModel.setTable('postal')
 
-    for r in range(len(df)):
+    rows = len(df)
+    for r in range(rows):
         record = dbModel.record()
         for c in range(len(df.columns)):
             value = df.iloc[r:r + 1, c:c + 1].values[0][0]
@@ -71,6 +73,10 @@ def main():
                 value = int(value)
             record.setValue(c + 1, value)
         dbModel.insertRecord(-1, record)
+
+        comp = 100 * (r + 1) / rows
+        stdout.write('\r%d%% completed' % comp)
+        stdout.flush()
 
 
 if __name__ == "__main__":
