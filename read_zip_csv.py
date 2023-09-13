@@ -1,4 +1,5 @@
 import pandas as pd
+from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
 
 """
 01. 全国地方公共団体コード（JIS X0401、X0402）………　半角数字
@@ -34,22 +35,56 @@ dict_header = {
     '更新の表示': 'INTEGER',
     '変更理由': 'INTEGER',
 }
-sql = '''
+sql_create = '''
     CREATE TABLE postal (
         id INTEGER PRIMARY KEY,
-        postal_code TEXT,
-        address_1 TEXT,
-        address_2 TEXT,
-        address_3 TEXT
+        全国地方公共団体コード INTEGER,
+        （旧）郵便番号 INTEGER,
+        郵便番号 INTEGER,
+        都道府県（カナ） STRING,
+        市区町村（カナ） STRING,
+        町域（カナ） STRING,
+        都道府県（漢字） STRING,
+        市区町村（漢字） STRING,
+        町域（漢字） STRING,
+        一町域が二以上の郵便番号 INTEGER,
+        小字毎に番地が起番 INTEGER,
+        丁目を有する町域 INTEGER,
+        一つの郵便番号で二以上の町域 INTEGER,
+        更新の表示 INTEGER,
+        変更理由 INTEGER
     )
 '''
+
+name_db = '郵便番号.sqlite3'
 
 
 def main():
     filename = 'utf_all.zip'
     df = pd.read_csv(filename, header=None, compression='zip')
-    df.columns = dict_header.keys()
-    print(df)
+    # df.columns = dict_header.keys()
+    # print(df)
+
+    con = QSqlDatabase.addDatabase('QSQLITE')
+    con.setDatabaseName(name_db)
+
+    if not con.open():
+        exit(0)
+
+    query = QSqlQuery()
+    query.exec(sql_create)
+
+    dbModel = QSqlTableModel()
+    dbModel.setTable('postal')
+
+    for r in range(len(df)):
+        record = dbModel.record()
+        for c in range(len(df.columns)):
+            value = df.iloc[r:r + 1, c:c + 1].values[0][0]
+            if type(value) is not str:
+                value = int(value)
+            record.setValue(c + 1, value)
+        dbModel.insertRecord(-1, record)
 
 
 if __name__ == "__main__":
