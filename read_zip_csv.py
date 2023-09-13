@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
 
@@ -18,23 +20,6 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
 14. 更新の表示（「0」は変更なし、「1」は変更あり、「2」廃止（廃止データのみ使用））
 15. 変更理由　（「0」は変更なし、「1」市政・区政・町政・分区・政令指定都市施行、「2」住居表示の実施、「3」区画整理、「4」郵便区調整等、「5」訂正、「6」廃止（廃止データのみ使用））
 """
-dict_header = {
-    '全国地方公共団体コード': 'INTEGER',
-    '（旧）郵便番号': 'INTEGER',
-    '郵便番号': 'INTEGER',
-    '都道府県（カナ）': 'STRING',
-    '市区町村（カナ）': 'STRING',
-    '町域（カナ）': 'STRING',
-    '都道府県（漢字）': 'STRING',
-    '市区町村（漢字）': 'STRING',
-    '町域（漢字）': 'STRING',
-    '一町域が二以上の郵便番号': 'INTEGER',
-    '小字毎に番地が起番': 'INTEGER',
-    '丁目を有する町域': 'INTEGER',
-    '一つの郵便番号で二以上の町域': 'INTEGER',
-    '更新の表示': 'INTEGER',
-    '変更理由': 'INTEGER',
-}
 sql_create = '''
     CREATE TABLE postal (
         id INTEGER PRIMARY KEY,
@@ -56,14 +41,15 @@ sql_create = '''
     )
 '''
 
+filename = 'utf_all.zip'
 name_db = '郵便番号.sqlite3'
 
 
 def main():
-    filename = 'utf_all.zip'
     df = pd.read_csv(filename, header=None, compression='zip')
-    # df.columns = dict_header.keys()
-    # print(df)
+
+    if os.path.isfile(name_db):
+        os.remove(name_db)
 
     con = QSqlDatabase.addDatabase('QSQLITE')
     con.setDatabaseName(name_db)
