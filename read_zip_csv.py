@@ -78,6 +78,7 @@ def main():
         stdout.write('\r%d%% completed' % comp)
         stdout.flush()
 
+    stdout.write('\n')
 
 if __name__ == "__main__":
     main()
