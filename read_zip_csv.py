@@ -61,18 +61,18 @@ def main():
     query = QSqlQuery()
     query.exec(sql_create)
 
-    dbModel = QSqlTableModel()
-    dbModel.setTable('postal')
+    model_db = QSqlTableModel()
+    model_db.setTable('postal')
 
     rows = len(df)
     for r in range(rows):
-        record = dbModel.record()
+        record = model_db.record()
         for c in range(len(df.columns)):
             value = df.iloc[r:r + 1, c:c + 1].values[0][0]
             if type(value) is not str:
                 value = int(value)
             record.setValue(c + 1, value)
-        dbModel.insertRecord(-1, record)
+        model_db.insertRecord(-1, record)
 
         comp = 100 * (r + 1) / rows
         stdout.write('\r%d%% completed' % comp)
