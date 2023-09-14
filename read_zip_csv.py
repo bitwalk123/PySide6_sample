@@ -5,6 +5,8 @@ import pandas as pd
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
 
 """
+https://www.post.japanpost.jp/zipcode/dl/readme.html
+
 01. 全国地方公共団体コード（JIS X0401、X0402）………　半角数字
 02. （旧）郵便番号（5桁）………………………………………　半角数字
 03. 郵便番号（7桁）………………………………………　半角数字
@@ -41,8 +43,9 @@ sql_create = '''
         変更理由 INTEGER
     )
 '''
-
+# https://www.post.japanpost.jp/zipcode/download.html
 filename = 'utf_all.zip'
+
 name_db = '郵便番号.sqlite3'
 
 
@@ -79,6 +82,7 @@ def main():
         stdout.flush()
 
     stdout.write('\n')
+
 
 if __name__ == "__main__":
     main()
