@@ -5,6 +5,7 @@ import pandas as pd
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
 
 """
+Reference:
 https://www.post.japanpost.jp/zipcode/dl/readme.html
 
 01. 全国地方公共団体コード（JIS X0401、X0402）………　半角数字
