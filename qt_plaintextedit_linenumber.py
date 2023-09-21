@@ -8,14 +8,20 @@ import sys
 from PySide6.QtCore import (
     QRect,
     QSize,
-    Qt, Slot,
+    Qt,
+    Slot,
 )
-from PySide6.QtGui import QPainter, QColor, QTextFormat
+from PySide6.QtGui import (
+    QColor,
+    QPainter,
+    QTextFormat,
+)
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
     QPlainTextEdit,
-    QWidget, QTextEdit,
+    QTextEdit,
+    QWidget,
 )
 
 
