@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 # coding: utf-8
 # Reference:
-# https://doc.qt.io/qt-5/qtwidgets-widgets-codeeditor-example.html
+# https://doc.qt.io/qtforpython-6.2/examples/example_widgets__codeeditor.html
 
 import sys
 
 from PySide6.QtCore import (
     QRect,
     QSize,
-    Qt,
+    Qt, Slot,
 )
-from PySide6.QtGui import QPainter
+from PySide6.QtGui import QPainter, QColor, QTextFormat
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
     QPlainTextEdit,
-    QWidget,
+    QWidget, QTextEdit,
 )
 
 
@@ -38,6 +38,7 @@ class PlainTextEdit(QPlainTextEdit):
         self.blockCountChanged[int].connect(self.updateLineNumberAreaWidth)
         self.updateRequest[QRect, int].connect(self.updateLineNumberArea)
         self.updateLineNumberAreaWidth(0)
+        self.highlight_current_line()
 
     def lineNumberAreaWidth(self):
         digits = 1
@@ -81,6 +82,7 @@ class PlainTextEdit(QPlainTextEdit):
         # QPainter needs an explicit end().
         painter.end()
 
+    @Slot()
     def updateLineNumberArea(self, rect, dy):
         if dy:
             self.lineNumberArea.scroll(0, dy)
@@ -91,8 +93,28 @@ class PlainTextEdit(QPlainTextEdit):
         if rect.contains(self.viewport().rect()):
             self.updateLineNumberAreaWidth(0)
 
+    @Slot()
     def updateLineNumberAreaWidth(self, newBlockCount):
         self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
+
+    @Slot()
+    def highlight_current_line(self):
+        extra_selections = []
+
+        if not self.isReadOnly():
+            selection = QTextEdit.ExtraSelection()
+
+            line_color = QColor(Qt.yellow).lighter(160)
+            selection.format.setBackground(line_color)
+
+            selection.format.setProperty(QTextFormat.FullWidthSelection, True)
+
+            selection.cursor = self.textCursor()
+            selection.cursor.clearSelection()
+
+            extra_selections.append(selection)
+
+        self.setExtraSelections(extra_selections)
 
 
 class Example(QMainWindow):
