@@ -38,7 +38,7 @@ class PlainTextEdit(QPlainTextEdit):
         self.blockCountChanged[int].connect(self.updateLineNumberAreaWidth)
         self.updateRequest[QRect, int].connect(self.updateLineNumberArea)
         self.updateLineNumberAreaWidth(0)
-        self.highlight_current_line()
+        self.highlightCurrentLine()
 
     def lineNumberAreaWidth(self):
         digits = 1
@@ -98,7 +98,7 @@ class PlainTextEdit(QPlainTextEdit):
         self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
 
     @Slot()
-    def highlight_current_line(self):
+    def highlightCurrentLine(self):
         extra_selections = []
 
         if not self.isReadOnly():
