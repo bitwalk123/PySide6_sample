@@ -14,7 +14,7 @@ from PySide6.QtCore import (
 from PySide6.QtGui import (
     QColor,
     QPainter,
-    QTextFormat,
+    QTextFormat, QFontDatabase, QFontMetricsF,
 )
 from PySide6.QtWidgets import (
     QApplication,
@@ -40,11 +40,33 @@ class LineNumberArea(QWidget):
 class PlainTextEdit(QPlainTextEdit):
     def __init__(self):
         super().__init__()
+        self.setStyleSheet('QPlainTextEdit {background-color: white;}')
+        self.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
+        self.setFontConfig()
         self.lineNumberArea = LineNumberArea(self)
         self.blockCountChanged[int].connect(self.updateLineNumberAreaWidth)
         self.updateRequest[QRect, int].connect(self.updateLineNumberArea)
         self.updateLineNumberAreaWidth(0)
         self.highlightCurrentLine()
+
+    @Slot()
+    def highlightCurrentLine(self):
+        extra_selections = []
+
+        if not self.isReadOnly():
+            selection = QTextEdit.ExtraSelection()
+
+            line_color = QColor(Qt.yellow).lighter(160)
+            selection.format.setBackground(line_color)
+
+            selection.format.setProperty(QTextFormat.FullWidthSelection, True)
+
+            selection.cursor = self.textCursor()
+            selection.cursor.clearSelection()
+
+            extra_selections.append(selection)
+
+        self.setExtraSelections(extra_selections)
 
     def lineNumberAreaWidth(self):
         digits = 1
@@ -55,13 +77,6 @@ class PlainTextEdit(QPlainTextEdit):
 
         space = 3 + self.fontMetrics().horizontalAdvance('9') * digits
         return space
-
-    def resizeEvent(self, e):
-        super().resizeEvent(e)
-        cr = self.contentsRect()
-        width = self.lineNumberAreaWidth()
-        rect = QRect(cr.left(), cr.top(), width, cr.height())
-        self.lineNumberArea.setGeometry(rect)
 
     def lineNumberAreaPaintEvent(self, event):
         painter = QPainter(self.lineNumberArea)
@@ -88,7 +103,22 @@ class PlainTextEdit(QPlainTextEdit):
         # QPainter needs an explicit end().
         painter.end()
 
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        cr = self.contentsRect()
+        width = self.lineNumberAreaWidth()
+        rect = QRect(cr.left(), cr.top(), width, cr.height())
+        self.lineNumberArea.setGeometry(rect)
+
     @Slot()
+    def setFontConfig(self):
+        font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
+        self.setFont(font)
+
+        fm = QFontMetricsF(font)
+        spaceWidth = fm.horizontalAdvance(' ')
+        self.setTabStopDistance(spaceWidth * 4)
+
     def updateLineNumberArea(self, rect, dy):
         if dy:
             self.lineNumberArea.scroll(0, dy)
@@ -103,31 +133,12 @@ class PlainTextEdit(QPlainTextEdit):
     def updateLineNumberAreaWidth(self, newBlockCount):
         self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
 
-    @Slot()
-    def highlightCurrentLine(self):
-        extra_selections = []
-
-        if not self.isReadOnly():
-            selection = QTextEdit.ExtraSelection()
-
-            line_color = QColor(Qt.yellow).lighter(160)
-            selection.format.setBackground(line_color)
-
-            selection.format.setProperty(QTextFormat.FullWidthSelection, True)
-
-            selection.cursor = self.textCursor()
-            selection.cursor.clearSelection()
-
-            extra_selections.append(selection)
-
-        self.setExtraSelections(extra_selections)
-
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.setWindowTitle('PlainTextEdit')
+        self.setWindowTitle('Simple Editor')
 
     def initUI(self):
         tedit = PlainTextEdit()
