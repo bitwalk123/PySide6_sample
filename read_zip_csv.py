@@ -82,6 +82,7 @@ def main():
         stdout.flush()
 
     stdout.write('\n')
+    con.close()
 
 
 if __name__ == "__main__":
