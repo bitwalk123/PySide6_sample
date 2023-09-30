@@ -14,10 +14,10 @@ from PySide6.QtWidgets import (
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.init_ui()
         self.setWindowTitle('ToolBar')
 
-    def initUI(self):
+    def init_ui(self):
         # Create pyqt toolbar
         toolbar = QToolBar()
         self.addToolBar(toolbar)
