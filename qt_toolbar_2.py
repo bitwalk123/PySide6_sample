@@ -38,7 +38,7 @@ class Example(QMainWindow):
         menu_open = QMenu(but_open)
         but_open.setMenu(menu_open)
 
-        # Sub manu for recent files
+        # Sub menu for recent files
         menu_recent = menu_open.addMenu('Recent files')
         for file_recent in self.list_file_recent:
             action_button = QAction(file_recent, self)
