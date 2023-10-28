@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
+#
+# Reference:
+# https://stackoverflow.com/questions/75727004/how-do-i-add-widgets-to-the-top-left-of-pyside-qt-layout-instead-of-having-the-i
 
 import sys
 
