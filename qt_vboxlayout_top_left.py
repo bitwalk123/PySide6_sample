@@ -9,8 +9,8 @@ import sys
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
-    QGridLayout,
     QLabel,
+    QVBoxLayout,
     QWidget,
 )
 
@@ -19,21 +19,21 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
         self.init_ui()
-        self.setWindowTitle('QGridLayoout test')
+        self.setWindowTitle('QVBoxLayoout test')
         self.setFixedSize(200, 200)
 
     def init_ui(self):
-        layout = QGridLayout()
+        layout = QVBoxLayout()
         layout.setAlignment(
             Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft
         )
         self.setLayout(layout)
 
         label1 = QLabel('Hello World!')
-        layout.addWidget(label1, 0, 0)
+        layout.addWidget(label1)
 
         label2 = QLabel('Thanks a lot.')
-        layout.addWidget(label2, 1, 0)
+        layout.addWidget(label2)
 
 
 def main():

@@ -6,7 +6,6 @@
 
 import sys
 
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
     QGridLayout,
@@ -26,9 +25,11 @@ class Example(QWidget):
         layout = QGridLayout()
         self.setLayout(layout)
 
-        label = QLabel('Hello World!')
-        layout.addWidget(label, 0, 0)
+        label1 = QLabel('Hello World!')
+        layout.addWidget(label1, 0, 0)
 
+        label2 = QLabel('Thanks a lot.')
+        layout.addWidget(label2, 1, 0)
 
 def main():
     app = QApplication(sys.argv)
