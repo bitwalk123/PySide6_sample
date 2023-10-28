@@ -24,9 +24,6 @@ class Example(QWidget):
 
     def init_ui(self):
         layout = QGridLayout()
-        layout.setAlignment(
-            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft
-        )
         self.setLayout(layout)
 
         label = QLabel('Hello World!')
