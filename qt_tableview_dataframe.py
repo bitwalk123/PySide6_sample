@@ -25,9 +25,9 @@ class Example(QMainWindow):
         view = QTableView()
         self.setCentralWidget(view)
 
-        #view.horizontalHeader().setStretchLastSection(True)
+        # view.horizontalHeader().setStretchLastSection(True)
         view.setAlternatingRowColors(True)
-        #view.setSelectionBehavior(QTableView.SelectRows)
+        # view.setSelectionBehavior(QTableView.SelectRows)
 
         model = PandasModel(df)
         view.setModel(model)
