@@ -7,7 +7,7 @@ import sys
 from PySide6.QtWidgets import (
     QTableView,
     QApplication,
-    QMainWindow,
+    QMainWindow, QHeaderView,
 )
 
 from qt_model_dataframe import PandasModel
@@ -25,12 +25,17 @@ class Example(QMainWindow):
         view = QTableView()
         self.setCentralWidget(view)
 
-        # view.horizontalHeader().setStretchLastSection(True)
         view.setAlternatingRowColors(True)
+        # view.horizontalHeader().setStretchLastSection(True)
         # view.setSelectionBehavior(QTableView.SelectRows)
 
         model = PandasModel(df)
         view.setModel(model)
+
+        header = view.horizontalHeader()
+        header.setSectionResizeMode(
+            QHeaderView.ResizeMode.ResizeToContents
+        )
 
 
 def main():
