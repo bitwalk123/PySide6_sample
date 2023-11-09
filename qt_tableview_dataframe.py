@@ -7,7 +7,7 @@ import sys
 from PySide6.QtWidgets import (
     QTableView,
     QApplication,
-    QMainWindow, QHeaderView,
+    QMainWindow, QHeaderView, QSizePolicy,
 )
 
 from qt_model_dataframe import PandasModel
@@ -19,7 +19,7 @@ class Example(QMainWindow):
         df = pd.read_csv('iris.csv')
         self.init_ui(df)
         self.setWindowTitle('QTableView')
-        self.resize(800, 600)
+        self.resize(600, 600)
 
     def init_ui(self, df: pd.DataFrame):
         view = QTableView()
