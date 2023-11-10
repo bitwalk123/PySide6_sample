@@ -23,10 +23,10 @@ class TableModel(QAbstractTableModel):
         self._data = data
 
     def data(self, index: Union[QModelIndex, QPersistentModelIndex], role: int = ...) -> Any:
-        if role == Qt.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole:
             return self._data[index.row()][index.column()]
 
-        if role == Qt.TextAlignmentRole:
+        if role == Qt.ItemDataRole.TextAlignmentRole:
             value = self._data[index.row()][index.column()]
 
             if isinstance(value, int) or isinstance(value, float):

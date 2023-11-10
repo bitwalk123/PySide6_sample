@@ -26,11 +26,11 @@ class TableModel(QAbstractTableModel):
         self._data = data
 
     def data(self, index: Union[QModelIndex, QPersistentModelIndex], role: int = ...) -> Any:
-        if role == Qt.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole:
             value = self._data.iloc[index.row(), index.column()]
             return str(value)
 
-        if role == Qt.TextAlignmentRole:
+        if role == Qt.ItemDataRole.TextAlignmentRole:
             value = self._data.iloc[index.row(), index.column()]
 
             if isinstance(value, np.int64) or isinstance(value, np.float64):
@@ -45,15 +45,15 @@ class TableModel(QAbstractTableModel):
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> Any:
         # section is the index of the column/row.
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
+        if role == Qt.ItemDataRole.DisplayRole:
+            if orientation == Qt.Orientation.Horizontal:
                 return str(self._data.columns[section])
 
-            if orientation == Qt.Vertical:
+            if orientation == Qt.Orientation.Vertical:
                 # return str(section + 1)
                 return str(self._data.index[section])
 
-        if role == Qt.TextAlignmentRole:
+        if role == Qt.ItemDataRole.TextAlignmentRole:
             if orientation == Qt.Vertical:
                 return Qt.AlignmentFlag.AlignVCenter + Qt.AlignmentFlag.AlignRight
 
