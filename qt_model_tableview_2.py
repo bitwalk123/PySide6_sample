@@ -1,3 +1,5 @@
+# Reference:
+# https://www.pythonguis.com/tutorials/pyside6-qtableview-modelviews-numpy-pandas/
 import numpy as np
 
 import pandas as pd
