@@ -48,13 +48,13 @@ class PandasModel2(QAbstractTableModel):
         col = index.column()
         value = self._dataframe.iloc[row, col]
 
-        if role == Qt.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole:
             return str(value)
-        elif role == Qt.TextAlignmentRole:
+        elif role == Qt.ItemDataRole.TextAlignmentRole:
             if (type(value) is np.int64) | (type(value) is np.float64):
                 flag = Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
             else:
-                flag =  Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
+                flag = Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
             return flag
 
         return None
@@ -64,13 +64,16 @@ class PandasModel2(QAbstractTableModel):
 
         Return dataframe index as vertical header data and columns as horizontal header data.
         """
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
+        if role == Qt.ItemDataRole.DisplayRole:
+            if orientation == Qt.Orientation.Horizontal:
                 return str(self._dataframe.columns[section])
 
-            if orientation == Qt.Vertical:
+            if orientation == Qt.Orientation.Vertical:
                 # return str(self._dataframe.index[section])
-                return None
+                return section + 1
+
+        if role == Qt.ItemDataRole.TextAlignmentRole:
+            if orientation == Qt.Vertical:
+                return Qt.AlignmentFlag.AlignVCenter + Qt.AlignmentFlag.AlignRight
 
         return None
-
