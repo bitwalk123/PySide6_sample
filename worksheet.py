@@ -59,7 +59,8 @@ class WorkSheet(QTableWidget):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Worksheet test')
+        self.setWindowTitle('WorkSheet test')
+        self.resize(800, 600)
         self.init_ui()
 
     def init_ui(self):
