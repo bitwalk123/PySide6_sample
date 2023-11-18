@@ -31,7 +31,6 @@ class WorkSheet(QTableWidget):
         header_horiz = QHeaderView(Qt.Orientation.Horizontal, parent=self)
         header_horiz.setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.setHorizontalHeader(header_horiz)
-        # self.setHorizontalHeaderLabels(list_header_col)
 
         header_vert = QHeaderView(Qt.Orientation.Vertical, parent=self)
         header_vert.setDefaultAlignment(Qt.AlignmentFlag.AlignRight)
