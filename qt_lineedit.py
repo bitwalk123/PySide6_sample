@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 import sys
-from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QDoubleValidator
+from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -18,11 +17,11 @@ class Example(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.initUI()
-        self.setMinimumSize(QSize(400, 0))
+        self.entry = QLineEdit()
+        self.init_ui()
         self.setWindowTitle("LineEdit")
 
-    def initUI(self):
+    def init_ui(self):
         hbox = QHBoxLayout()
         self.setLayout(hbox)
 
@@ -30,21 +29,17 @@ class Example(QWidget):
         lab.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         hbox.addWidget(lab)
 
-        self.line = QLineEdit()
-        #self.line.setAlignment(Qt.AlignmentFlag.AlignRight)
-        #validator = QDoubleValidator()
-        #validator.setBottom(0.0)
-        #self.line.setValidator(validator)
-        self.line.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        hbox.addWidget(self.line)
+        self.entry.setFixedWidth(200)
+        self.entry.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        hbox.addWidget(self.entry)
 
         but = QPushButton('OK')
         but.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        but.clicked.connect(self.clickMethod)
+        but.clicked.connect(self.button_clicked)
         hbox.addWidget(but)
 
-    def clickMethod(self):
-        print('Your name: ' + self.line.text())
+    def button_clicked(self):
+        print('Your name: ' + self.entry.text())
 
 
 def main():
