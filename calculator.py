@@ -81,7 +81,7 @@ class Calculator(QWidget):
         self.lcd.setDigitCount(self.max_chars + 2)
         self.lcd.setSmallDecimalPoint(True)
         self.lcd.display(self.ent.get_text())
-        self.lcd.setStyleSheet("QLCDNumber {background-color:darkgreen; color:yellow;}")
+        # self.lcd.setStyleSheet("QLCDNumber {background-color:darkgreen; color:yellow;}")
         self.lcd.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         grid.addWidget(self.lcd, 0, 0, 1, 4)
         grid.setRowMinimumHeight(0, 40)
