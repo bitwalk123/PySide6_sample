@@ -3,7 +3,6 @@ mplfinance
 openpyxl
 pip-chill
 pip-review
-pyqtdarktheme
 pyside6
 pywavelets
 requests
