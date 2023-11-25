@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Calculator
+GenericName=Calculator
+Exec=/home/bitwalk/PycharmProjects/PySide6_sample/calculator.sh
+Terminal=false
+Icon=/home/bitwalk/PycharmProjects/PySide6_sample/calculator.png
+Type=Application
+Categories=Utilities;
+StartupWMClass=Calculator
+MimeType=text/plain;
