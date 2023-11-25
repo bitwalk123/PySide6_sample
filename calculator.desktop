@@ -1,10 +1,14 @@
 [Desktop Entry]
-Name=Calculator
-GenericName=Calculator
+Name=Calculator (PySide6)
+Name[ja]=電卓 (PySide6)
+Comment=Normal calculator
+Comment[ja]=通常の電卓
+Keywords=calculation;arithmetic;
+Keywords[ja]=calculation;算術;calculator;計算機;
 Exec=/home/bitwalk/PycharmProjects/PySide6_sample/calculator.sh
-Terminal=false
 Icon=/home/bitwalk/PycharmProjects/PySide6_sample/calculator.png
+Terminal=false
 Type=Application
-Categories=Utilities;
-StartupWMClass=Calculator
-MimeType=text/plain;
+StartupNotify=true
+Categories=Utility;
+X-Purism-FormFactor=Workstation;Mobile;
