@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+import platform
 import sys
 import PySide6
 from PySide6 import QtCore
@@ -19,6 +19,9 @@ class Hello(QWidget):
         self.init_ui()
         self.setWindowTitle('Hello World!')
 
+        print('Machine', platform.machine())
+        print('System', platform.system())
+        print('Python', sys.version)
         print('PySide', PySide6.__version__)
 
     def init_ui(self):
