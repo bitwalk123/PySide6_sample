@@ -54,8 +54,8 @@ class Calculator(QWidget):
     reg = queue.Queue()
 
     # regular expression
-    re1 = re.compile("([\-0-9]+)\.$")
-    re2 = re.compile("([\-0-9]+\.)0$")
+    re1 = re.compile(r'([\-0-9]+)\.$')
+    re2 = re.compile(r'([\-0-9]+\.)0$')
 
     def __init__(self):
         super().__init__()
