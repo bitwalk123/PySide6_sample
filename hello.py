@@ -19,10 +19,9 @@ class Hello(QWidget):
         self.init_ui()
         self.setWindowTitle('Hello World!')
 
-        print('Machine', platform.machine())
-        print('System', platform.system())
-        print('Python', sys.version)
-        print('PySide', PySide6.__version__)
+        print('> Platform', platform.platform())
+        print('> Python', sys.version)
+        print('> PySide', PySide6.__version__)
 
     def init_ui(self):
         layout = QVBoxLayout()
