@@ -54,11 +54,12 @@ class Calculator(QWidget):
     reg = queue.Queue()
 
     # regular expression
-    re1 = re.compile("([\-0-9]+)\.$")
-    re2 = re.compile("([\-0-9]+\.)0$")
+    pattern1 = re.compile(r'([\-0-9]+)\.$')
+    pattern2 = re.compile(r'([\-0-9]+\.)0$')
 
     def __init__(self):
         super().__init__()
+        self.ent = Register()
         self.init_ui()
         self.setWindowTitle('Calculator')
         self.setWindowIcon(QIcon(self.get_app_pixmap()))
@@ -72,9 +73,6 @@ class Calculator(QWidget):
         # https://stackoverflow.com/questions/16673074/how-can-i-fully-disable-resizing-a-window-including-the-resize-icon-when-the-mou
         grid.setSizeConstraint(QLayout.SetFixedSize)
         self.setLayout(grid)
-
-        # This is register
-        self.ent = Register()
 
         # This is display value of register
         self.lcd = QLCDNumber(self)
@@ -139,7 +137,7 @@ class Calculator(QWidget):
             else:
                 str_value = str(int(value * m) / m)
 
-        result = self.re2.match(str_value)
+        result = self.pattern2.match(str_value)
         if result:
             str_value = result.group(1)
             return str_value
@@ -340,7 +338,7 @@ class Calculator(QWidget):
                 if self.flag_dot:
                     disp_new = disp_current + text_ascii
                 else:
-                    result = self.re1.match(disp_current)
+                    result = self.pattern1.match(disp_current)
                     if result:
                         disp_new = result.group(1) + text_ascii + "."
                     else:
