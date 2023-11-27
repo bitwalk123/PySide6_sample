@@ -1,11 +1,15 @@
-jinja2
+fqdn
+isoduration
+jsonpointer
+jupyterlab
 mplfinance
 openpyxl
 pip-chill
 pip-review
 pyside6
 pywavelets
-requests
 scikit-image
 scikit-learn
 seaborn
+uri-template
+webcolors
