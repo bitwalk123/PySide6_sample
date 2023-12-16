@@ -5,10 +5,12 @@ import sys
 from PySide6.QtWidgets import (
     QApplication,
     QDialog,
+    QDialogButtonBox,
+    QLabel,
     QPushButton,
     QSizePolicy,
     QVBoxLayout,
-    QWidget, QDialogButtonBox, QLabel,
+    QWidget,
 )
 
 
@@ -41,7 +43,10 @@ class Example(QWidget):
         self.setLayout(layout)
 
         btn = QPushButton('ダイアログ表示')
-        btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        btn.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding
+        )
         btn.clicked.connect(self.button_clicked)
         layout.addWidget(btn)
 
