@@ -13,12 +13,12 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from qt_sql_postgres_dialog import DBInfoDlg
-from qt_sql_postgres_funcs import (
+from qt_postgres_dialog import DBInfoDlg
+from qt_postgres_funcs import (
     db_get_all_contents,
     db_get_col_info,
 )
-from qt_sql_postgres_model import DataFrameModel
+from qt_postgres_model import DataFrameModel
 
 
 class Example(QMainWindow):
