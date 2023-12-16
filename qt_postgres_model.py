@@ -20,10 +20,6 @@ class DataFrameModel(QAbstractTableModel):
         return 0
 
     def columnCount(self, parent=QModelIndex()) -> int:
-        """Override method from QAbstractTableModel
-
-        Return column count of the pandas DataFrame
-        """
         if parent == QModelIndex():
             return len(self._dataframe.columns)
         return 0
@@ -53,7 +49,6 @@ class DataFrameModel(QAbstractTableModel):
                 return str(self._dataframe.columns[section])
 
             if orientation == Qt.Orientation.Vertical:
-                # return str(self._dataframe.index[section])
                 return None
 
         return None
