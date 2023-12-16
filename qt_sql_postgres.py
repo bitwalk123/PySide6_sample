@@ -4,36 +4,20 @@ import sys
 from PySide6.QtSql import QSqlDatabase, QSqlQuery
 from PySide6.QtWidgets import (
     QApplication,
+    QHeaderView,
     QMainWindow,
     QStyle,
+    QTableView,
     QToolBar,
     QToolButton,
-    QTableView, QHeaderView,
 )
 
-from qt_model_dataframe import PandasModel
 from qt_sql_postgres_dialog import DBInfoDlg
-
-
-def db_get_col_info(info: dict, cols: list, query: QSqlQuery):
-    sql = """
-            SELECT column_name
-            FROM information_schema.columns
-            WHERE table_name = '%s';
-        """ % info['table']
-    query.exec(sql)
-    while query.next():
-        cols.append(query.value(0))
-
-
-def db_get_all_contents(info: dict, vals: dict, cols: list, query: QSqlQuery):
-    for key in cols:
-        vals[key] = list()
-    sql = 'SELECT * FROM %s;' % info['table']
-    query.exec(sql)
-    while query.next():
-        for i, key in enumerate(cols):
-            vals[key].append(query.value(i))
+from qt_sql_postgres_funcs import (
+    db_get_all_contents,
+    db_get_col_info,
+)
+from qt_sql_postgres_model import DataFrameModel
 
 
 class Example(QMainWindow):
@@ -87,17 +71,18 @@ class Example(QMainWindow):
         con.setPassword(dict_info['password'])
         if con.open():
             print('connected!')
-            list_col = list()
             query = QSqlQuery()
+            # table columns
+            list_col = list()
             db_get_col_info(dict_info, list_col, query)
+            # table contents
             dict_val = dict()
             db_get_all_contents(dict_info, dict_val, list_col, query)
-            df = pd.DataFrame(dict_val)
             con.close()
-
-            model = PandasModel(df)
+            # show table
+            df = pd.DataFrame(dict_val)
+            model = DataFrameModel(df)
             self.view.setModel(model)
-
         else:
             print('NOT connected!')
 
