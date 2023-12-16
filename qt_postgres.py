@@ -85,6 +85,7 @@ class Example(QMainWindow):
             con.close()
             # show table
             df = pd.DataFrame(dict_val)
+            print(df.shape)
             model = DataFrameModel(df)
             view: QWidget | QTableView = self.centralWidget()
             view.setModel(model)
