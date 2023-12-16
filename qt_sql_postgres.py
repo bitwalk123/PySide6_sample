@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QTableView,
     QToolBar,
     QToolButton,
+    QWidget,
 )
 
 from qt_sql_postgres_dialog import DBInfoDlg
@@ -23,21 +24,21 @@ from qt_sql_postgres_model import DataFrameModel
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.view = None
         self.init_ui()
         self.setWindowTitle('DB Connection test')
         self.resize(800, 600)
 
     def init_ui(self):
+        # toolbar
         toolbar = QToolBar()
         self.add_button_to_toolbar(toolbar)
         self.addToolBar(toolbar)
-
-        self.view = QTableView()
-        self.view.setAlternatingRowColors(True)
-        self.setCentralWidget(self.view)
-
-        header = self.view.horizontalHeader()
+        # table view
+        view = QTableView()
+        view.setAlternatingRowColors(True)
+        self.setCentralWidget(view)
+        # horizontal header of table
+        header = view.horizontalHeader()
         header.setSectionResizeMode(
             QHeaderView.ResizeMode.ResizeToContents
         )
@@ -78,11 +79,13 @@ class Example(QMainWindow):
             # table contents
             dict_val = dict()
             db_get_all_contents(dict_info, dict_val, list_col, query)
+            # close connection
             con.close()
             # show table
             df = pd.DataFrame(dict_val)
             model = DataFrameModel(df)
-            self.view.setModel(model)
+            view: QWidget | QTableView = self.centralWidget()
+            view.setModel(model)
         else:
             print('NOT connected!')
 
