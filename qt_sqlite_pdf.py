@@ -21,7 +21,12 @@ from PySide6.QtWidgets import (
 
 def create_table():
     query = QSqlQuery()
-    sql = 'CREATE TABLE file (name_file TEXT UNIQUE, content NONE);'
+    sql = """
+        CREATE TABLE IF NOT EXISTS file (
+            name_file TEXT UNIQUE,
+            content NONE
+        );
+    """
     if not query.exec(sql):
         print(query.lastError())
 
@@ -29,7 +34,10 @@ def create_table():
 def get_content_from_filename(filename: str) -> bytes:
     content = None
     query = QSqlQuery()
-    sql = 'SELECT content FROM file WHERE name_file = "%s";' % filename
+    sql = """
+        SELECT content FROM file
+        WHERE name_file = "%s";
+    """ % filename
     query.exec(sql)
     if query.next():
         content_str = query.value(0)
@@ -65,22 +73,20 @@ def insert_filename_content(filename: str, content_str: str):
 
 
 class Example(QMainWindow):
-    dbname = 'test.sqlite'
-    con = QSqlDatabase.addDatabase('QSQLITE')
-    con.setDatabaseName(dbname)
-
     def __init__(self):
         super().__init__()
-        self.combo = None
-        if not os.path.exists(self.dbname):
-            self.init_db()
+        self.dbname = 'test.sqlite'
+        self.con = QSqlDatabase.addDatabase('QSQLITE')
+        self.con.setDatabaseName(self.dbname)
+        self.init_table()
 
+        self.combo = None
         self.init_ui()
         self.update_filelist()
         self.setWindowTitle('SQLite & PDF Test')
         self.resize(600, 800)
 
-    def init_db(self):
+    def init_table(self):
         if self.con.open():
             create_table()
             self.con.close()
