@@ -14,8 +14,6 @@ from PySide6.QtWidgets import (
 )
 
 
-
-
 class Example(QWidget):
     def __init__(self):
         super().__init__()
@@ -43,6 +41,8 @@ class Example(QWidget):
         value, ok = dlg.getDouble(dlg, 'Input value', 'value')
         if ok:
             print(value)
+
+
 def main():
     app = QApplication(sys.argv)
     ex = Example()

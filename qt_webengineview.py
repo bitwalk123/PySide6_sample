@@ -5,13 +5,13 @@
 """PySide6 WebEngineWidgets Example"""
 
 import sys
-from PySide6.QtCore import QUrl, Slot
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import QUrl
 from PySide6.QtWidgets import (
     QApplication,
     QLineEdit,
     QMainWindow,
     QPushButton,
+    QStyle,
     QToolBar,
 )
 from PySide6.QtWebEngineCore import QWebEnginePage
@@ -23,60 +23,60 @@ class Example(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('PySide6 WebEngineWidgets Example')
+        self.address = None
+        self.view = None
 
-        self.toolBar = QToolBar()
-        self.addToolBar(self.toolBar)
-        self.backButton = QPushButton()
-        self.backButton.setIcon(
-            QIcon(':/qt-project.org/styles/commonstyle/images/left-32.png')
-        )
-        self.backButton.clicked.connect(self.back)
-        self.toolBar.addWidget(self.backButton)
-        self.forwardButton = QPushButton()
-        self.forwardButton.setIcon(
-            QIcon(':/qt-project.org/styles/commonstyle/images/right-32.png')
-        )
-        self.forwardButton.clicked.connect(self.forward)
-        self.toolBar.addWidget(self.forwardButton)
+        url = 'https://www.qt.io/'
+        self.init_ui(url)
+        self.setWindowTitle('QWebEngineView example')
+        self.resize(1000, 800)
 
-        self.addressLineEdit = QLineEdit()
-        self.addressLineEdit.returnPressed.connect(self.load)
-        self.toolBar.addWidget(self.addressLineEdit)
+    def init_ui(self, url_init: str):
+        toolbar = QToolBar()
+        self.addToolBar(toolbar)
 
-        self.webEngineView = QWebEngineView()
-        self.setCentralWidget(self.webEngineView)
+        but_back = QPushButton()
+        icon_back = self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowBack)
+        but_back.setIcon(icon_back)
+        but_back.clicked.connect(self.back)
+        toolbar.addWidget(but_back)
 
-        initialUrl = 'http://qt.io'
-        self.addressLineEdit.setText(initialUrl)
-        self.webEngineView.load(QUrl(initialUrl))
-        self.webEngineView.page().titleChanged.connect(self.setWindowTitle)
-        self.webEngineView.page().urlChanged.connect(self.urlChanged)
+        but_forward = QPushButton()
+        icon_forward = self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowForward)
+        but_forward.setIcon(icon_forward)
+        but_forward.clicked.connect(self.forward)
+        toolbar.addWidget(but_forward)
 
-    @Slot()
+        self.address = address = QLineEdit()
+        address.returnPressed.connect(self.load)
+        toolbar.addWidget(address)
+
+        self.view = view = QWebEngineView()
+        self.setCentralWidget(view)
+
+        address.setText(url_init)
+        view.load(QUrl(url_init))
+        view.page().titleChanged.connect(self.setWindowTitle)
+        view.page().urlChanged.connect(self.url_changed)
+
     def load(self):
-        url = QUrl.fromUserInput(self.addressLineEdit.text())
+        url = QUrl.fromUserInput(self.address.text())
         if url.isValid():
-            self.webEngineView.load(url)
+            self.view.load(url)
 
-    @Slot()
     def back(self):
-        self.webEngineView.page().triggerAction(QWebEnginePage.WebAction.Back)
+        self.view.page().triggerAction(QWebEnginePage.WebAction.Back)
 
-    @Slot()
     def forward(self):
-        self.webEngineView.page().triggerAction(QWebEnginePage.WebAction.Forward)
+        self.view.page().triggerAction(QWebEnginePage.WebAction.Forward)
 
-    @Slot(QUrl)
-    def urlChanged(self, url):
-        self.addressLineEdit.setText(url.toString())
+    def url_changed(self, url):
+        self.address.setText(url.toString())
 
 
 def main():
-    app = QApplication(sys.argv)
+    app = QApplication()
     ex = Example()
-    availableGeometry = ex.screen().availableGeometry()
-    ex.resize(availableGeometry.width() * 2 / 3, availableGeometry.height() * 2 / 3)
     ex.show()
     sys.exit(app.exec())
 
