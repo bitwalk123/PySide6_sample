@@ -23,19 +23,19 @@ class Example(QWidget):
 
         self.col = QColor(0, 0, 0)
 
-        redb = QPushButton('赤', self)
+        redb = QPushButton('Red', self)
         redb.setCheckable(True)
         redb.move(10, 10)
 
         redb.clicked[bool].connect(self.setColor)
 
-        greenb = QPushButton('緑', self)
+        greenb = QPushButton('Green', self)
         greenb.setCheckable(True)
         greenb.move(10, 60)
 
         greenb.clicked[bool].connect(self.setColor)
 
-        blueb = QPushButton('青', self)
+        blueb = QPushButton('Blue', self)
         blueb.setCheckable(True)
         blueb.move(10, 110)
 
@@ -43,7 +43,9 @@ class Example(QWidget):
 
         self.square = QFrame(self)
         self.square.setGeometry(150, 20, 100, 100)
-        self.square.setStyleSheet("QWidget { background-color: %s }" % self.col.name())
+        self.square.setStyleSheet("""
+            QWidget { background-color: %s }
+        """ % self.col.name())
 
     def setColor(self, pressed):
         source = self.sender()
@@ -53,14 +55,16 @@ class Example(QWidget):
         else:
             val = 0
 
-        if source.text() == '赤':
+        if source.text() == 'Red':
             self.col.setRed(val)
-        elif source.text() == '緑':
+        elif source.text() == 'Green':
             self.col.setGreen(val)
         else:
             self.col.setBlue(val)
 
-        self.square.setStyleSheet("QFrame { background-color: %s }" % self.col.name())
+        self.square.setStyleSheet("""
+            QFrame { background-color: %s }
+        """ % self.col.name())
 
 
 def main():
