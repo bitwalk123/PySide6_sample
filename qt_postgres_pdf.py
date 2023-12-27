@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (
 def create_table():
     query = QSqlQuery()
     sql = """
-        CREATE TABLE IF NOT EXISTS file (
+        CREATE TABLE IF NOT EXISTS pdfrepo (
             name_file character varying(255),
             content bytea
         );
@@ -34,7 +34,7 @@ def get_content_from_filename(filename: str) -> bytes:
     q_byte_array = None
     query = QSqlQuery()
     sql = """
-        SELECT content FROM file
+        SELECT content FROM pdfrepo
         WHERE name_file = '%s';
     """ % filename
     flag = query.exec(sql)
@@ -48,7 +48,7 @@ def get_content_from_filename(filename: str) -> bytes:
 
 def get_list_file(list_file: list):
     query = QSqlQuery()
-    sql = 'SELECT name_file FROM file;'
+    sql = 'SELECT name_file FROM pdfrepo;'
     flag = query.exec(sql)
     while query.next():
         list_file.append(query.value(0))
@@ -57,7 +57,7 @@ def get_list_file(list_file: list):
 
 
 def insert_filename_content(filename: str, content: bytes):
-    sql = 'INSERT INTO file VALUES(?, ?);'
+    sql = 'INSERT INTO pdfrepo VALUES(?, ?);'
     query = QSqlQuery()
     query.prepare(sql)
     query.bindValue(0, filename)
