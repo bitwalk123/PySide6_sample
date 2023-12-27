@@ -1,9 +1,8 @@
-import base64
 import os
 import sys
 import tempfile
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QByteArray
 from PySide6.QtGui import QAction
 from PySide6.QtPdf import QPdfDocument
 from PySide6.QtPdfWidgets import QPdfView
@@ -23,8 +22,8 @@ def create_table():
     query = QSqlQuery()
     sql = """
         CREATE TABLE IF NOT EXISTS file (
-            name_file TEXT UNIQUE,
-            content NONE
+            name_file character varying(255),
+            content bytea
         );
     """
     if not query.exec(sql):
@@ -32,16 +31,18 @@ def create_table():
 
 
 def get_content_from_filename(filename: str) -> bytes:
-    content = None
+    q_byte_array = None
     query = QSqlQuery()
     sql = """
         SELECT content FROM file
-        WHERE name_file = "%s";
+        WHERE name_file = '%s';
     """ % filename
-    query.exec(sql)
+    flag = query.exec(sql)
     if query.next():
-        content_str = query.value(0)
-        content = base64.b64decode(content_str.encode())
+        q_byte_array = query.value(0)
+    if not flag:
+        print(query.lastError())
+    content = q_byte_array.data()
     return content
 
 
@@ -55,19 +56,12 @@ def get_list_file(list_file: list):
         print(query.lastError())
 
 
-def insert_filename_content(filename: str, content_str: str):
+def insert_filename_content(filename: str, content: bytes):
     sql = 'INSERT INTO file VALUES(?, ?);'
     query = QSqlQuery()
     query.prepare(sql)
     query.bindValue(0, filename)
-    query.bindValue(1, content_str)
-    """
-    note: This does not work!
-    query.bindValue(
-        1, content,
-        type=QSql.ParamTypeFlag.In | QSql.ParamTypeFlag.Binary
-    )
-    """
+    query.bindValue(1, QByteArray(content))
     if not query.exec():
         print(query.lastError())
 
@@ -75,9 +69,11 @@ def insert_filename_content(filename: str, content_str: str):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        #self.dbname = 'test.sqlite'
-        self.con = QSqlDatabase.addDatabase('QSQLITE')
+        self.con = QSqlDatabase.addDatabase('QPSQL')
+        self.con.setHostName('192.168.0.34')
         self.con.setDatabaseName('testdb')
+        self.con.setUserName('postgres')
+        self.con.setPassword('postgres')
         self.init_table()
 
         self.combo = None
@@ -126,11 +122,10 @@ class Example(QMainWindow):
             basename = os.path.basename(filename)
             f = open(filename, 'rb')
             with f:
-                content = base64.b64encode(f.read())
-                content_str: str = content.decode()
+                content = f.read()
 
             if self.con.open():
-                insert_filename_content(basename, content_str)
+                insert_filename_content(basename, content)
                 self.con.close()
                 self.update_filelist()
                 self.combo.setCurrentText(basename)
