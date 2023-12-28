@@ -1,4 +1,3 @@
-import base64
 import os
 import sys
 import tempfile
@@ -18,72 +17,44 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from qt_db_common_pdf import (
+    get_content_from_filename,
+    get_list_file,
+    insert_filename_content,
+)
+
 
 def create_table():
     query = QSqlQuery()
     sql = """
-        CREATE TABLE IF NOT EXISTS file (
-            name_file TEXT UNIQUE,
-            content NONE
+        CREATE TABLE IF NOT EXISTS pdfrepo (
+            name_file character varying(255) UNIQUE,
+            content bytea
         );
     """
     if not query.exec(sql):
         print(query.lastError())
 
 
-def get_content_from_filename(filename: str) -> bytes:
-    content = None
-    query = QSqlQuery()
-    sql = """
-        SELECT content FROM file
-        WHERE name_file = "%s";
-    """ % filename
-    query.exec(sql)
-    if query.next():
-        content_str = query.value(0)
-        content = base64.b64decode(content_str.encode())
-    return content
-
-
-def get_list_file(list_file: list):
-    query = QSqlQuery()
-    sql = 'SELECT name_file FROM file;'
-    flag = query.exec(sql)
-    while query.next():
-        list_file.append(query.value(0))
-    if not flag:
-        print(query.lastError())
-
-
-def insert_filename_content(filename: str, content_str: str):
-    sql = 'INSERT INTO file VALUES(?, ?);'
-    query = QSqlQuery()
-    query.prepare(sql)
-    query.bindValue(0, filename)
-    query.bindValue(1, content_str)
-    """
-    note: This does not work!
-    query.bindValue(
-        1, content,
-        type=QSql.ParamTypeFlag.In | QSql.ParamTypeFlag.Binary
-    )
-    """
-    if not query.exec():
-        print(query.lastError())
+def get_connection() -> QSqlDatabase:
+    con = QSqlDatabase.addDatabase('QPSQL')
+    con.setHostName('192.168.0.34')
+    con.setDatabaseName('testdb')
+    con.setUserName('postgres')
+    con.setPassword('postgres')
+    return con
 
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.dbname = 'test.sqlite'
-        self.con = QSqlDatabase.addDatabase('QSQLITE')
-        self.con.setDatabaseName(self.dbname)
+        self.con = get_connection()
         self.init_table()
 
         self.combo = None
         self.init_ui()
         self.update_filelist()
-        self.setWindowTitle('SQLite & PDF Test')
+        self.setWindowTitle('PostgreSQL & PDF test')
         self.resize(600, 800)
 
     def init_table(self):
@@ -104,13 +75,13 @@ class Example(QMainWindow):
         toolbar = QToolBar()
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
 
-        self.combo = QComboBox()
-        self.combo.setSizePolicy(
+        self.combo = combo = QComboBox()
+        combo.setSizePolicy(
             QSizePolicy.Policy.Expanding,
             QSizePolicy.Policy.Preferred
         )
-        self.combo.currentTextChanged.connect(self.on_current_text_changed)
-        toolbar.addWidget(self.combo)
+        combo.currentTextChanged.connect(self.on_current_text_changed)
+        toolbar.addWidget(combo)
 
         view = QPdfView(self)
         view.setPageMode(QPdfView.PageMode.MultiPage)
@@ -126,11 +97,10 @@ class Example(QMainWindow):
             basename = os.path.basename(filename)
             f = open(filename, 'rb')
             with f:
-                content = base64.b64encode(f.read())
-                content_str: str = content.decode()
+                content = f.read()
 
             if self.con.open():
-                insert_filename_content(basename, content_str)
+                insert_filename_content(basename, content)
                 self.con.close()
                 self.update_filelist()
                 self.combo.setCurrentText(basename)

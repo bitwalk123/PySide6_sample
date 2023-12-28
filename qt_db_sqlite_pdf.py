@@ -2,7 +2,7 @@ import os
 import sys
 import tempfile
 
-from PySide6.QtCore import Qt, QByteArray
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction
 from PySide6.QtPdf import QPdfDocument
 from PySide6.QtPdfWidgets import QPdfView
@@ -17,74 +17,49 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-
-def create_table():
-    query = QSqlQuery()
-    sql = """
-        CREATE TABLE IF NOT EXISTS pdfrepo (
-            name_file character varying(255),
-            content bytea
-        );
-    """
-    if not query.exec(sql):
-        print(query.lastError())
+from qt_db_common_pdf import (
+    get_content_from_filename,
+    get_list_file,
+    insert_filename_content,
+)
 
 
-def get_content_from_filename(filename: str) -> bytes:
-    q_byte_array = None
-    query = QSqlQuery()
-    sql = """
-        SELECT content FROM pdfrepo
-        WHERE name_file = '%s';
-    """ % filename
-    flag = query.exec(sql)
-    if query.next():
-        q_byte_array = query.value(0)
-    if not flag:
-        print(query.lastError())
-    content = q_byte_array.data()
-    return content
+class SqliteExample(QMainWindow):
+    app_title = 'SQLite & PDF test'
 
-
-def get_list_file(list_file: list):
-    query = QSqlQuery()
-    sql = 'SELECT name_file FROM pdfrepo;'
-    flag = query.exec(sql)
-    while query.next():
-        list_file.append(query.value(0))
-    if not flag:
-        print(query.lastError())
-
-
-def insert_filename_content(filename: str, content: bytes):
-    sql = 'INSERT INTO pdfrepo VALUES(?, ?);'
-    query = QSqlQuery()
-    query.prepare(sql)
-    query.bindValue(0, filename)
-    query.bindValue(1, QByteArray(content))
-    if not query.exec():
-        print(query.lastError())
-
-
-class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.con = QSqlDatabase.addDatabase('QPSQL')
-        self.con.setHostName('192.168.0.34')
-        self.con.setDatabaseName('testdb')
-        self.con.setUserName('postgres')
-        self.con.setPassword('postgres')
+        self.con = self.get_connection()
         self.init_table()
 
         self.combo = None
         self.init_ui()
         self.update_filelist()
-        self.setWindowTitle('PostgreSQL & PDF Test')
+        self.setWindowTitle(self.app_title)
         self.resize(600, 800)
+
+    @staticmethod
+    def create_table():
+        query = QSqlQuery()
+        sql = """
+            CREATE TABLE IF NOT EXISTS pdfrepo (
+                name_file TEXT UNIQUE,
+                content NONE
+            );
+        """
+        if not query.exec(sql):
+            print(query.lastError())
+
+    @staticmethod
+    def get_connection() -> QSqlDatabase:
+        dbname = 'testdb.sqlite'
+        con = QSqlDatabase.addDatabase('QSQLITE')
+        con.setDatabaseName(dbname)
+        return con
 
     def init_table(self):
         if self.con.open():
-            create_table()
+            self.create_table()
             self.con.close()
 
     def init_ui(self):
@@ -100,13 +75,13 @@ class Example(QMainWindow):
         toolbar = QToolBar()
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
 
-        self.combo = QComboBox()
-        self.combo.setSizePolicy(
+        self.combo = combo = QComboBox()
+        combo.setSizePolicy(
             QSizePolicy.Policy.Expanding,
             QSizePolicy.Policy.Preferred
         )
-        self.combo.currentTextChanged.connect(self.on_current_text_changed)
-        toolbar.addWidget(self.combo)
+        combo.currentTextChanged.connect(self.on_current_text_changed)
+        toolbar.addWidget(combo)
 
         view = QPdfView(self)
         view.setPageMode(QPdfView.PageMode.MultiPage)
@@ -161,7 +136,7 @@ class Example(QMainWindow):
 
 def main():
     app = QApplication()
-    ex = Example()
+    ex = SqliteExample()
     ex.show()
     sys.exit(app.exec())
 
