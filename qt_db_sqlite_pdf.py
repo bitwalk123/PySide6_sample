@@ -24,7 +24,7 @@ from qt_db_common_pdf import (
 )
 
 
-class SqliteExample(QMainWindow):
+class SQLiteExample(QMainWindow):
     app_title = 'SQLite & PDF test'
 
     def __init__(self):
@@ -52,8 +52,8 @@ class SqliteExample(QMainWindow):
 
     @staticmethod
     def get_connection() -> QSqlDatabase:
-        dbname = 'testdb.sqlite'
         con = QSqlDatabase.addDatabase('QSQLITE')
+        dbname = 'testdb.sqlite'
         con.setDatabaseName(dbname)
         return con
 
@@ -136,7 +136,7 @@ class SqliteExample(QMainWindow):
 
 def main():
     app = QApplication()
-    ex = SqliteExample()
+    ex = SQLiteExample()
     ex.show()
     sys.exit(app.exec())
 
