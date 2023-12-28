@@ -4,10 +4,10 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery
 from PySide6.QtWidgets import QApplication
 
 from qt_db_postgres_dialog import DBInfoDlg
-from qt_db_sqlite_pdf import SQLiteExample
+from qt_db_sqlite_pdf import SQLitePDF
 
 
-class PostgresExample(SQLiteExample):
+class PostgresPDF(SQLitePDF):
     app_title = 'PostgreSQL & PDF test'
 
     def __init__(self):
@@ -37,9 +37,10 @@ class PostgresExample(SQLiteExample):
             con.setPassword(dict_info['password'])
         return con
 
+
 def main():
     app = QApplication()
-    ex = PostgresExample()
+    ex = PostgresPDF()
     ex.show()
     sys.exit(app.exec())
 

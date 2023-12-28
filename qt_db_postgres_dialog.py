@@ -12,20 +12,6 @@ from PySide6.QtWidgets import (
 )
 
 
-class Label(QLabel):
-
-    def __init__(self, text: str):
-        super().__init__(text)
-        self.setLineWidth(1)
-        self.setFrameStyle(
-            QFrame.Shape.StyledPanel | QFrame.Shadow.Raised
-        )
-        self.setSizePolicy(
-            QSizePolicy.Policy.Expanding,
-            QSizePolicy.Policy.Preferred
-        )
-
-
 class Entry(QLineEdit):
     def __init__(self, key: str):
         super().__init__()
@@ -47,7 +33,6 @@ class DBInfoDlg(QDialog):
         self.setWindowTitle('DB Info')
 
         vbox = QVBoxLayout()
-        vbox.setContentsMargins(0, 0, 0, 0)
         vbox.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.setLayout(vbox)
 
@@ -61,32 +46,24 @@ class DBInfoDlg(QDialog):
         vbox.addWidget(bbox)
 
     def gen_entries(self, base):
-        grid = QGridLayout()
-        grid.setContentsMargins(0, 0, 0, 0)
-        grid.setSpacing(1)
-        base.setLayout(grid)
+        layout = QGridLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(1)
+        base.setLayout(layout)
 
-        key = 'host'
-        row = 0
-        self.gen_row(grid, key, row)
+        for row, key in enumerate(['host', 'database', 'user', 'password']):
+            if key == 'password':
+                self.gen_row(layout, key, row, True)
+            else:
+                self.gen_row(layout, key, row)
 
-        key = 'database'
-        row += 1
-        self.gen_row(grid, key, row)
-
-        key = 'user'
-        row += 1
-        self.gen_row(grid, key, row)
-
-        key = 'password'
-        row += 1
-        self.gen_row(grid, key, row, True)
-
-        grid.setColumnStretch(0, 0)
-        grid.setColumnStretch(1, 1)
+        layout.setColumnStretch(0, 0)
+        layout.setColumnStretch(1, 1)
 
     def gen_row(self, grid: QGridLayout, key: str, row: int, flag: int = False):
-        lab = Label(key)
+        lab = QLabel(key)
+        lab.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Raised)
+        lab.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         grid.addWidget(lab, row, 0)
 
         ent = Entry(key)

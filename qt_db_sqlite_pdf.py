@@ -24,7 +24,7 @@ from qt_db_common_pdf import (
 )
 
 
-class SQLiteExample(QMainWindow):
+class SQLitePDF(QMainWindow):
     app_title = 'SQLite & PDF test'
 
     def __init__(self):
@@ -136,7 +136,7 @@ class SQLiteExample(QMainWindow):
 
 def main():
     app = QApplication()
-    ex = SQLiteExample()
+    ex = SQLitePDF()
     ex.show()
     sys.exit(app.exec())
 
