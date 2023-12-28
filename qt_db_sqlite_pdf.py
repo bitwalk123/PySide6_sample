@@ -34,9 +34,11 @@ class SQLitePDF(QMainWindow):
 
         self.combo = None
         self.init_ui()
-        self.update_filelist()
+
         self.setWindowTitle(self.app_title)
         self.resize(600, 800)
+
+        self.update_filelist()
 
     @staticmethod
     def create_table():
