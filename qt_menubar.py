@@ -19,8 +19,8 @@ class Example(QMainWindow):
 
     def init_ui(self):
         # Menubar
-        menu = self.menuBar()
-        menu_file = menu.addMenu('&File')
+        menubar = self.menuBar()
+        menu_file = menubar.addMenu('&File')
 
         action_button = QAction(QIcon('bug.png'), '&Your button', self)
         action_button.setStatusTip('This is your button')

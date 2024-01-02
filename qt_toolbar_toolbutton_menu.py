@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding: utf-8
 import sys
 
 from PySide6.QtGui import QActionGroup, QAction
@@ -32,8 +34,8 @@ class Example(QMainWindow):
         toolbutton.setText('Menu')
         toolbar.addWidget(toolbutton)
 
-        toolmenu = QMenu(self)
-        toolbutton.setMenu(toolmenu)
+        menu = QMenu(self)
+        toolbutton.setMenu(menu)
         toolbutton.setPopupMode(
             QToolButton.ToolButtonPopupMode.InstantPopup
         )
@@ -41,15 +43,15 @@ class Example(QMainWindow):
         action_1 = QAction('Action 1')
         action_1.setCheckable(True)
         action_1.setChecked(True)  # default selection
-        toolmenu.addAction(action_1)
+        menu.addAction(action_1)
 
         action_2 = QAction('Action 2')
         action_2.setCheckable(True)
-        toolmenu.addAction(action_2)
+        menu.addAction(action_2)
 
         action_3 = QAction('Action 3')
         action_3.setCheckable(True)
-        toolmenu.addAction(action_3)
+        menu.addAction(action_3)
 
         group_action = QActionGroup(self)
         group_action.addAction(action_1)
