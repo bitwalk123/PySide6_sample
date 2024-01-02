@@ -5,20 +5,28 @@ from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
     QMenu,
+    QSizePolicy,
     QToolBar,
     QToolButton,
+    QWidget,
 )
 
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.group_action: QActionGroup = None
         self.init_ui()
 
     def init_ui(self):
         toolbar = QToolBar()
         self.addToolBar(toolbar)
+
+        pad = QWidget()
+        pad.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Preferred
+        )
+        toolbar.addWidget(pad)
 
         toolbutton = QToolButton()
         toolbutton.setText('Menu')
@@ -32,7 +40,7 @@ class Example(QMainWindow):
 
         action_1 = QAction('Action 1')
         action_1.setCheckable(True)
-        action_1.setChecked(True) # default selection
+        action_1.setChecked(True)  # default selection
         toolmenu.addAction(action_1)
 
         action_2 = QAction('Action 2')
@@ -43,14 +51,15 @@ class Example(QMainWindow):
         action_3.setCheckable(True)
         toolmenu.addAction(action_3)
 
-        self.group_action = group_action = QActionGroup(self)
-        group_action.triggered.connect(self.on_triggered)
+        group_action = QActionGroup(self)
         group_action.addAction(action_1)
         group_action.addAction(action_2)
         group_action.addAction(action_3)
+        group_action.triggered.connect(self.on_triggered)
 
     def on_triggered(self):
-        action = self.group_action.checkedAction()
+        group: QActionGroup = self.sender()
+        action = group.checkedAction()
         print(action.text(), 'is selected.')
 
 
