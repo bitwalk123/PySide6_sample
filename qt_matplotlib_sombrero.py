@@ -4,12 +4,13 @@ import matplotlib as mpl
 import numpy as np
 import sys
 
+from PySide6.QtGui import QPixmap
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtCore import Qt, QBuffer, QIODevice
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QLabel
 
 
 class Sombrero(FigureCanvas):
@@ -31,6 +32,25 @@ class Sombrero(FigureCanvas):
             linewidth=0, antialiased=False
         )
 
+        ###################
+        ## UNDER TESTING ##
+        ###################
+        #fig.savefig('sombrero.png')
+        buffer = QBuffer()
+        buffer.open(QIODevice.OpenModeFlag.WriteOnly)
+        fig.savefig(buffer)
+
+        self.win = win = QWidget()
+        win.setWindowTitle('TEST')
+
+        byte_array = buffer.data()
+        pixmap = QPixmap()
+        pixmap.loadFromData(byte_array)
+
+        lab = QLabel(win)
+        lab.setPixmap(pixmap)
+        win.resize(pixmap.size().width(), pixmap.size().height())
+        win.show()
 
 class Example(QMainWindow):
     def __init__(self):
