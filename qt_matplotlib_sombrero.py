@@ -88,13 +88,13 @@ class Example(QMainWindow):
         self.addToolBar(Qt.ToolBarArea.BottomToolBarArea, navtoolbar)
 
     def on_apply_button(self):
-        canvas: QWidget | Sombrero = self.centralWidget()
-        fig = canvas.fig
         buffer = QBuffer()
         buffer.open(QIODevice.OpenModeFlag.WriteOnly)
+
+        canvas: QWidget | Sombrero = self.centralWidget()
+        fig = canvas.fig
         fig.savefig(buffer)
         byte_array = buffer.data()
-
         self.win = ImageViewer(byte_array)
         self.win.show()
 
