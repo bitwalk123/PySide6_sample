@@ -31,12 +31,15 @@ from PySide6.QtWidgets import (
 class ImageViewer(QWidget):
     def __init__(self, byte_array: QByteArray):
         super().__init__()
+        self.init_ui(byte_array)
         self.setWindowTitle('Matplotlib image viewer')
+
+    def init_ui(self, byte_array: QByteArray):
         lab = QLabel(self)
         pixmap = QPixmap()
         pixmap.loadFromData(byte_array)
         lab.setPixmap(pixmap)
-        self.setFixedSize(
+        lab.setFixedSize(
             pixmap.size().width(),
             pixmap.size().height()
         )
@@ -44,8 +47,8 @@ class ImageViewer(QWidget):
 
 class Sombrero(FigureCanvas):
     def __init__(self):
-        self.fig = fig = Figure()
-        super().__init__(fig)
+        self.fig = Figure()
+        super().__init__(self.fig)
 
         X = np.arange(-5, 5, 0.25)
         Y = np.arange(-5, 5, 0.25)
@@ -53,7 +56,7 @@ class Sombrero(FigureCanvas):
         R = np.sqrt(X ** 2 + Y ** 2)
         Z = np.sin(R)
 
-        ax = fig.add_subplot(111, projection='3d')
+        ax = self.fig.add_subplot(111, projection='3d')
         ax.plot_surface(
             X, Y, Z,
             rstride=1, cstride=1,
@@ -65,7 +68,8 @@ class Sombrero(FigureCanvas):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.win = None
+        self.viewer = None
+
         self.init_ui()
         self.setWindowTitle('QBuffer test')
 
@@ -91,12 +95,11 @@ class Example(QMainWindow):
         buffer = QBuffer()
         buffer.open(QIODevice.OpenModeFlag.WriteOnly)
 
-        canvas: QWidget | Sombrero = self.centralWidget()
-        fig = canvas.fig
-        fig.savefig(buffer)
+        canvas: QWidget | FigureCanvas = self.centralWidget()
+        canvas.figure.savefig(buffer)
         byte_array = buffer.data()
-        self.win = ImageViewer(byte_array)
-        self.win.show()
+        self.viewer = ImageViewer(byte_array)
+        self.viewer.show()
 
 
 def main():
