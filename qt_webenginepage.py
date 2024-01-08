@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding: utf-8
 import sys
 
 from PySide6.QtCore import QUrl
@@ -11,6 +13,8 @@ class Example(QWebEngineView):
         super().__init__()
         self.load(url)
         self.loadFinished.connect(self.on_load_finished)
+        page: QWebEnginePage = self.page()
+        page.titleChanged.connect(self.setWindowTitle)
         self.resize(1000, 800)
 
     def on_load_finished(self, flag: bool) -> bool:
