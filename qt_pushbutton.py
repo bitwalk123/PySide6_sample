@@ -22,7 +22,10 @@ class Example(QWidget):
         self.setLayout(layout)
 
         btn = QPushButton('プッシュボタン')
-        btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        btn.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding
+        )
         btn.clicked.connect(self.button_clicked)
         layout.addWidget(btn)
 
