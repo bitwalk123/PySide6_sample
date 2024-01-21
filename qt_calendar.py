@@ -2,27 +2,65 @@
 # coding: utf-8
 
 import sys
+
+from PySide6.QtCore import QDate
 from PySide6.QtWidgets import (
     QApplication,
     QCalendarWidget,
-    QVBoxLayout,
-    QWidget,
+    QLineEdit,
+    QMainWindow,
+    QStyle,
+    QToolBar,
+    QToolButton,
 )
 
 
-class Example(QWidget):
+class DateEntry(QLineEdit):
     def __init__(self):
         super().__init__()
-        self.init_ui()
-        self.setWindowTitle('Calendar')
+        self.qdate: QDate | None = None
+        self.setEnabled(False)
 
-    def init_ui(self):
-        calendar = QCalendarWidget()
+    def getDate(self) -> QDate | None:
+        return self.qdate
 
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
+    def setDate(self, qdate: QDate):
+        self.qdate = qdate
+        self.setText('{:0=4}-{:0=2}-{:0=2}'.format(
+            qdate.year(), qdate.month(), qdate.day()
+        ))
 
-        vbox.addWidget(calendar)
+
+class Example(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.calendar: QCalendarWidget | None = None
+
+        toolbar = QToolBar()
+        self.addToolBar(toolbar)
+
+        self.entry = DateEntry()
+        toolbar.addWidget(self.entry)
+
+        but_calendar = QToolButton()
+        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogApplyButton)
+        but_calendar.setIcon(icon)
+        but_calendar.clicked.connect(self.on_clicked)
+        toolbar.addWidget(but_calendar)
+
+    def on_date_selected(self, qdate: QDate):
+        self.entry.setDate(qdate)
+        if self.calendar is not None:
+            self.calendar.hide()
+            self.calendar.deleteLater()
+
+    def on_clicked(self):
+        self.calendar = QCalendarWidget()
+        qdate = self.entry.getDate()
+        if qdate is not None:
+            self.calendar.setSelectedDate(qdate)
+        self.calendar.activated.connect(self.on_date_selected)
+        self.calendar.show()
 
 
 def main():
