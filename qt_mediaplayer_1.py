@@ -20,6 +20,7 @@ def main():
     audio.setVolume(50)
 
     video = QVideoWidget()
+    video.setWindowTitle('MP4 sample')
     player.setVideoOutput(video)
     video.show()
 
