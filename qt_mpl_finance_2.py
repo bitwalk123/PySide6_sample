@@ -1,8 +1,8 @@
 import sys
 
 import mplfinance as mpf
-
 import pandas as pd
+
 from PySide6.QtCore import (
     QThreadPool,
     Qt,
@@ -13,7 +13,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from qt_mpl_finance_2_sub import StockChart, DockNavigator, MyToolBar
+from qt_mpl_finance_2_sub import (
+    DockNavigator,
+    MyToolBar,
+    StockChart,
+)
 from qt_mpl_finance_2_yfinance import GetTradeInfoWorker
 
 
