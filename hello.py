@@ -33,6 +33,7 @@ class Hello(QWidget):
         label.setFont(font)
         label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
+        print(label.parent())
 
 
 def main():
