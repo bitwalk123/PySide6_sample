@@ -1,6 +1,5 @@
-import sys
-
 import pandas as pd
+import sys
 
 from PySide6.QtCore import (
     QThreadPool,
