@@ -1,6 +1,5 @@
 import sys
 
-import mplfinance as mpf
 import pandas as pd
 
 from PySide6.QtCore import (
@@ -13,12 +12,13 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from qt_mpl_finance_2_func import draw_chart
 from qt_mpl_finance_2_sub import (
     DockNavigator,
     MyToolBar,
     StockChart,
 )
-from qt_mpl_finance_2_yfinance import GetTradeInfoWorker
+from qt_mpl_finance_2_thread import ThreadWorker
 
 
 class Example(QMainWindow):
@@ -44,27 +44,13 @@ class Example(QMainWindow):
         )
 
     def on_ticker_entered(self, ticker: str):
-        worker = GetTradeInfoWorker(ticker)
-        worker.signals.finished.connect(self.draw_chart)
+        worker = ThreadWorker(ticker)
+        worker.finished.connect(self.on_draw_chart)
         self.threadpool.start(worker)
 
-    def draw_chart(self, ticker: str, df: pd.DataFrame):
+    def on_draw_chart(self, ticker: str, df: pd.DataFrame):
         chart: QWidget | StockChart = self.centralWidget()
-        chart.clearAxes()
-        chart.ax.set_title(ticker)
-        mpf.plot(
-            df,
-            type='candle',
-            datetime_format='%m/%d',
-            mav=(5, 25),
-            tight_layout=False,
-            style='yahoo',
-            ax=chart.ax,
-            volume=chart.ax2
-        )
-        chart.ax.grid()
-        chart.ax2.grid()
-        chart.refreshDraw()
+        draw_chart(chart, ticker, df)
 
 
 def main():
