@@ -28,13 +28,14 @@ class Example(QWebEngineView):
             self.page().toHtml(self.print_html)
 
     def on_download_requested(self, download: QWebEngineDownloadRequest):
-        print(type(download))
         # Reference:
         # https://stackoverflow.com/questions/55963931/how-to-download-csv-file-with-qwebengineview-and-qurl
-        old_path = download.url().path()  # download.path()
-        suffix = QFileInfo(old_path).suffix()
+        url_path = download.url().path()  # download.path()
+        if url_path == '/':
+            url_path = 'index.html'
+        suffix = QFileInfo(url_path).suffix()
         path, _ = QFileDialog.getSaveFileName(
-            self, "Save File", old_path, "*." + suffix
+            self, 'Save File', url_path, '*.' + suffix
         )
         if path:
             download.setDownloadDirectory(path)
