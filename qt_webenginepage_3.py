@@ -12,8 +12,6 @@ from PySide6.QtWidgets import QApplication, QFileDialog
 class Example(QWebEngineView):
     def __init__(self, url: QUrl):
         super().__init__()
-        self.status_load = False
-        self.loadFinished.connect(self.on_load_finished)
         self.resize(1000, 800)
 
         self.load(url)
@@ -28,8 +26,6 @@ class Example(QWebEngineView):
             self.page().toHtml(self.print_html)
 
     def on_download_requested(self, download: QWebEngineDownloadRequest):
-        # Reference:
-        # https://stackoverflow.com/questions/55963931/how-to-download-csv-file-with-qwebengineview-and-qurl
         url_path = download.url().path()  # download.path()
         if url_path == '/':
             url_path = 'index.html'
@@ -40,9 +36,6 @@ class Example(QWebEngineView):
         if path:
             download.setDownloadDirectory(path)
             download.accept()
-
-    def on_load_finished(self, flag: bool):
-        self.status_load = flag
 
     @staticmethod
     def print_html(html: str):
