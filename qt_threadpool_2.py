@@ -38,7 +38,7 @@ class Worker(QRunnable, WorkerSignal):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('ThreadPool')
+        self.setWindowTitle('QThreadPool')
         self.threadpool = QThreadPool()
 
         self.btn = QPushButton('START')
