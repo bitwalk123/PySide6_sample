@@ -22,11 +22,18 @@ class Example(QWebEngineView):
 
     def createWindow(self, wwtype: QWebEnginePage.WebWindowType):
         action: QAction = self.pageAction(QWebEnginePage.WebAction.ViewSource)
-        if action.isEnabled():
-            self.page().toHtml(self.print_html)
+        if not action.isEnabled():
+            return
+        # Just STDOUT
+        self.page().toHtml(self.print_html)
 
     def on_download_requested(self, download: QWebEngineDownloadRequest):
-        url_path = download.url().path()  # download.path()
+        action: QAction = self.pageAction(QWebEnginePage.WebAction.SavePage)
+        if not action.isEnabled():
+            return
+
+        # Save page as single HTML
+        url_path = download.url().path()
         if url_path == '/':
             url_path = 'index.html'
         suffix = QFileInfo(url_path).suffix()
@@ -34,6 +41,9 @@ class Example(QWebEngineView):
             self, 'Save File', url_path, '*.' + suffix
         )
         if path:
+            download.setSavePageFormat(
+                QWebEngineDownloadRequest.SavePageFormat.SingleHtmlSaveFormat
+            )
             download.setDownloadFileName(path)
             download.accept()
 
