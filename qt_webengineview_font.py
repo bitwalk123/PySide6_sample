@@ -12,10 +12,6 @@ from PySide6.QtWidgets import QApplication
 class Example(QWebEngineView):
     def __init__(self, url: QUrl):
         super().__init__()
-        fonts = QFontDatabase()
-        for fontname in fonts.families():
-            print(fontname)
-
         self.load(url)
         page: QWebEnginePage = self.page()
         page.titleChanged.connect(self.setWindowTitle)
