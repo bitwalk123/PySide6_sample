@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 
 
 class Example(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self):
         super().__init__()
         self.init_ui()
         self.setWindowTitle('Font list')
@@ -29,7 +29,7 @@ class Example(QWidget):
         layout.addWidget(combo)
 
         self.label = label = QLabel()
-        label.setText('ABCDEFabcdef1234567!"#$%&')
+        label.setText('ABCDEabcde12345?#$%&あいうえお')
         layout.addWidget(label)
 
         self.selection_changed()
