@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import sys
 from PySide6.QtWidgets import (
     QApplication,
@@ -10,13 +7,12 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
         self.setWindowTitle('Label')
 
-    def initUI(self):
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
