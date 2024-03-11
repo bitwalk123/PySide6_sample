@@ -1,11 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import sys
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
-    QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
@@ -14,27 +10,25 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
         self.setWindowTitle('CheckBox')
 
-    def initUI(self):
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
-        cbox_A = QCheckBox('チェックボックスＡ')
-        cbox_A.toggle()
-        cbox_A.stateChanged.connect(self.checkboxChanged)
-        vbox.addWidget(cbox_A)
+        cbox_a = QCheckBox('チェックボックスＡ')
+        cbox_a.toggle()
+        cbox_a.stateChanged.connect(self.checkbox_changed)
+        vbox.addWidget(cbox_a)
 
-        cbox_B = QCheckBox('チェックボックスＢ')
-        cbox_B.stateChanged.connect(self.checkboxChanged)
-        vbox.addWidget(cbox_B)
+        cbox_b = QCheckBox('チェックボックスＢ')
+        cbox_b.stateChanged.connect(self.checkbox_changed)
+        vbox.addWidget(cbox_b)
 
-        cbox_C = QCheckBox('チェックボックスＣ')
-        cbox_C.stateChanged.connect(self.checkboxChanged)
-        vbox.addWidget(cbox_C)
+        cbox_c = QCheckBox('チェックボックスＣ')
+        cbox_c.stateChanged.connect(self.checkbox_changed)
+        vbox.addWidget(cbox_c)
 
-    def checkboxChanged(self, state):
+    def checkbox_changed(self, state):
         cbox = self.sender()
         if cbox.isChecked():
             print('「' + cbox.text() + '」にチェックを入れました。')
