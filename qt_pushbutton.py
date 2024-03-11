@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import sys
 from PySide6.QtWidgets import (
     QApplication,
@@ -14,10 +11,8 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.init_ui()
         self.setWindowTitle('PushButton')
 
-    def init_ui(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
