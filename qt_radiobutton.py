@@ -1,8 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import sys
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
     QButtonGroup,
@@ -15,45 +11,35 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
         self.setWindowTitle('RadioButton')
 
-    def initUI(self):
+        rb_group = QButtonGroup()
+
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
-        rb_A = QRadioButton('ラジオボタンＡ')
-        # rad_A.toggle()
-        rb_A.toggled.connect(self.checkboxChanged)
-        vbox.addWidget(rb_A)
+        rb_a = QRadioButton('ラジオボタンＡ')
+        rb_a.toggle()
+        rb_a.toggled.connect(self.radiobutton_changed)
+        rb_group.addButton(rb_a)
+        vbox.addWidget(rb_a)
 
-        rb_B = QRadioButton('ラジオボタンＢ')
-        rb_B.toggled.connect(self.checkboxChanged)
-        vbox.addWidget(rb_B)
+        rb_b = QRadioButton('ラジオボタンＢ')
+        rb_b.toggled.connect(self.radiobutton_changed)
+        rb_group.addButton(rb_b)
+        vbox.addWidget(rb_b)
 
-        rb_C = QRadioButton('ラジオボタンＣ')
-        rb_C.toggled.connect(self.checkboxChanged)
-        vbox.addWidget(rb_C)
+        rb_c = QRadioButton('ラジオボタンＣ')
+        rb_c.toggled.connect(self.radiobutton_changed)
+        rb_group.addButton(rb_c)
+        vbox.addWidget(rb_c)
 
-        # Reference:
-        # https://doc.qt.io/qtforpython/PySide6/QtWidgets/QRadioButton.html
-        #
-        # Radio buttons are autoExclusive by default. If auto-exclusive is
-        # enabled, radio buttons that belong to the same parent widget behave
-        # as if they were part of the same exclusive button group. If you need
-        # multiple exclusive button groups for radio buttons that belong to the
-        # same parent widget, put them into a QButtonGroup .
-        rb_group = QButtonGroup()
-        rb_group.addButton(rb_A)
-        rb_group.addButton(rb_B)
-        rb_group.addButton(rb_C)
-
-    def checkboxChanged(self, state):
+    def radiobutton_changed(self, state):
         rb: QRadioButton = self.sender()
         if rb.isChecked():
-            print('「' + rb.text() + '」にチェックを入れました。')
+            print('「' + rb.text() + '」をオンにしました。')
         else:
-            print('「' + rb.text() + '」のチェックを外しました。')
+            print('「' + rb.text() + '」をオフにしました。')
 
 
 def main():
