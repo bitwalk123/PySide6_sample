@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('PushButton')
+        self.setWindowTitle('QPushButton')
 
         layout = QVBoxLayout()
         self.setLayout(layout)

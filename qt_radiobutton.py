@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('RadioButton')
+        self.setWindowTitle('QRadioButton')
 
         rb_group = QButtonGroup()
 

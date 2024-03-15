@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-# Reference:
-# https://pythonpyqt.com/pyqt-qtextedit/
-
 import sys
 from PySide6.QtWidgets import (
     QApplication,
