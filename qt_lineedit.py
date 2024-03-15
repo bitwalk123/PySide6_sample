@@ -1,10 +1,9 @@
 import sys
 from PySide6.QtWidgets import (
     QApplication,
-    QHBoxLayout,
-    QLabel,
     QLineEdit,
     QSizePolicy,
+    QVBoxLayout,
     QWidget,
 )
 
@@ -14,22 +13,18 @@ class Example(QWidget):
         super().__init__()
         self.setWindowTitle("QLineEdit")
 
-        hbox = QHBoxLayout()
-        self.setLayout(hbox)
-
-        lab = QLabel('Name:')
-        lab.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        hbox.addWidget(lab)
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
 
         entry = QLineEdit()
         entry.returnPressed.connect(self.on_entry_entered)
         entry.setMinimumWidth(200)
         entry.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        hbox.addWidget(entry)
+        vbox.addWidget(entry)
 
     def on_entry_entered(self):
         lineedit: QLineEdit = self.sender()
-        print('Your name: ' + lineedit.text())
+        print('「' + lineedit.text() + '」が入力されました。')
 
 
 def main():
