@@ -1,22 +1,28 @@
 import sys
+
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
-    QScrollArea,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
 )
 
 
-class Example(QScrollArea):
+class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWidgetResizable(True)
-        self.setWindowTitle('QScrollArea')
+        self.setWindowTitle('QLabel with QPixmap')
 
-        pixmap = QPixmap("sample_picture.jpg")
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
+
         lab = QLabel()
+        pixmap = QPixmap("sample_picture.jpg").scaledToWidth(400)
         lab.setPixmap(pixmap)
-        self.setWidget(lab)
+        vbox.addWidget(lab)
 
 
 def main():
