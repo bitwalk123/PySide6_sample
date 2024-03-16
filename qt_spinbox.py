@@ -1,11 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import sys
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
-    QSizePolicy,
     QSpinBox,
     QVBoxLayout,
     QWidget,
@@ -15,23 +11,19 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('SpinBox')
-        self.initUI()
+        self.setWindowTitle('QSpinBox')
 
-    def initUI(self):
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
-        sbox = QSpinBox()
-        sbox.setRange(0, 100)
-        sbox.setAlignment(Qt.AlignRight)
-        sbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        sbox.valueChanged.connect(self.show_value)
-        vbox.addWidget(sbox)
+        sb = QSpinBox()
+        sb.setRange(0, 100)
+        sb.setAlignment(Qt.AlignmentFlag.AlignRight)
+        sb.valueChanged.connect(self.show_value)
+        vbox.addWidget(sb)
 
-    def show_value(self):
-        spin: QSpinBox = self.sender()
-        print(spin.value())
+    def show_value(self, value: int):
+        print('%d になりました。' % value)
 
 
 def main():
