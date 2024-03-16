@@ -15,7 +15,7 @@ class MyDockWidget(QDockWidget):
         base.setAlignment(Qt.AlignmentFlag.AlignCenter)
         if side == 'leftright':
             base.setFixedWidth(80)
-        else:
+        elif side == 'topbottom':
             base.setFixedHeight(50)
 
         base.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)

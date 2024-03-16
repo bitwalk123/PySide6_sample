@@ -57,7 +57,7 @@ class Example(QMainWindow):
 
         base = QLabel('Central Widget')
         base.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        base.setFixedSize(300, 200)
+        base.setMinimumSize(300, 200)
         base.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         base.setLineWidth(1)
         self.setCentralWidget(base)
