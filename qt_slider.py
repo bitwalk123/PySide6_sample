@@ -14,23 +14,19 @@ from PySide6.QtWidgets import (
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Slider')
-        self.initUI()
+        self.setWindowTitle('QSlider')
 
-    def initUI(self):
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
-        slider = QSlider(orientation=Qt.Horizontal)
-        slider.setTickPosition(QSlider.TicksBothSides)
+        slider = QSlider(orientation=Qt.Orientation.Horizontal)
+        slider.setTickPosition(QSlider.TickPosition.TicksBothSides)
         slider.setRange(0, 100)
-        slider.setTickInterval(10)
         slider.valueChanged.connect(self.show_value)
         vbox.addWidget(slider)
 
-    def show_value(self):
-        sld: QSlider = self.sender()
-        print(sld.value())
+    def show_value(self, value: int):
+        print('%d になりました。' % value)
 
 
 def main():
