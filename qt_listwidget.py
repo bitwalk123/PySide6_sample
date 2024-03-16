@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QApplication,
     QListWidget,
     QVBoxLayout,
-    QWidget,
+    QWidget, QListWidgetItem,
 )
 
 
@@ -27,8 +27,12 @@ class Example(QWidget):
         self.setLayout(vbox)
 
         lw = QListWidget()
+        lw.itemDoubleClicked.connect(self.item_double_clicked)
         lw.addItems(self.pref)
         vbox.addWidget(lw)
+
+    def item_double_clicked(self, obj: QListWidgetItem):
+        print('「' + obj.text() + '」が選択されました。')
 
 
 def main():
