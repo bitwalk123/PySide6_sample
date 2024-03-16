@@ -1,9 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-#
-# Reference
-# https://www.tutorialspoint.com/pyqt/pyqt_qcombobox_widget.htm
 import sys
+
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
@@ -13,35 +9,36 @@ from PySide6.QtWidgets import (
 
 
 class Example(QWidget):
-    def __init__(self, parent=None):
+    pref = [
+        '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
+        '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県',
+        '山梨県', '長野県', '新潟県', '富山県', '石川県', '福井県', '岐阜県',
+        '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県',
+        '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県',
+        '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県',
+        '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県',
+    ]
+
+    def __init__(self):
         super().__init__()
-        self.init_ui()
-        self.setWindowTitle("Combobox")
+        self.setWindowTitle('QComboBox')
 
-    def init_ui(self):
-        layout = QVBoxLayout()
-        self.setLayout(layout)
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
 
-        combo = QComboBox(self)
-        combo.addItem("C")
-        combo.addItem("C++")
-        combo.addItems(["Java", "C#", "Python"])
-        combo.currentIndexChanged.connect(self.selection_changed)
+        combo = QComboBox()
+        combo.setEditable(True)
+        combo.setMaxVisibleItems(10)
+        combo.currentTextChanged.connect(self.selected_item)
+        combo.addItems(self.pref)
+        vbox.addWidget(combo)
 
-        layout.addWidget(combo)
-
-    def selection_changed(self, i):
-        cb: QComboBox = self.sender()
-
-        print("Items in the list are :")
-        for count in range(cb.count()):
-            print(cb.itemText(count))
-
-        print("Current index", i, "selection changed ", cb.currentText())
+    def selected_item(self, selected):
+        print('「' + selected + '」が選択されました。')
 
 
 def main():
-    app = QApplication(sys.argv)
+    app: QApplication = QApplication(sys.argv)
     ex = Example()
     ex.show()
     sys.exit(app.exec())
