@@ -12,8 +12,8 @@ class Example(QTabWidget):
         super().__init__()
         self.setWindowTitle('QTabWidget')
 
-        self.addTab(QWidget(), 'タブ１')
-        self.addTab(QWidget(), 'タブ２')
+        self.addTab(QWidget(), 'タブ &A')
+        self.addTab(QWidget(), 'タブ &B')
 
 
 def main():
