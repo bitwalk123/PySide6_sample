@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from scipy import interpolate
+from scipy.interpolate import make_interp_spline
 
 if __name__ == '__main__':
     csvfile = 'temperature.csv'
@@ -9,7 +9,7 @@ if __name__ == '__main__':
     print(df)
 
     fig, ax = plt.subplots()
-    fig.canvas.manager.set_window_title('Trend test')
+    fig.canvas.manager.set_window_title('Trend test with spline curve')
 
     line1 = plt.plot(
         df['気温'],
@@ -21,6 +21,21 @@ if __name__ == '__main__':
         markeredgewidth=1,
         markerfacecolor='cyan',
         label='original data'
+    )
+
+    # for spline curve
+    bspl = make_interp_spline(
+        df.index.map(pd.Timestamp.timestamp),
+        df['気温'],
+        k=2
+    )
+    x = pd.date_range(min(df.index), max(df.index), freq='1min')
+    y = bspl(x.map(pd.Timestamp.timestamp))
+    line2 = plt.plot(
+        x, y,
+        linewidth=1,
+        color='red',
+        label='spline curve'
     )
 
     plt.grid()
