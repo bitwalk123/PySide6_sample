@@ -1,18 +1,18 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from scipy.interpolate import make_interp_spline
+from pandas import DatetimeIndex, Index
+from scipy.interpolate import make_interp_spline, BSpline
 
 if __name__ == '__main__':
     csvfile = 'temperature.csv'
-    df = pd.read_csv(csvfile, index_col=0)
-    df.index = pd.to_datetime(df.index)
-    print(df)
+    df = pd.read_csv(csvfile, index_col=0, parse_dates=True)
+    print(df.index)
 
     fig, ax = plt.subplots()
     fig.canvas.manager.set_window_title('Trend test with spline curve')
 
     line1 = plt.plot(
-        df['気温'],
+        df,
         linewidth=1,
         color='blue',
         marker='o',
@@ -23,16 +23,18 @@ if __name__ == '__main__':
         label='original data'
     )
 
-    # for spline curve
-    bspl = make_interp_spline(
-        df.index.map(pd.Timestamp.timestamp),
-        df['気温'],
-        k=2
-    )
-    x = pd.date_range(min(df.index), max(df.index), freq='1min')
-    y = bspl(x.map(pd.Timestamp.timestamp))
+    ts: Index = df.index.map(pd.Timestamp.timestamp)
+    print(ts)
+    bspl: BSpline = make_interp_spline(ts, df['気温'], k=2)
+    # dbspl = bspl.derivative(nu=1)
+
+    x1: DatetimeIndex = pd.date_range(min(df.index), max(df.index), freq='1min')
+    ts1: Index = x1.map(pd.Timestamp.timestamp)
+    y1 = bspl(ts1)
+    # dy1 = dbspl(ts1)
+
     line2 = plt.plot(
-        x, y,
+        x1, y1,
         linewidth=1,
         color='red',
         label='spline curve'

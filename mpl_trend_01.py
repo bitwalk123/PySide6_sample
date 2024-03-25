@@ -1,18 +1,17 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from scipy import interpolate
 
 if __name__ == '__main__':
     csvfile = 'temperature.csv'
-    df = pd.read_csv(csvfile, index_col=0)
-    df.index = pd.to_datetime(df.index)
+    df = pd.read_csv(csvfile, index_col=0, parse_dates=True)
     print(df)
+    print(type(df.index))
 
     fig, ax = plt.subplots()
     fig.canvas.manager.set_window_title('Trend test')
 
     line1 = plt.plot(
-        df['気温'],
+        df,
         linewidth=1,
         color='blue',
         marker='o',
