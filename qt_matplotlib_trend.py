@@ -3,7 +3,13 @@ from typing import Union
 
 import pandas as pd
 from PySide6.QtCore import QObject, Qt
-from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QWidget, QStyle
+from PySide6.QtWidgets import (
+    QApplication,
+    QDockWidget,
+    QMainWindow,
+    QStyle,
+    QWidget,
+)
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar,
@@ -16,11 +22,11 @@ from scipy.interpolate import BSpline, make_interp_spline
 class MyCanvas(FigureCanvas):
     def __init__(self):
         self.fig = Figure()
-        self.axes = self.fig.add_subplot(111)
+        self.ax = self.fig.add_subplot()
         super().__init__(self.fig)
 
     def clearAxes(self):
-        self.axes.cla()
+        self.ax.cla()
 
     def refreshDraw(self):
         self.fig.canvas.draw()
@@ -30,7 +36,9 @@ class Example(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowIcon(
-            self.style().standardIcon(QStyle.StandardPixmap.SP_TitleBarMenuButton)
+            self.style().standardIcon(
+                QStyle.StandardPixmap.SP_TitleBarMenuButton
+            )
         )
         self.setWindowTitle('Trend test')
 
@@ -49,7 +57,7 @@ class Example(QMainWindow):
     def draw_plot(self, df: pd.DataFrame):
         canvas: Union[QObject, MyCanvas] = self.centralWidget()
         fig = canvas.fig
-        ax = canvas.axes
+        ax = canvas.ax
 
         ax.plot(
             df,
