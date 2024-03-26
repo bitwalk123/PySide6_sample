@@ -3,7 +3,7 @@ from typing import Union
 
 import pandas as pd
 from PySide6.QtCore import QObject, Qt
-from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QWidget, QStyle
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar,
@@ -29,6 +29,9 @@ class MyCanvas(FigureCanvas):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowIcon(
+            self.style().standardIcon(QStyle.StandardPixmap.SP_TitleBarMenuButton)
+        )
         self.setWindowTitle('Trend test')
 
         canvas = MyCanvas()
