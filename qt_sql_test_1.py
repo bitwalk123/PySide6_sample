@@ -15,9 +15,9 @@ if not con.open():
 
 # Create a query and execute it right away using .exec()
 createTableQuery = QSqlQuery()
-createTableQuery.exec_(
+createTableQuery.exec(
     '''
-    CREATE TABLE contacts (
+    CREATE TABLE IF NOT EXISTS test (
         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
         name VARCHAR(40) NOT NULL,
         job VARCHAR(50),
@@ -54,4 +54,4 @@ for name, job, email in data:
     insertDataQuery.addBindValue(name)
     insertDataQuery.addBindValue(job)
     insertDataQuery.addBindValue(email)
-    insertDataQuery.exec_()
+    insertDataQuery.exec()
