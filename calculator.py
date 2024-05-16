@@ -63,7 +63,9 @@ class Calculator(QWidget):
         self.init_ui()
         self.setWindowTitle('Calculator')
         self.setWindowIcon(QIcon(self.get_app_pixmap()))
-        self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
+        self.setWindowFlags(
+            Qt.WindowType.WindowMinimizeButtonHint | Qt.WindowType.WindowCloseButtonHint
+        )
 
     def init_ui(self):
         grid = QGridLayout()
@@ -71,7 +73,7 @@ class Calculator(QWidget):
         grid.setVerticalSpacing(2)
         # Reference
         # https://stackoverflow.com/questions/16673074/how-can-i-fully-disable-resizing-a-window-including-the-resize-icon-when-the-mou
-        grid.setSizeConstraint(QLayout.SetFixedSize)
+        grid.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.setLayout(grid)
 
         # This is display value of register
@@ -80,7 +82,10 @@ class Calculator(QWidget):
         self.lcd.setSmallDecimalPoint(True)
         self.lcd.display(self.ent.get_text())
         # self.lcd.setStyleSheet("QLCDNumber {background-color:darkgreen; color:yellow;}")
-        self.lcd.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.lcd.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding
+        )
         grid.addWidget(self.lcd, 0, 0, 1, 4)
         grid.setRowMinimumHeight(0, 40)
 
@@ -90,7 +95,10 @@ class Calculator(QWidget):
             method = getattr(self, method_name)
             but.clicked.connect(method)
             but.setStyleSheet("QPushButton {font-size:12pt; padding:5px 30px;}")
-            but.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            but.setSizePolicy(
+                QSizePolicy.Policy.Expanding,
+                QSizePolicy.Policy.Expanding
+            )
             grid.addWidget(but, key['y'], key['x'], key['h'], key['w'])
 
     def get_app_pixmap(self):
