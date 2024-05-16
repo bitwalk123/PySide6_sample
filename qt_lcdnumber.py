@@ -2,7 +2,12 @@ import datetime
 import sys
 
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QApplication, QWidget, QLCDNumber, QVBoxLayout
+from PySide6.QtWidgets import (
+    QApplication,
+    QLCDNumber,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 class Example(QWidget):
