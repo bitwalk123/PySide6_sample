@@ -22,14 +22,17 @@ class Example(QWidget):
         self.setLayout(vbox)
 
         url = 'https://doc.qt.io/qtforpython-6/'
+        msg = 'Qt for Python'
         lab = QLabel()
-        lab.setText('<a href="%s">%s</a>' % (url, url))
+        lab.setText('<a href="%s">%s</a>' % (url, msg))
         lab.setOpenExternalLinks(True)
         lab.setContentsMargins(10, 0, 10, 0)
+        """
         lab.setSizePolicy(
             QSizePolicy.Policy.Expanding,
             QSizePolicy.Policy.Expanding
         )
+        """
         vbox.addWidget(lab)
 
 
