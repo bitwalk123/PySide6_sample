@@ -48,22 +48,37 @@ class Example(QMainWindow):
 
         r = 0
         lab0 = QLabel('データベースファイル')
-        lab0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        lab0.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         grid.addWidget(lab0, r, 0)
 
         entry0 = QLineEdit()
-        entry0.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        entry0.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed
+        )
         grid.addWidget(entry0, r, 1)
 
         but0 = QPushButton('作成')
-        but0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        but0.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         but0.clicked.connect(lambda: self.click_db_create(entry0, but0))
         grid.addWidget(but0, r, 2)
 
         status_label = QLabel('進捗')
-        status_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        status_label.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         self.progbar = QProgressBar()
-        self.progbar.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.progbar.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed
+        )
 
         status_bar = QStatusBar()
         status_bar.addWidget(status_label, 1)

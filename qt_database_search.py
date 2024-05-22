@@ -38,7 +38,10 @@ class Example(QMainWindow):
         self.setCentralWidget(area)
 
         base = QWidget()
-        base.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        base.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed
+        )
         area.setWidget(base)
 
         grid = QGridLayout()
@@ -46,65 +49,101 @@ class Example(QMainWindow):
 
         r = 0
         lab0 = QLabel('DBファイル')
-        lab0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        lab0.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         grid.addWidget(lab0, r, 0)
 
         entry0 = QLabel()
         entry0.setStyleSheet("QLabel {background: #fff;}")
-        entry0.setFrameShape(QFrame.Panel)
-        entry0.setFrameShadow(QFrame.Sunken)
-        entry0.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        entry0.setFrameShape(QFrame.Shape.Panel)
+        entry0.setFrameShadow(QFrame.Shadow.Sunken)
+        entry0.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed
+        )
         grid.addWidget(entry0, r, 1, 1, 4)
 
         but0 = QPushButton('選択')
-        but0.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        but0.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         but0.clicked.connect(lambda: self.select_database(entry0))
         grid.addWidget(but0, r, 5)
 
         r += 1
         lab10 = QLabel('検索キー')
-        lab10.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        lab10.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Expanding
+        )
         grid.addWidget(lab10, r, 0, 2, 1)
 
         lab11 = QLabel('都道府県')
-        lab11.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        lab11.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         grid.addWidget(lab11, r, 1)
 
         lab12 = QLabel('市区町村')
-        lab12.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        lab12.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         grid.addWidget(lab12, r, 2)
 
         lab13 = QLabel('住　　所')
-        lab13.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        lab13.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed
+        )
         grid.addWidget(lab13, r, 3)
 
         lab14 = QLabel('郵便番号')
-        lab14.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        lab14.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Expanding
+        )
         grid.addWidget(lab14, r, 4, 1, 2)
 
         r += 1
         self.combo1 = QComboBox()
         self.combo1.setMinimumWidth(100)
-        self.combo1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.combo1.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         self.combo1.currentIndexChanged.connect(self.on_address_1_index_changed)
         grid.addWidget(self.combo1, r, 1)
 
         self.combo2 = QComboBox()
         self.combo2.setMinimumWidth(200)
-        self.combo2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.combo2.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed
+        )
         self.combo2.currentIndexChanged.connect(self.on_address_2_index_changed)
         grid.addWidget(self.combo2, r, 2)
 
         self.combo3 = QComboBox()
-        self.combo3.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.combo3.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed
+        )
         self.combo3.currentIndexChanged.connect(self.on_address_3_index_changed)
         grid.addWidget(self.combo3, r, 3)
 
         self.zipcode = QLabel()
         self.zipcode.setStyleSheet("QLabel {background: #fff;}")
-        self.zipcode.setFrameShape(QFrame.Panel)
-        self.zipcode.setFrameShadow(QFrame.Sunken)
-        self.zipcode.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.zipcode.setFrameShape(QFrame.Shape.Panel)
+        self.zipcode.setFrameShadow(QFrame.Shadow.Sunken)
+        self.zipcode.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed
+        )
         grid.addWidget(self.zipcode, r, 4, 1, 2)
 
     def select_database(self, ent: QLineEdit):
