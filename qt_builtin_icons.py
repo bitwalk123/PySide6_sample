@@ -24,7 +24,7 @@ class Window(QWidget):
             pixmapi = getattr(QStyle, name)
             icon = self.style().standardIcon(pixmapi)
             btn.setIcon(icon)
-            layout.addWidget(btn, n / 4, n % 4)
+            layout.addWidget(btn, int(n / 4), n % 4)
 
         self.setLayout(layout)
 

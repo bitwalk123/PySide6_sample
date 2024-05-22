@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 
 class ButtonHeaderView(QHeaderView):
     def __init__(self, parent):
-        super().__init__(Qt.Vertical, parent)
+        super().__init__(Qt.Orientation.Vertical, parent)
         self.m_buttons = []
         self.sectionResized.connect(self.adjustPositions)
         self.sectionCountChanged.connect(self.onSectionCountChanged)
@@ -24,7 +24,7 @@ class ButtonHeaderView(QHeaderView):
             button.deleteLater()
         for i in range(self.count()):
             button = QPushButton(self)
-            button.setCursor(Qt.ArrowCursor)
+            button.setCursor(Qt.CursorShape.ArrowCursor)
             button.clicked.connect(self.show_button)
             self.m_buttons.append(button)
             self.update_data()
@@ -41,7 +41,9 @@ class ButtonHeaderView(QHeaderView):
 
     def update_data(self):
         for i, button in enumerate(self.m_buttons):
-            text = self.model().headerData(i, self.orientation(), Qt.DisplayRole)
+            text = self.model().headerData(
+                i, self.orientation(), Qt.ItemDataRole.DisplayRole
+            )
             button.setText(str(text))
 
     def updateGeometries(self):
