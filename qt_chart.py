@@ -41,7 +41,9 @@ class Example(QMainWindow):
         self.chart.createDefaultAxes()
         self.chart.setTitle("Simple line chart example")
         self.chartView = QChartView(self.chart)
-        self.chartView.setRenderHint(QPainter.Antialiasing)
+        self.chartView.setRenderHint(
+            QPainter.RenderHint.Antialiasing
+        )
         self.setCentralWidget(self.chartView)
 
 

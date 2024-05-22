@@ -1,15 +1,12 @@
 import sys
 from PySide6.QtCore import (
     QPointF,
-    QRect,
     Qt,
 )
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
-    QMainWindow,
-    QRubberBand,
 )
 from PySide6.QtCharts import (
     QChart,
@@ -26,16 +23,16 @@ class Example(QChartView):
         super().__init__()
         self.chart = QChart()
         self.setChart(self.chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         axis_x = QValueAxis()
         axis_x.setTickCount(10)
         axis_x.setTitleText('x')
-        self.chart.addAxis(axis_x, Qt.AlignBottom)
+        self.chart.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
 
         axis_y= QValueAxis()
-        axis_y.setLinePenColor(Qt.red)
-        self.chart.addAxis(axis_y, Qt.AlignLeft)
+        axis_y.setLinePenColor(Qt.GlobalColor.red)
+        self.chart.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
 
         series = QLineSeries()
         series.setPointsVisible(True)
