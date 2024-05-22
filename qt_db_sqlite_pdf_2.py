@@ -2,7 +2,12 @@ import os
 import sys
 import tempfile
 
-from PySide6.QtCore import Qt, QBuffer, QByteArray, QIODevice, QDataStream
+from PySide6.QtCore import (
+    QBuffer,
+    QByteArray,
+    QIODevice,
+    Qt,
+)
 from PySide6.QtGui import QAction
 from PySide6.QtPdf import QPdfDocument
 from PySide6.QtPdfWidgets import QPdfView
