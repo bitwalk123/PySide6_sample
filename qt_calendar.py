@@ -43,7 +43,9 @@ class Example(QMainWindow):
         toolbar.addWidget(self.entry)
 
         but_calendar = QToolButton()
-        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogApplyButton)
+        icon = self.style().standardIcon(
+            QStyle.StandardPixmap.SP_DialogApplyButton
+        )
         but_calendar.setIcon(icon)
         but_calendar.clicked.connect(self.on_clicked)
         toolbar.addWidget(but_calendar)
