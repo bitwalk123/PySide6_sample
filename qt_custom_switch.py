@@ -52,13 +52,13 @@ class Switch(QAbstractButton):
         )
         self.animation = QPropertyAnimation(self, b'pqProp', self)
         self.animation.setDuration(120)
-        self.setCursor(Qt.PointingHandCursor)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
 
     def paintEvent(self, e):
         """QAbstractButton method. Paint the button.
         """
         painter = QPainter(self)
-        painter.setPen(Qt.NoPen)
+        painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(self.switchBrush if self.on else self.disabledBrush)
         painter.setOpacity(0.6)
         painter.drawRoundedRect(
@@ -72,7 +72,7 @@ class Switch(QAbstractButton):
     def mouseReleaseEvent(self, e):
         """Switch the button.
         """
-        if e.button() == Qt.LeftButton:
+        if e.button() == Qt.MouseButton.LeftButton:
             self.on = not self.on
             self.switchBrush = self.onBrush if self.on else self.slotBrush
             self.animation.setStartValue(self.xPos)
