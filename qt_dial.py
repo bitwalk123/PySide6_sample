@@ -30,7 +30,6 @@ class Example(QWidget):
 
 def main():
     app = QApplication(sys.argv)
-    # print(QStyleFactory.keys())
     app.setStyle('Fusion')
     ex = Example()
     ex.show()
