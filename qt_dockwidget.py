@@ -15,10 +15,8 @@ from PySide6.QtWidgets import (
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.initUI()
         self.setWindowTitle('DockWidget')
 
-    def initUI(self):
         main_te = QTextEdit()
         dock_left = QDockWidget("Left")
         dock_right = QDockWidget("Right")
@@ -26,10 +24,10 @@ class Example(QMainWindow):
         dock_bottom = QDockWidget("Bottom")
 
         self.setCentralWidget(main_te)
-        self.addDockWidget(Qt.LeftDockWidgetArea, dock_left)
-        self.addDockWidget(Qt.RightDockWidgetArea, dock_right)
-        self.addDockWidget(Qt.TopDockWidgetArea, dock_top)
-        self.addDockWidget(Qt.BottomDockWidgetArea, dock_bottom)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, dock_left)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dock_right)
+        self.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea, dock_top)
+        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, dock_bottom)
         self.statusBar()
 
         # Exit Action
