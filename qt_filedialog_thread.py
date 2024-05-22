@@ -50,7 +50,7 @@ class CSVReader(QObject):
 class WorkInProgress(QProgressDialog):
     def __init__(self, parent):
         super().__init__(labelText='Working...', parent=parent)
-        self.setWindowModality(Qt.WindowModal)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
         self.setCancelButton(None)
         self.setRange(0, 0)
         self.setWindowTitle('progress')
