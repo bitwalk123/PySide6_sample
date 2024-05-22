@@ -5,8 +5,6 @@ import sys
 from PySide6.QtWidgets import (
     QApplication,
     QDial,
-    QLabel,
-    QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
