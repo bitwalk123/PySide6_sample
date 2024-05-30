@@ -1,3 +1,4 @@
+appdirs
 fqdn
 isoduration
 jsonpointer
@@ -13,5 +14,6 @@ scikit-image
 scikit-learn
 seaborn
 uri-template
+watchdog
 webcolors
 yfinance
