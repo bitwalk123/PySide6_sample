@@ -17,13 +17,18 @@ from watchdog.observers import Observer
 
 
 class WatchDog(QObject, FileSystemEventHandler):
-    fileCreated = Signal(FileCreatedEvent)
+    onAnyEvent = Signal(str)
 
     def __init__(self):
         super().__init__()
 
-    def on_created(self, event):
-        self.fileCreated.emit(event)
+    def on_any_event(self, e):
+        msg = '%s : %s : %s' % (
+            str(e.is_directory),
+            e.event_type,
+            e.src_path
+        )
+        self.onAnyEvent.emit(msg)
 
 
 class Example(QMainWindow):
@@ -42,17 +47,13 @@ class Example(QMainWindow):
         self.setCentralWidget(output)
 
         dog = WatchDog()
-        dog.fileCreated.connect(self.file_created)
+        dog.onAnyEvent.connect(self.update_output)
         observer = Observer()
         observer.schedule(dog, path=dir_target, recursive=True)
         observer.start()
 
-    def file_created(self, e: FileCreatedEvent):
-        message = '%s is added!\n' % e.src_path
-        self.update_output(message)
-
     def update_output(self, msg: str):
-        self.output.insertPlainText(msg)
+        self.output.insertPlainText(msg + '\n')
         self.output.verticalScrollBar().setValue(
             self.output.verticalScrollBar().maximum()
         )
