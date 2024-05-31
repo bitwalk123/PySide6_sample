@@ -35,11 +35,11 @@ class Example(QMainWindow):
         if not os.path.exists(dir_target):
             os.mkdir(dir_target)
 
-        pte = QPlainTextEdit()
-        pte.setStyleSheet('font-family: monospace;')
-        pte.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
-        pte.setReadOnly(True)
-        self.setCentralWidget(pte)
+        self.output = output = QPlainTextEdit()
+        output.setStyleSheet('font-family: monospace;')
+        output.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
+        output.setReadOnly(True)
+        self.setCentralWidget(output)
 
         dog = WatchDog()
         dog.fileCreated.connect(self.file_created)
@@ -52,10 +52,9 @@ class Example(QMainWindow):
         self.update_output(message)
 
     def update_output(self, msg: str):
-        output: QWidget | QPlainTextEdit = self.centralWidget()
-        output.insertPlainText(msg)
-        output.verticalScrollBar().setValue(
-            output.verticalScrollBar().maximum()
+        self.output.insertPlainText(msg)
+        self.output.verticalScrollBar().setValue(
+            self.output.verticalScrollBar().maximum()
         )
 
 
