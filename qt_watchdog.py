@@ -7,12 +7,8 @@ from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
     QPlainTextEdit,
-    QWidget,
 )
-from watchdog.events import (
-    FileSystemEventHandler,
-    FileCreatedEvent
-)
+from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 
