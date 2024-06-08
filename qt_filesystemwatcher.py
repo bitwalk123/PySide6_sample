@@ -5,8 +5,8 @@ from os.path import expanduser
 from PySide6.QtCore import QFileSystemWatcher
 from PySide6.QtWidgets import (
     QApplication,
-    QLabel,
-    QMainWindow, QPlainTextEdit,
+    QMainWindow,
+    QPlainTextEdit,
 )
 
 
