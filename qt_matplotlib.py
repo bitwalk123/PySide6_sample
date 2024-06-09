@@ -112,7 +112,7 @@ class Example(QMainWindow):
         for x in toolbar.actions():
             if x.text() in unwanted_buttons:
                 toolbar.removeAction(x)
-        self.addToolBar(Qt.TopToolBarArea, toolbar)
+        self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
 
 
 def main():

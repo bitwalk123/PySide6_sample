@@ -77,7 +77,7 @@ class Example(QMainWindow):
         self.setCentralWidget(canvas)
         # navigation for plot
         navtoolbar = NavigationToolbar(canvas, self)
-        self.addToolBar(Qt.BottomToolBarArea, navtoolbar)
+        self.addToolBar(Qt.ToolBarArea.BottomToolBarArea, navtoolbar)
 
 
 def main():
