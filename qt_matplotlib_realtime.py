@@ -41,10 +41,10 @@ class Example(QMainWindow):
 
         self.timer = timer = QTimer(self)
         timer.timeout.connect(self.update_data)
-        timer.start(100)
+        timer.start(50)
 
     def update_data(self):
-        if self.count > 500:
+        if self.count > 1000:
             self.timer.stop()
             print('completed!')
             return
