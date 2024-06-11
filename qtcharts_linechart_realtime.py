@@ -13,7 +13,7 @@ from PySide6.QtGui import QPainter, QPen
 from PySide6.QtWidgets import QApplication, QMainWindow
 
 
-def get_pen() -> QPen:
+def get_red_pen() -> QPen:
     pen = QPen(Qt.GlobalColor.red)
     pen.setWidth(1)
     return pen
@@ -25,7 +25,7 @@ class Example(QMainWindow):
         self.x = 0
 
         self.series = QLineSeries()
-        self.series.setPen(get_pen())
+        self.series.setPen(get_red_pen())
         self.series.setPointsVisible(True)
         self.series.setMarkerSize(2.0)
         self.series.append(self.x, 0)
