@@ -26,7 +26,7 @@ class LogLineChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         series = QLineSeries()
@@ -43,7 +43,7 @@ class LogLineChart(QChartView):
         axisX.setTitleText('Data point')
         axisX.setLabelFormat('%i')
         axisX.setTickCount(series.count())
-        chart.addAxis(axisX, Qt.AlignBottom)
+        chart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
         series.attachAxis(axisX)
 
         axisY = QLogValueAxis()
@@ -51,7 +51,7 @@ class LogLineChart(QChartView):
         axisY.setLabelFormat('%.0E')
         axisY.setBase(10.0)
         axisY.setMinorTickCount(-1)
-        chart.addAxis(axisY, Qt.AlignLeft)
+        chart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)
         series.attachAxis(axisY)
 
         return chart

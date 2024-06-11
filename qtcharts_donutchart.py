@@ -21,7 +21,7 @@ class DonutChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         series = QPieSeries()
@@ -42,7 +42,7 @@ class DonutChart(QChartView):
         chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
 
         chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignBottom)
+        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         return chart
 

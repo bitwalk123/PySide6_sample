@@ -25,7 +25,7 @@ class InteractScatterChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         series_a = QScatterSeries()
@@ -51,8 +51,8 @@ class InteractScatterChart(QChartView):
 
         chart.setTitle('Click to interact with scatter points')
         chart.createDefaultAxes()
-        chart.axes(Qt.Horizontal)[0].setRange(0, 4.5)
-        chart.axes(Qt.Vertical)[0].setRange(0, 4.5)
+        chart.axes(Qt.Orientation.Horizontal)[0].setRange(0, 4.5)
+        chart.axes(Qt.Orientation.Vertical)[0].setRange(0, 4.5)
 
         return chart
 

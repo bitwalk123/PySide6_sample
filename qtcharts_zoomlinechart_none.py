@@ -41,7 +41,7 @@ class ZoomLineChart(QChartView):
         chart = self.init_ui()
         self.setChart(chart)
         self.setRubberBand(QChartView.RubberBand.RectangleRubberBand)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.setMouseTracking(True)
         self.setInteractive(True)
         self.setRubberBand(QChartView.RubberBand.RectangleRubberBand)

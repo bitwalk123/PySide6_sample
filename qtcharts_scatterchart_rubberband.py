@@ -92,7 +92,7 @@ class ChartView(QChartView):
 
         self.chart = ScatterPlot(list_data)
         self.setChart(self.chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
         self.setMaximumSize(500, 500)
 
     def mousePressEvent(self, event):

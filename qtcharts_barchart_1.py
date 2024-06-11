@@ -38,16 +38,16 @@ class BarChart(QChartView):
         categories = ['']
         axis_x = QBarCategoryAxis()
         axis_x.setCategories(categories)
-        chart.addAxis(axis_x, Qt.AlignBottom)
+        chart.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
         series.attachAxis(axis_x)
 
         axis_y = QValueAxis()
         axis_y.setRange(0, 15)
-        chart.addAxis(axis_y, Qt.AlignLeft)
+        chart.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
         series.attachAxis(axis_y)
 
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
 
 class Example(QMainWindow):

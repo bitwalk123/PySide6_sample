@@ -35,7 +35,7 @@ class ScatterView(QChartView):
         super().__init__()
         self.list_data = list_data
         self.init_ui()
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
         self._value_pos = QPoint()
         self.setMouseTracking(True)
 

@@ -28,7 +28,7 @@ class LineBarChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         set0 = QBarSet('Jane')
@@ -68,19 +68,19 @@ class LineBarChart(QChartView):
         categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         axisX = QBarCategoryAxis()
         axisX.append(categories)
-        chart.addAxis(axisX, Qt.AlignBottom)
+        chart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
         lineseries.attachAxis(axisX)
         barseries.attachAxis(axisX)
         axisX.setRange('Jan', 'Jun')
 
         axisY = QValueAxis()
-        chart.addAxis(axisY, Qt.AlignLeft)
+        chart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)
         lineseries.attachAxis(axisY)
         barseries.attachAxis(axisY)
         axisY.setRange(0, 20)
 
         chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignBottom)
+        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         return chart
 

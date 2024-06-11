@@ -24,7 +24,7 @@ class StackedBarChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         set0 = QBarSet('Jane')
@@ -54,15 +54,15 @@ class StackedBarChart(QChartView):
         categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         axisX = QBarCategoryAxis()
         axisX.append(categories)
-        chart.addAxis(axisX, Qt.AlignBottom)
+        chart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
         series.attachAxis(axisX)
 
         axisY = QValueAxis()
-        chart.addAxis(axisY, Qt.AlignLeft)
+        chart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)
         series.attachAxis(axisY)
 
         chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignBottom)
+        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         return chart
 

@@ -44,7 +44,7 @@ class BoxWhiskerChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         series_acme: QBoxPlotSeries = box_data_reader('acme_data.txt', 'Acme Ltd')
@@ -60,7 +60,7 @@ class BoxWhiskerChart(QChartView):
         #chart.axes(Qt.Horizontal)[0].setMax(34.0)
 
         chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignBottom)
+        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         return chart
 

@@ -24,7 +24,7 @@ class BarChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         list_value = [1, 2, 2, 4, 6, 3, 2, 1]
@@ -45,16 +45,16 @@ class BarChart(QChartView):
         axis_x = QBarCategoryAxis()
         axis_x.setLabelsVisible(False)
         axis_x.append(categories)
-        chart.addAxis(axis_x, Qt.AlignBottom)
+        chart.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
         series.attachAxis(axis_x)
 
         axis_y = QValueAxis()
         #axis_y.setRange(0, 15)
-        chart.addAxis(axis_y, Qt.AlignLeft)
+        chart.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
         series.attachAxis(axis_y)
 
         chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignBottom)
+        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         return chart
 

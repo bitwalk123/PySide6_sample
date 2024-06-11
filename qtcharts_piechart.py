@@ -24,7 +24,7 @@ class PieChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         series = QPieSeries()
@@ -37,8 +37,8 @@ class PieChart(QChartView):
         slice1 = series.slices()[1]
         slice1.setExploded()
         slice1.setLabelVisible()
-        slice1.setPen(QPen(Qt.darkGreen, 2))
-        slice1.setBrush(Qt.green)
+        slice1.setPen(QPen(Qt.GlobalColor.darkGreen, 2))
+        slice1.setBrush(Qt.GlobalColor.green)
 
         chart = QChart()
         chart.addSeries(series)
@@ -46,7 +46,7 @@ class PieChart(QChartView):
         chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
 
         chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignBottom)
+        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         return chart
 
