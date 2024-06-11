@@ -13,39 +13,42 @@ from PySide6.QtGui import QPainter, QPen
 from PySide6.QtWidgets import QApplication, QMainWindow
 
 
+def get_pen() -> QPen:
+    pen = QPen(Qt.GlobalColor.red)
+    pen.setWidth(1)
+    return pen
+
+
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-
         self.x = 0
 
         self.series = QLineSeries()
-        pen = QPen(Qt.GlobalColor.red)
-        pen.setWidth(1)
-        self.series.setPen(pen)
+        self.series.setPen(get_pen())
         self.series.setPointsVisible(True)
         self.series.setMarkerSize(2.0)
         self.series.append(self.x, 0)
 
-        self.axisX = QValueAxis()
-        self.axisX.setTitleText('X')
-        self.axisX.setTickCount(5)
-        self.axisX.setRange(0, 1)
+        self.axis_x = QValueAxis()
+        self.axis_x.setTitleText('X')
+        self.axis_x.setTickCount(5)
+        self.axis_x.setRange(0, 0)
 
-        self.axisY = QValueAxis()
-        self.axisY.setTitleText('Y')
-        self.axisY.setRange(-1, 1)
+        self.axis_y = QValueAxis()
+        self.axis_y.setTitleText('Y')
+        self.axis_y.setRange(-1, 1)
 
         chart = QChart()
         chart.setTitle("Sample")
         chart.addSeries(self.series)
         chart.legend().hide()
 
-        chart.addAxis(self.axisX, Qt.AlignmentFlag.AlignBottom)
-        self.series.attachAxis(self.axisX)
+        chart.addAxis(self.axis_x, Qt.AlignmentFlag.AlignBottom)
+        self.series.attachAxis(self.axis_x)
 
-        chart.addAxis(self.axisY, Qt.AlignmentFlag.AlignLeft)
-        self.series.attachAxis(self.axisY)
+        chart.addAxis(self.axis_y, Qt.AlignmentFlag.AlignLeft)
+        self.series.attachAxis(self.axis_y)
 
         view = QChartView(chart)
         view.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -60,7 +63,9 @@ class Example(QMainWindow):
     def update_data(self):
         self.x += 0.02 * pi
         self.series.append(self.x, sin(self.x))
-        self.axisX.setRange(0, self.x)
+        x_max = round(self.x + 0.5)
+        if self.axis_x.max() < x_max:
+            self.axis_x.setRange(0, self.axis_x.max() + 4)
         if self.x > 10 * pi:
             self.timer.stop()
 

@@ -48,7 +48,7 @@ class ScatterChart(QChartView):
         QLocale.setDefault(QLocale.c())
         chart = self.init_chart()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_chart(self):
         series = datetime_data_reader('sun_spots.txt')
@@ -63,14 +63,14 @@ class ScatterChart(QChartView):
         # axis_x.setTickCount(10)
         axis_x.setFormat('MMM yyyy')
         axis_x.setTitleText('Date')
-        chart.addAxis(axis_x, Qt.AlignBottom)
+        chart.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
         series.attachAxis(axis_x)
 
         axis_y = QValueAxis()
         # axis_y.setTickCount(10)
         axis_y.setLabelFormat('%i')
         axis_y.setTitleText('Sunspots count')
-        chart.addAxis(axis_y, Qt.AlignLeft)
+        chart.addAxis(axis_y, Qt.AlignmentFlag.AlignLeft)
         series.attachAxis(axis_y)
 
         return chart
