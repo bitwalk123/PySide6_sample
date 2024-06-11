@@ -31,7 +31,7 @@ class ScatterChart(QChartView):
         super().__init__()
         chart = self.init_ui()
         self.setChart(chart)
-        self.setRenderHint(QPainter.Antialiasing)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
     def init_ui(self):
         series1 = QScatterSeries()
@@ -65,18 +65,18 @@ class ScatterChart(QChartView):
                             15 + 14 * math.sin(0.8 * i * math.pi))
         starPath.closeSubpath()
 
-        star = QImage(30, 30, QImage.Format_ARGB32)
-        star.fill(Qt.transparent)
+        star = QImage(30, 30, QImage.Format.Format_ARGB32)
+        star.fill(Qt.GlobalColor.transparent)
 
         painter = QPainter(star)
-        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setPen(QColor(246, 166, 37))
         painter.setBrush(painter.pen().color())
         painter.drawPath(starPath)
         painter.end()
 
         series3.setBrush(star)
-        series3.setPen(QColor(Qt.transparent))
+        series3.setPen(QColor(Qt.GlobalColor.transparent))
 
         chart = QChart()
         chart.addSeries(series1)
