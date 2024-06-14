@@ -1,3 +1,5 @@
+# Reference:
+# https://stackoverflow.com/questions/48474699/marker-size-alpha-scaling-with-window-size-zoom-in-plot-scatter
 import sys
 from math import sin
 from typing import Any
@@ -65,6 +67,18 @@ class MyChart(FigureCanvas):
         self.sizes = self.path.get_sizes()
 
 
+def draw_chart(chart: MyChart):
+    list_x = list()
+    list_y = list()
+    for i in range(100):
+        x = i / 10.
+        y = sin(x)
+        list_x.append(x)
+        list_y.append(y)
+    path = chart.ax.scatter(list_x, list_y, s=20, c='blue')
+    chart.setPath(path)
+
+
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -76,18 +90,7 @@ class Example(QMainWindow):
         navbar = NavigationToolbar(chart, self)
         self.addToolBar(Qt.ToolBarArea.BottomToolBarArea, navbar)
 
-        self.draw_chart(chart)
-
-    def draw_chart(self, chart: MyChart):
-        list_x = list()
-        list_y = list()
-        for i in range(100):
-            x = i / 10.
-            y = sin(x)
-            list_x.append(x)
-            list_y.append(y)
-        path = chart.ax.scatter(list_x, list_y, s=20, c='blue')
-        chart.setPath(path)
+        draw_chart(chart)
 
 
 def main():
