@@ -2,7 +2,6 @@ import sys
 from math import sin
 from typing import Any
 
-from PySide6.QtCore import Qt
 from matplotlib.axes import Axes
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas,
@@ -10,6 +9,8 @@ from matplotlib.backends.backend_qtagg import (
 )
 from matplotlib.collections import PathCollection
 from matplotlib.figure import Figure
+
+from PySide6.QtCore import Qt
 
 from PySide6.QtWidgets import QMainWindow, QApplication
 
@@ -24,30 +25,32 @@ class MyChart(FigureCanvas):
         self.fig_h = self.fig.get_figheight()
 
         self.ax = self.fig.add_subplot(111)
-        self.ax.callbacks.connect('xlim_changed', self.limChanged)
-        self.ax.callbacks.connect('ylim_changed', self.limChanged)
+        self.ax.callbacks.connect('xlim_changed', self.onLimitChanged)
+        self.ax.callbacks.connect('ylim_changed', self.onLimitChanged)
 
         self.xlim = self.ax.get_xlim()
         self.ylim = self.ax.get_ylim()
 
         self.fig_factor = None
         self.path = None
-        self.psizes = None
+        self.sizes = None
 
-    def getZoomFactor(self, lx: tuple[float, float], ly: tuple[float, float]) -> float:
+    def getZoomFactor(self,
+                      limx: tuple[float, float],
+                      limy: tuple[float, float]) -> float:
         return min(
-            (self.xlim[1] - self.xlim[0]) / (lx[1] - lx[0]),
-            (self.ylim[1] - self.ylim[0]) / (ly[1] - ly[0])
+            (self.xlim[1] - self.xlim[0]) / (limx[1] - limx[0]),
+            (self.ylim[1] - self.ylim[0]) / (limy[1] - limy[0])
         )
 
-    def limChanged(self, ax: Axes):
+    def onLimitChanged(self, ax: Axes):
         lx = ax.get_xlim()
         ly = ax.get_ylim()
         zfactor = self.getZoomFactor(lx, ly)
 
         try:
             self.path.set_sizes(
-                [s * zfactor * self.fig_factor for s in self.psizes]
+                [s * zfactor * self.fig_factor for s in self.sizes]
             )
         except KeyError:
             pass
@@ -59,7 +62,7 @@ class MyChart(FigureCanvas):
 
     def setPath(self, path: PathCollection):
         self.path = path
-        self.psizes = path.get_sizes()
+        self.sizes = self.path.get_sizes()
 
 
 class Example(QMainWindow):
