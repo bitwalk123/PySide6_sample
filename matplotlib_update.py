@@ -1,7 +1,5 @@
 # Reference:
 # https://stackoverflow.com/questions/58186783/updating-matplotlib-figures-in-real-time-for-data-acquisition
-from math import sin
-
 import matplotlib.pyplot as plt
 import numpy
 
@@ -17,7 +15,7 @@ if __name__ == '__main__':
     line, = plt.plot([], [])
     for i in range(x_max):
         x = float(i)
-        y = sin(x * 0.1)
+        y = numpy.sin(x * 0.1)
 
         line.set_xdata(numpy.append(line.get_xdata(), [x]))
         line.set_ydata(numpy.append(line.get_ydata(), [y]))
