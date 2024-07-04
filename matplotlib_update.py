@@ -7,12 +7,15 @@ if __name__ == '__main__':
     x_max = 500
 
     fig = plt.figure()
+
     ax = fig.gca()
     ax.set_xlim(0, x_max)
     ax.set_ylim(-1, 1)
     plt.grid()
 
-    line, = plt.plot([], [])
+    line, = plt.plot([], [], label='TEST')
+    ax.legend(loc='best')
+
     for i in range(x_max):
         x = float(i)
         y = numpy.sin(x * 0.1)
