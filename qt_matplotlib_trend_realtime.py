@@ -53,7 +53,10 @@ class Example(QMainWindow):
         self.setCentralWidget(chart)
 
         toolbar = NavigationToolbar(chart, self)
-        self.addToolBar(Qt.ToolBarArea.BottomToolBarArea, toolbar)
+        self.addToolBar(
+            Qt.ToolBarArea.BottomToolBarArea,
+            toolbar
+        )
 
         self.timer = timer = QTimer(self)
         timer.timeout.connect(self.update_data)
