@@ -30,8 +30,12 @@ class MyTrend(FigureCanvas):
     def add_data(self, x: float, y: float):
         x_array = np.append(self.line.get_xdata(), [x])
         y_array = np.append(self.line.get_ydata(), [y])
+
         self.line.set_xdata(x_array)
         self.line.set_ydata(y_array)
+
+        self.fig.canvas.draw_idle()
+        self.fig.canvas.flush_events()
 
 
 class Example(QMainWindow):
@@ -63,9 +67,7 @@ class Example(QMainWindow):
 
         x = float(self.count)
         y = math.sin(x * 0.1)
-
         self.chart.add_data(x, y)
-        self.chart.fig.canvas.draw()
         self.count += 1
 
 
