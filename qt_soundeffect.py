@@ -6,7 +6,7 @@ from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
-    QToolBar, QToolButton, QStyle, QLineEdit, QFileDialog, QStatusBar, QLabel, QPlainTextEdit,
+    QToolBar, QToolButton, QStyle, QLineEdit, QFileDialog, QStatusBar, QLabel, QPlainTextEdit, QDial,
 )
 
 """
@@ -26,7 +26,7 @@ def main():
 
 class MyToolBar(QToolBar):
     wavSelected = Signal(str)
-    wavPlay = Signal(str)
+    wavPlay = Signal()
     wavStop = Signal()
 
     def __init__(self):
@@ -78,7 +78,7 @@ class MyToolBar(QToolBar):
 
     def wav_play(self):
         self.playStart()
-        self.wavPlay.emit(self.entry.text())
+        self.wavPlay.emit()
 
     def wav_stop(self):
         self.playEnd()
@@ -96,23 +96,23 @@ class MyToolBar(QToolBar):
 class MyStatusBar(QStatusBar):
     def __init__(self):
         super().__init__()
-        # self.lab = lab = QLabel()
         self.pte = pte = QPlainTextEdit()
+        pte.setReadOnly(True)
         self.addWidget(pte, stretch=True)
 
     def addMSG(self, msg: str):
         # Reference:
         # https://stackoverflow.com/questions/14550146/qtextedit-scroll-down-automatically-only-if-the-scrollbar-is-at-the-bottom
-        scrollbar = self.pte.verticalScrollBar()
-        scrollbarAtBottom = (scrollbar.value() >= (scrollbar.maximum() - 4))
-        scrollbarPrevValue = scrollbar.value()
+        scr = self.pte.verticalScrollBar()
+        scr_at_bottom = (scr.value() >= (scr.maximum() - 4))
+        scr_prev_value = scr.value()
 
         self.pte.insertPlainText('%s\n' % msg)
 
-        if scrollbarAtBottom:
+        if scr_at_bottom:
             self.pte.ensureCursorVisible()
         else:
-            self.pte.verticalScrollBar().setValue(scrollbarPrevValue)
+            self.pte.verticalScrollBar().setValue(scr_prev_value)
 
 
 class Example(QMainWindow):
@@ -130,7 +130,16 @@ class Example(QMainWindow):
         self.statusbar = statusbar = MyStatusBar()
         self.setStatusBar(statusbar)
 
-    def create_new_effect(self, wav_file: str):
+        dial = QDial()
+        dial.setRange(0, 100)
+        dial.setNotchesVisible(True)
+        dial.valueChanged.connect(self.show_value)
+        self.setCentralWidget(dial)
+
+    def show_value(self, value: int):
+        print('%d になりました。' % value)
+
+    def create_sound_effect(self, wav_file: str):
         self.effect = QSoundEffect()
         self.effect.loopsRemainingChanged.connect(self.remaining_changed)
         self.effect.sourceChanged.connect(self.source_changed)
@@ -147,7 +156,7 @@ class Example(QMainWindow):
         self.statusbar.addMSG('Wav file: %s' % qurl.fileName())
 
     def source_selected(self, wav_file: str):
-        self.create_new_effect(wav_file)
+        self.create_sound_effect(wav_file)
 
     def status_changed(self):
         if self.effect.status() == QSoundEffect.Status.Loading:
@@ -163,7 +172,7 @@ class Example(QMainWindow):
 
         self.statusbar.addMSG(msg)
 
-    def sound_play(self, wav_file: str):
+    def sound_play(self):
         self.effect.play()
 
     def sound_stop(self):
