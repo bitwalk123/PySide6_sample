@@ -6,7 +6,7 @@ from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
-    QToolBar, QToolButton, QStyle, QLineEdit, QFileDialog,
+    QToolBar, QToolButton, QStyle, QLineEdit, QFileDialog, QStatusBar, QLabel,
 )
 
 """
@@ -91,6 +91,16 @@ class MyToolBar(QToolBar):
         self.but_stop.setEnabled(False)
 
 
+class MyStatusBar(QStatusBar):
+    def __init__(self):
+        super().__init__()
+        self.lab = lab = QLabel()
+        self.addWidget(lab, stretch=True)
+
+    def addMSG(self, msg: str):
+        self.lab.setText(msg)
+
+
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -101,6 +111,9 @@ class Example(QMainWindow):
         toolbar.mediaStop.connect(self.sound_stop)
         self.addToolBar(toolbar)
 
+        self.statusbar = statusbar = MyStatusBar()
+        self.setStatusBar(statusbar)
+
         self.effect = QSoundEffect()
         self.effect.statusChanged.connect(self.status_changed)
         self.effect.loopsRemainingChanged.connect(self.remaining_changed)
@@ -110,7 +123,18 @@ class Example(QMainWindow):
             self.toolbar.playEnd()
 
     def status_changed(self):
-        print(self.effect.status())
+        if self.effect.status() == QSoundEffect.Status.Loading:
+            msg = 'Loading'
+        elif self.effect.status() == QSoundEffect.Status.Ready:
+            msg = 'Ready'
+        elif self.effect.status() == QSoundEffect.Status.Error:
+            msg = 'Error'
+        elif self.effect.status() == QSoundEffect.Status.Null:
+            msg = 'Null'
+        else:
+            msg = 'Unknown'
+
+        self.statusbar.addMSG(msg)
 
     def sound_play(self, wav_file: str):
         self.effect.setSource(QUrl.fromLocalFile(wav_file))
