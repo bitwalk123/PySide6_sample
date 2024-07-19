@@ -6,7 +6,7 @@ from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
-    QToolBar, QToolButton, QStyle, QLineEdit, QFileDialog, QStatusBar, QLabel,
+    QToolBar, QToolButton, QStyle, QLineEdit, QFileDialog, QStatusBar, QLabel, QPlainTextEdit,
 )
 
 """
@@ -25,8 +25,9 @@ def main():
 
 
 class MyToolBar(QToolBar):
-    mediaPlay = Signal(str)
-    mediaStop = Signal()
+    wavSelected = Signal(str)
+    wavPlay = Signal(str)
+    wavStop = Signal()
 
     def __init__(self):
         super().__init__()
@@ -66,8 +67,9 @@ class MyToolBar(QToolBar):
         dialog.setNameFilter('wav file (*.wav)')
         if dialog.exec():
             filename = dialog.selectedFiles()[0]
-            self.entry.setText(filename)
             self.but_play.setEnabled(True)
+            self.entry.setText(filename)
+            self.wavSelected.emit(filename)
 
     def get_icon(self, name: str) -> QIcon:
         pixmap = getattr(QStyle.StandardPixmap, name)
@@ -76,11 +78,11 @@ class MyToolBar(QToolBar):
 
     def wav_play(self):
         self.playStart()
-        self.mediaPlay.emit(self.entry.text())
+        self.wavPlay.emit(self.entry.text())
 
     def wav_stop(self):
         self.playEnd()
-        self.mediaStop.emit()
+        self.wavStop.emit()
 
     def playStart(self):
         self.but_play.setEnabled(False)
@@ -94,33 +96,58 @@ class MyToolBar(QToolBar):
 class MyStatusBar(QStatusBar):
     def __init__(self):
         super().__init__()
-        self.lab = lab = QLabel()
-        self.addWidget(lab, stretch=True)
+        # self.lab = lab = QLabel()
+        self.pte = pte = QPlainTextEdit()
+        self.addWidget(pte, stretch=True)
 
     def addMSG(self, msg: str):
-        self.lab.setText(msg)
+        # Reference:
+        # https://stackoverflow.com/questions/14550146/qtextedit-scroll-down-automatically-only-if-the-scrollbar-is-at-the-bottom
+        scrollbar = self.pte.verticalScrollBar()
+        scrollbarAtBottom = (scrollbar.value() >= (scrollbar.maximum() - 4))
+        scrollbarPrevValue = scrollbar.value()
+
+        self.pte.insertPlainText('%s\n' % msg)
+
+        if scrollbarAtBottom:
+            self.pte.ensureCursorVisible()
+        else:
+            self.pte.verticalScrollBar().setValue(scrollbarPrevValue)
 
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.effect = None
         self.setWindowTitle('Wav Player')
 
         self.toolbar = toolbar = MyToolBar()
-        toolbar.mediaPlay.connect(self.sound_play)
-        toolbar.mediaStop.connect(self.sound_stop)
+        toolbar.wavSelected.connect(self.source_selected)
+        toolbar.wavPlay.connect(self.sound_play)
+        toolbar.wavStop.connect(self.sound_stop)
         self.addToolBar(toolbar)
 
         self.statusbar = statusbar = MyStatusBar()
         self.setStatusBar(statusbar)
 
+    def create_new_effect(self, wav_file: str):
         self.effect = QSoundEffect()
-        self.effect.statusChanged.connect(self.status_changed)
         self.effect.loopsRemainingChanged.connect(self.remaining_changed)
+        self.effect.sourceChanged.connect(self.source_changed)
+        self.effect.statusChanged.connect(self.status_changed)
+
+        self.effect.setSource(QUrl.fromLocalFile(wav_file))
 
     def remaining_changed(self):
         if self.effect.loopsRemaining() == 0:
             self.toolbar.playEnd()
+
+    def source_changed(self):
+        qurl: QUrl = self.effect.source()
+        self.statusbar.addMSG('Wav file: %s' % qurl.fileName())
+
+    def source_selected(self, wav_file: str):
+        self.create_new_effect(wav_file)
 
     def status_changed(self):
         if self.effect.status() == QSoundEffect.Status.Loading:
@@ -137,8 +164,6 @@ class Example(QMainWindow):
         self.statusbar.addMSG(msg)
 
     def sound_play(self, wav_file: str):
-        self.effect.setSource(QUrl.fromLocalFile(wav_file))
-        # self.effect.setLoopCount(-2)
         self.effect.play()
 
     def sound_stop(self):
