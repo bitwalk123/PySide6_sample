@@ -105,7 +105,7 @@ class MyToolBar(QToolBar):
         self.but_stop.setEnabled(False)
 
 
-class Example(QMainWindow):
+class MyWavPlayer(QMainWindow):
     def __init__(self):
         super().__init__()
         icon_win = get_icon(self, 'SP_TitleBarMenuButton')
@@ -196,13 +196,13 @@ class Example(QMainWindow):
         self.effect.stop()
 
     def volume_changed(self):
-        msg = 'Volume: %.2f' % self.effect.volume()
+        msg = 'Volume = %.2f' % self.effect.volume()
         self.add_msg(msg)
 
 
 def main():
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = MyWavPlayer()
     ex.show()
     sys.exit(app.exec())
 
