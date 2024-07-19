@@ -10,10 +10,9 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMainWindow,
     QPlainTextEdit,
-    QStatusBar,
     QStyle,
     QToolBar,
-    QToolButton, QWidget, QVBoxLayout, QHBoxLayout, QSizePolicy, QGridLayout,
+    QToolButton,
 )
 
 
@@ -33,12 +32,14 @@ class MyToolBar(QToolBar):
         super().__init__()
 
         but_folder = QToolButton()
+        but_folder.setToolTip('Choose wav file.')
         ico_folder = get_icon(self, 'SP_DirIcon')
         but_folder.setIcon(ico_folder)
         but_folder.clicked.connect(self.file_dialog)
         self.addWidget(but_folder)
 
         self.but_play = but_play = QToolButton()
+        but_play.setToolTip('Start playing wav file.')
         ico_play = get_icon(self, 'SP_MediaPlay')
         but_play.setIcon(ico_play)
         but_play.setEnabled(False)
@@ -46,6 +47,7 @@ class MyToolBar(QToolBar):
         self.addWidget(but_play)
 
         self.but_stop = but_stop = QToolButton()
+        but_stop.setToolTip('Stop playing wav file.')
         ico_stop = get_icon(self, 'SP_MediaStop')
         but_stop.setIcon(ico_stop)
         but_stop.setEnabled(False)
@@ -63,6 +65,7 @@ class MyToolBar(QToolBar):
         self.addWidget(entry)
 
         self.dial = dial = QDial()
+        dial.setToolTip('Adjust sound volume.')
         dial.setFixedSize(32, 32)
         dial.setMinimum(0)
         dial.setMaximum(100)
@@ -82,7 +85,7 @@ class MyToolBar(QToolBar):
             self.entry.setText(filename)
             self.wavSelected.emit(filename)
 
-    def getVolume(self):
+    def getVolume(self) -> float:
         return self.dial.value() / 100.
 
     def wav_play(self):
@@ -108,6 +111,7 @@ class Example(QMainWindow):
         icon_win = get_icon(self, 'SP_TitleBarMenuButton')
         self.setWindowIcon(icon_win)
         self.setWindowTitle('Wav Player')
+
         self.effect = None
 
         self.toolbar = toolbar = MyToolBar()
@@ -119,9 +123,7 @@ class Example(QMainWindow):
 
         self.pte = pte = QPlainTextEdit()
         pte.setReadOnly(True)
-        pte.setStyleSheet("""
-            QPlainTextEdit {background-color: white;}
-        """)
+        pte.setStyleSheet('QPlainTextEdit {background-color: white;}')
 
         self.setCentralWidget(pte)
 
