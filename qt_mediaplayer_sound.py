@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
     QPlainTextEdit,
     QStyle,
     QToolBar,
-    QToolButton,
+    QToolButton, QStatusBar, QProgressBar,
 )
 
 
@@ -105,9 +105,27 @@ class MyToolBar(QToolBar):
         self.but_stop.setEnabled(False)
 
 
+class MyStatusBar(QStatusBar):
+    def __init__(self):
+        super().__init__()
+        self.progress = progress = QProgressBar()
+        self.addWidget(progress, stretch=True)
+
+    def setMaximum(self, maximum: int):
+        self.progress.setRange(0, maximum)
+
+    def setProgress(self, progress: int):
+        self.progress.setValue(progress)
+
+    def clear(self):
+        self.progress.setValue(0)
+
+
 class MySoundPlayer(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.duration = None
+
         icon_win = get_icon(self, 'SP_TitleBarMenuButton')
         self.setWindowIcon(icon_win)
         self.setWindowTitle('Sound Player')
@@ -118,6 +136,9 @@ class MySoundPlayer(QMainWindow):
         toolbar.wavStop.connect(self.sound_stop)
         toolbar.wavVolume.connect(self.set_volume)
         self.addToolBar(toolbar)
+
+        self.statusbar = statusbar = MyStatusBar()
+        self.setStatusBar(statusbar)
 
         self.pte = pte = QPlainTextEdit()
         pte.setReadOnly(True)
@@ -132,7 +153,7 @@ class MySoundPlayer(QMainWindow):
         self.player = player = QMediaPlayer()
         player.setAudioOutput(output)
         player.durationChanged.connect(self.duration_changed)
-        player.playbackRateChanged.connect(self.playback_rate_changed)
+        player.positionChanged.connect(self.position_changed)
         player.playbackStateChanged.connect(self.playback_state_changed)
         player.sourceChanged.connect(self.source_changed)
 
@@ -149,20 +170,28 @@ class MySoundPlayer(QMainWindow):
             self.pte.verticalScrollBar().setValue(scr_prev_value)
 
     def duration_changed(self, duration: int):
-        print(duration)
+        self.statusbar.setMaximum(duration)
 
-    def playback_rate_changed(self, rate: float):
-        print('playback rate', rate)
+    def position_changed(self, position: int):
+        self.statusbar.setProgress(position)
 
-    def playback_state_changed(self, status):
-        print(status)
+    def playback_state_changed(self, status: QMediaPlayer.PlaybackState):
+        if status == QMediaPlayer.PlaybackState.PausedState:
+            self.add_msg('Paused')
+        elif status == QMediaPlayer.PlaybackState.PlayingState:
+            self.add_msg('Playing')
+        elif status == QMediaPlayer.PlaybackState.StoppedState:
+            self.statusbar.clear()
+            self.add_msg('Stopped')
+        else:
+            self.add_msg('Unknown status')
 
     def set_volume(self, volume: float):
         self.output.setVolume(volume)
 
     def source_changed(self):
         qurl: QUrl = self.player.source()
-        self.add_msg('Wav file: %s' % qurl.fileName())
+        self.add_msg('Sound file: %s' % qurl.fileName())
 
     def source_selected(self, file: str):
         self.player.setSource(QUrl.fromLocalFile(file))
@@ -174,7 +203,7 @@ class MySoundPlayer(QMainWindow):
         self.player.stop()
 
     def volume_changed(self, volume: float):
-        print('Volume', volume)
+        self.add_msg('Volume = %.2f' % volume)
 
 
 def main():
