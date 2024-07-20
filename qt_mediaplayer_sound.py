@@ -78,7 +78,7 @@ class MyToolBar(QToolBar):
 
     def file_dialog(self):
         dialog = QFileDialog()
-        dialog.setNameFilter('wav file (*.wav)')
+        dialog.setNameFilter('Sound files (*.wav *.mp3)')
         if dialog.exec():
             filename = dialog.selectedFiles()[0]
             self.but_play.setEnabled(True)
@@ -105,7 +105,7 @@ class MyToolBar(QToolBar):
         self.but_stop.setEnabled(False)
 
 
-class MyWavPlayer(QMainWindow):
+class MySoundPlayer(QMainWindow):
     def __init__(self):
         super().__init__()
         icon_win = get_icon(self, 'SP_TitleBarMenuButton')
@@ -116,6 +116,7 @@ class MyWavPlayer(QMainWindow):
         toolbar.wavSelected.connect(self.source_selected)
         toolbar.wavPlay.connect(self.sound_play)
         toolbar.wavStop.connect(self.sound_stop)
+        toolbar.wavVolume.connect(self.set_volume)
         self.addToolBar(toolbar)
 
         self.pte = pte = QPlainTextEdit()
@@ -125,6 +126,9 @@ class MyWavPlayer(QMainWindow):
         self.setCentralWidget(pte)
 
         self.output = output = QAudioOutput()
+        output.setVolume(toolbar.getVolume())
+        output.volumeChanged.connect(self.volume_changed)
+
         self.player = player = QMediaPlayer()
         player.setAudioOutput(output)
         player.durationChanged.connect(self.duration_changed)
@@ -153,6 +157,9 @@ class MyWavPlayer(QMainWindow):
     def playback_state_changed(self, status):
         print(status)
 
+    def set_volume(self, volume: float):
+        self.output.setVolume(volume)
+
     def source_changed(self):
         qurl: QUrl = self.player.source()
         self.add_msg('Wav file: %s' % qurl.fileName())
@@ -161,21 +168,18 @@ class MyWavPlayer(QMainWindow):
         self.player.setSource(QUrl.fromLocalFile(file))
 
     def sound_play(self):
-        qurl: QUrl = self.player.source()
-        msg = 'Start playing "%s".' % qurl.fileName()
-        self.add_msg(msg)
         self.player.play()
 
     def sound_stop(self):
-        qurl: QUrl = self.player.source()
-        msg = 'Stop playing "%s".' % qurl.fileName()
-        self.add_msg(msg)
         self.player.stop()
+
+    def volume_changed(self, volume: float):
+        print('Volume', volume)
 
 
 def main():
     app = QApplication(sys.argv)
-    ex = MyWavPlayer()
+    ex = MySoundPlayer()
     ex.show()
     sys.exit(app.exec())
 
