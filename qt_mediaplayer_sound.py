@@ -1,8 +1,8 @@
 import sys
 
-from PySide6.QtCore import Signal, QUrl
+from PySide6.QtCore import QUrl, Signal
 from PySide6.QtGui import QIcon
-from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PySide6.QtMultimedia import QAudioOutput, QMediaPlayer
 from PySide6.QtWidgets import (
     QApplication,
     QDial,
@@ -10,9 +10,11 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMainWindow,
     QPlainTextEdit,
+    QProgressBar,
+    QStatusBar,
     QStyle,
     QToolBar,
-    QToolButton, QStatusBar, QProgressBar,
+    QToolButton,
 )
 
 
@@ -23,23 +25,23 @@ def get_icon(parent, name: str) -> QIcon:
 
 
 class MyToolBar(QToolBar):
-    wavSelected = Signal(str)
-    wavPlay = Signal()
-    wavStop = Signal()
-    wavVolume = Signal(float)
+    soundSelected = Signal(str)
+    soundPlay = Signal()
+    soundStop = Signal()
+    soundVolume = Signal(float)
 
     def __init__(self):
         super().__init__()
 
         but_folder = QToolButton()
-        but_folder.setToolTip('Choose wav file.')
+        but_folder.setToolTip('Choose sound file.')
         ico_folder = get_icon(self, 'SP_DirIcon')
         but_folder.setIcon(ico_folder)
         but_folder.clicked.connect(self.file_dialog)
         self.addWidget(but_folder)
 
         self.but_play = but_play = QToolButton()
-        but_play.setToolTip('Start playing wav file.')
+        but_play.setToolTip('Start playing sound file.')
         ico_play = get_icon(self, 'SP_MediaPlay')
         but_play.setIcon(ico_play)
         but_play.setEnabled(False)
@@ -47,7 +49,7 @@ class MyToolBar(QToolBar):
         self.addWidget(but_play)
 
         self.but_stop = but_stop = QToolButton()
-        but_stop.setToolTip('Stop playing wav file.')
+        but_stop.setToolTip('Stop playing sound file.')
         ico_stop = get_icon(self, 'SP_MediaStop')
         but_stop.setIcon(ico_stop)
         but_stop.setEnabled(False)
@@ -74,7 +76,7 @@ class MyToolBar(QToolBar):
         self.addWidget(dial)
 
     def change_dial(self, value: int):
-        self.wavVolume.emit(value / 100.)
+        self.soundVolume.emit(value / 100.)
 
     def file_dialog(self):
         dialog = QFileDialog()
@@ -83,18 +85,18 @@ class MyToolBar(QToolBar):
             filename = dialog.selectedFiles()[0]
             self.but_play.setEnabled(True)
             self.entry.setText(filename)
-            self.wavSelected.emit(filename)
+            self.soundSelected.emit(filename)
 
     def getVolume(self) -> float:
         return self.dial.value() / 100.
 
     def wav_play(self):
         self.playStart()
-        self.wavPlay.emit()
+        self.soundPlay.emit()
 
     def wav_stop(self):
         self.playEnd()
-        self.wavStop.emit()
+        self.soundStop.emit()
 
     def playStart(self):
         self.but_play.setEnabled(False)
@@ -111,30 +113,28 @@ class MyStatusBar(QStatusBar):
         self.progress = progress = QProgressBar()
         self.addWidget(progress, stretch=True)
 
-    def setMaximum(self, maximum: int):
+    def clearProgress(self):
+        self.setProgress(0)
+
+    def setDuration(self, maximum: int):
         self.progress.setRange(0, maximum)
 
     def setProgress(self, progress: int):
         self.progress.setValue(progress)
 
-    def clear(self):
-        self.progress.setValue(0)
-
 
 class MySoundPlayer(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.duration = None
-
         icon_win = get_icon(self, 'SP_TitleBarMenuButton')
         self.setWindowIcon(icon_win)
         self.setWindowTitle('Sound Player')
 
         self.toolbar = toolbar = MyToolBar()
-        toolbar.wavSelected.connect(self.source_selected)
-        toolbar.wavPlay.connect(self.sound_play)
-        toolbar.wavStop.connect(self.sound_stop)
-        toolbar.wavVolume.connect(self.set_volume)
+        toolbar.soundSelected.connect(self.source_selected)
+        toolbar.soundPlay.connect(self.sound_play)
+        toolbar.soundStop.connect(self.sound_stop)
+        toolbar.soundVolume.connect(self.set_volume)
         self.addToolBar(toolbar)
 
         self.statusbar = statusbar = MyStatusBar()
@@ -143,7 +143,6 @@ class MySoundPlayer(QMainWindow):
         self.pte = pte = QPlainTextEdit()
         pte.setReadOnly(True)
         pte.setStyleSheet('QPlainTextEdit {background-color: white;}')
-
         self.setCentralWidget(pte)
 
         self.output = output = QAudioOutput()
@@ -170,7 +169,7 @@ class MySoundPlayer(QMainWindow):
             self.pte.verticalScrollBar().setValue(scr_prev_value)
 
     def duration_changed(self, duration: int):
-        self.statusbar.setMaximum(duration)
+        self.statusbar.setDuration(duration)
 
     def position_changed(self, position: int):
         self.statusbar.setProgress(position)
@@ -181,7 +180,7 @@ class MySoundPlayer(QMainWindow):
         elif status == QMediaPlayer.PlaybackState.PlayingState:
             self.add_msg('Playing')
         elif status == QMediaPlayer.PlaybackState.StoppedState:
-            self.statusbar.clear()
+            self.statusbar.clearProgress()
             self.add_msg('Stopped')
         else:
             self.add_msg('Unknown status')
