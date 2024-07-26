@@ -3,7 +3,7 @@
 import platform
 import sys
 import PySide6
-from PySide6 import QtCore
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QApplication,
@@ -31,7 +31,7 @@ class Hello(QWidget):
         font = QFont()
         font.setPointSize(24)
         label.setFont(font)
-        label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
         print(label.parent())
 
