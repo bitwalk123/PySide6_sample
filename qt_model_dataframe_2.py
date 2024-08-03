@@ -73,7 +73,7 @@ class PandasModel2(QAbstractTableModel):
                 return section + 1
 
         if role == Qt.ItemDataRole.TextAlignmentRole:
-            if orientation == Qt.Vertical:
+            if orientation == Qt.Orientation.Vertical:
                 return Qt.AlignmentFlag.AlignVCenter + Qt.AlignmentFlag.AlignRight
 
         return None
