@@ -74,9 +74,6 @@ class Example(QMainWindow):
             df.index = df.index.tz_convert('Asia/Tokyo')
         return df
 
-    def on_update(self):
-        self.draw_chart()
-
 
 def main():
     app = QApplication()
