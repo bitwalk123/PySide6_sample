@@ -17,20 +17,17 @@ from PySide6.QtWidgets import (
 
 
 class TableModel(QAbstractTableModel):
-    def __init__(self, df:pd.DataFrame):
+    def __init__(self, df: pd.DataFrame):
         super().__init__()
         self._data = df
+
+    def columnCount(self, index: Union[QModelIndex, QPersistentModelIndex] = ...) -> int:
+        return self._data.shape[1]
 
     def data(self, index: Union[QModelIndex, QPersistentModelIndex], role: int = ...) -> Any:
         if role == Qt.ItemDataRole.DisplayRole:
             value = self._data.iloc[index.row(), index.column()]
             return str(value)
-
-    def rowCount(self, index: Union[QModelIndex, QPersistentModelIndex] = ...) -> int:
-        return self._data.shape[0]
-
-    def columnCount(self, index: Union[QModelIndex, QPersistentModelIndex] = ...) -> int:
-        return self._data.shape[1]
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> Any:
         # section is the index of the column/row.
@@ -40,6 +37,9 @@ class TableModel(QAbstractTableModel):
 
             if orientation == Qt.Orientation.Vertical:
                 return str(self._data.index[section])
+
+    def rowCount(self, index: Union[QModelIndex, QPersistentModelIndex] = ...) -> int:
+        return self._data.shape[0]
 
 
 class Example(QMainWindow):
