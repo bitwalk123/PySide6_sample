@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 
-class Chart(FigureCanvas):
+class MyChart(FigureCanvas):
     def __init__(self):
         self.fig = Figure()
         self.fig.subplots_adjust(left=0.2, right=0.95, top=0.9, bottom=0.15)
@@ -42,7 +42,7 @@ class Example(QMainWindow):
         self.setFixedSize(400, 400)
 
         self.ticker = yf.Ticker('USDJPY=X')
-        self.chart = Chart()
+        self.chart = MyChart()
         self.setCentralWidget(self.chart)
         self.draw_chart()
 
