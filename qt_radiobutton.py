@@ -13,33 +13,31 @@ class Example(QWidget):
         super().__init__()
         self.setWindowTitle('QRadioButton')
 
-        rb_group = QButtonGroup()
-
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
         rb_a = QRadioButton('ラジオボタンＡ')
         rb_a.toggle()
-        rb_a.toggled.connect(self.radiobutton_changed)
-        rb_group.addButton(rb_a)
         vbox.addWidget(rb_a)
 
         rb_b = QRadioButton('ラジオボタンＢ')
-        rb_b.toggled.connect(self.radiobutton_changed)
-        rb_group.addButton(rb_b)
         vbox.addWidget(rb_b)
 
         rb_c = QRadioButton('ラジオボタンＣ')
-        rb_c.toggled.connect(self.radiobutton_changed)
-        rb_group.addButton(rb_c)
         vbox.addWidget(rb_c)
 
-    def radiobutton_changed(self, state):
-        rb: QRadioButton = self.sender()
-        if rb.isChecked():
-            print('「' + rb.text() + '」をオンにしました。')
+        self.rb_group = rb_group = QButtonGroup()
+        rb_group.addButton(rb_a)
+        rb_group.addButton(rb_b)
+        rb_group.addButton(rb_c)
+        rb_group.buttonToggled.connect(self.radiobutton_changed)
+
+    def radiobutton_changed(self, rb: QRadioButton, state: bool):
+        if state:
+            status = 'オン'
         else:
-            print('「' + rb.text() + '」をオフにしました。')
+            status = 'オフ'
+        print('「%s」を%sにしました。' % (rb.text(), status))
 
 
 def main():
