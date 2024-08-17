@@ -58,6 +58,9 @@ class MyChart(FigureCanvas):
             ax.remove()
         self.ax = dict()
 
+    def setTitle(self, title: str):
+        self.ax[0].set_title(title)
+
 
 class ChartNavigation(NavigationToolbar):
     def __init__(self, chart: FigureCanvas):
@@ -123,7 +126,7 @@ class Example(QMainWindow):
             param['volume'] = self.chart.ax[1]
 
         mpf.plot(**param)
-        self.chart.ax[0].set_title(self.symbol)
+        self.chart.setTitle(self.symbol)
         self.chart.refreshDraw()
         self.navigation.update()
 
