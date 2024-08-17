@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import mplfinance as mpf
 import sys
 import yfinance as yf
@@ -31,7 +31,7 @@ class MyChart(FigureCanvas):
         self.ax = dict()
 
     def initAxes(self, ax, n: int):
-        grid = plt.GridSpec(n + 2, 1, wspace=0.0, hspace=0.0)
+        grid = gridspec.GridSpec(n + 2, 1, wspace=0.0, hspace=0.0)
         # Main
         ax[0] = self.fig.add_subplot(grid[0:3, 0])
         ax[0].grid()
@@ -66,11 +66,6 @@ class MyChart(FigureCanvas):
         self.ax[0].set_title(title)
 
 
-class ChartNavigation(NavigationToolbar):
-    def __init__(self, chart: FigureCanvas):
-        super().__init__(chart)
-
-
 class MyToolBar(QToolBar):
     volumeCheckChanged = Signal()
 
@@ -99,7 +94,7 @@ class Example(QMainWindow):
         self.chart = chart = MyChart()
         self.setCentralWidget(chart)
 
-        self.navigation = navigation = ChartNavigation(chart)
+        self.navigation = navigation = NavigationToolbar(chart)
         self.addToolBar(QtCore.Qt.ToolBarArea.BottomToolBarArea, navigation)
 
         self.symbol = symbol = '^N225'
