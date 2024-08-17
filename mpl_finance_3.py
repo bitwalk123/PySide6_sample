@@ -1,12 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
 import matplotlib.pyplot as plt
 import mplfinance as mpf
-import pandas as pd
 import sys
 import yfinance as yf
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Signal
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar,
@@ -15,16 +12,23 @@ from matplotlib.figure import Figure
 from PySide6 import QtCore
 from PySide6.QtWidgets import (
     QApplication,
+    QCheckBox,
     QMainWindow,
-    QToolBar, QCheckBox,
+    QToolBar,
 )
 
 
 class MyChart(FigureCanvas):
     def __init__(self):
         self.fig = Figure()
-        self.ax = dict()
         super().__init__(self.fig)
+        self.fig.subplots_adjust(
+            left=0.12,
+            right=0.87,
+            top=0.9,
+            bottom=0.05,
+        )
+        self.ax = dict()
 
     def initAxes(self, ax, n: int):
         grid = plt.GridSpec(n + 2, 1, wspace=0.0, hspace=0.0)
@@ -86,13 +90,7 @@ class MyToolBar(QToolBar):
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-
-        self.symbol = symbol = '^N225'
-        ticker = yf.Ticker(symbol)
-        self.df = ticker.history(period='3mo')
-
-        self.resize(800, 600)
-        self.setWindowTitle('Multiple charts')
+        self.setWindowTitle('Dynamic charts')
 
         self.toolbar = toolbar = MyToolBar()
         toolbar.volumeCheckChanged.connect(self.draw)
@@ -104,6 +102,9 @@ class Example(QMainWindow):
         self.navigation = navigation = ChartNavigation(chart)
         self.addToolBar(QtCore.Qt.ToolBarArea.BottomToolBarArea, navigation)
 
+        self.symbol = symbol = '^N225'
+        ticker = yf.Ticker(symbol)
+        self.df = ticker.history(period='3mo')
         self.draw()
 
     def draw(self):
@@ -121,7 +122,6 @@ class Example(QMainWindow):
             xrotation=0,
             ax=self.chart.ax[0],
         )
-
         if self.toolbar.isVolumeChecked():
             param['volume'] = self.chart.ax[1]
 
