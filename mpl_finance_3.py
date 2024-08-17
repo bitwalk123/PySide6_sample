@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import mplfinance as mpf
 import pandas as pd
@@ -22,14 +21,19 @@ class MyChart(FigureCanvas):
     def __init__(self):
         self.fig = Figure()
         super().__init__(self.fig)
+        self.ax = ax = dict()
 
         n = 2
+        self.init_axes(ax, n)
+
+    def init_axes(self, ax, n: int):
         grid = plt.GridSpec(n + 1, 1, wspace=0.0, hspace=0.0)
-        self.ax = ax = dict()
+        # Main
         ax[0] = self.fig.add_subplot(grid[0:2, 0])
         ax[0].grid()
-        ax[0].tick_params(labelbottom=False)
-
+        if n > 1:
+            ax[0].tick_params(labelbottom=False)
+        # Sub
         for i in range(1, n):
             ax[i] = self.fig.add_subplot(grid[i + 1, 0], sharex=ax[0])
             ax[i].grid()
