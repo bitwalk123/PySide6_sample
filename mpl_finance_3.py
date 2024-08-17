@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import mplfinance as mpf
 import pandas as pd
 import sys
+import yfinance as yf
 
 from PySide6.QtCore import Qt, Signal
 from matplotlib.backends.backend_qtagg import (
@@ -26,15 +27,15 @@ class MyChart(FigureCanvas):
         super().__init__(self.fig)
 
     def initAxes(self, ax, n: int):
-        grid = plt.GridSpec(n + 1, 1, wspace=0.0, hspace=0.0)
+        grid = plt.GridSpec(n + 2, 1, wspace=0.0, hspace=0.0)
         # Main
-        ax[0] = self.fig.add_subplot(grid[0:2, 0])
+        ax[0] = self.fig.add_subplot(grid[0:3, 0])
         ax[0].grid()
         if n > 1:
             ax[0].tick_params(labelbottom=False)
         # Sub
         for i in range(1, n):
-            ax[i] = self.fig.add_subplot(grid[i + 1, 0], sharex=ax[0])
+            ax[i] = self.fig.add_subplot(grid[i + 2, 0], sharex=ax[0])
             ax[i].grid()
             if i < n - 1:
                 ax[i].tick_params(labelbottom=False)
@@ -68,24 +69,24 @@ class MyToolBar(QToolBar):
 
     def __init__(self):
         super().__init__()
-        self.check_volume = check_volume = QCheckBox('Volume')
-        check_volume.setChecked(True)
-        check_volume.checkStateChanged.connect(self.volume_check_changed)
-        self.addWidget(check_volume)
+        self.chk_volume = chk_volume = QCheckBox('Volume')
+        chk_volume.checkStateChanged.connect(self.volume_check_changed)
+        self.addWidget(chk_volume)
+
+    def isVolumeChecked(self) -> bool:
+        return self.chk_volume.isChecked()
 
     def volume_check_changed(self):
         self.volumeCheckChanged.emit()
-
-    def isVolumeChecked(self) -> bool:
-        return self.check_volume.isChecked()
 
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        # sample dataset
-        filename = 'candlestick_sample_data.csv'
-        self.df = pd.read_csv(filename, index_col=0, parse_dates=True)
+
+        self.symbol = symbol = '^N225'
+        ticker = yf.Ticker(symbol)
+        self.df = ticker.history(period='3mo')
 
         self.resize(800, 600)
         self.setWindowTitle('Multiple charts')
@@ -122,7 +123,9 @@ class Example(QMainWindow):
             param['volume'] = self.chart.ax[1]
 
         mpf.plot(**param)
+        self.chart.ax[0].set_title(self.symbol)
         self.chart.refreshDraw()
+        self.navigation.update()
 
 
 def main():
