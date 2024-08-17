@@ -41,7 +41,7 @@ class Example(QMainWindow):
     def __init__(self):
         super().__init__()
         self.resize(800, 600)
-        self.setWindowTitle('Candlestick Chart on PySide6')
+        self.setWindowTitle('Multiple charts')
 
         self.chart = chart = MyChart()
         self.setCentralWidget(chart)
@@ -58,17 +58,17 @@ class Example(QMainWindow):
         filename = 'candlestick_sample_data.csv'
         df = pd.read_csv(filename, index_col=0, parse_dates=True)
 
-        mpf.plot(
-            df,
+        param = dict(
+            data=df,
             style='yahoo',
             type='candle',
             datetime_format='%m/%d',
             xrotation=0,
             ax=self.chart.ax[0],
-            volume=self.chart.ax[1]
         )
-        # self.chart.ax[0].grid()
-        # self.chart.ax[1].grid()
+        param['volume'] = self.chart.ax[1]
+
+        mpf.plot(**param)
 
 
 def main():
