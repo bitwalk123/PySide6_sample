@@ -1,4 +1,3 @@
-import matplotlib.gridspec as gridspec
 import mplfinance as mpf
 import sys
 import yfinance as yf
@@ -31,18 +30,18 @@ class MyChart(FigureCanvas):
         self.ax = dict()
 
     def initAxes(self, ax, n: int):
-        grid = gridspec.GridSpec(n + 2, 1, wspace=0.0, hspace=0.0)
-        # Main
-        ax[0] = self.fig.add_subplot(grid[0:3, 0])
-        ax[0].grid()
         if n > 1:
-            ax[0].tick_params(labelbottom=False)
-        # Sub
-        for i in range(1, n):
-            ax[i] = self.fig.add_subplot(grid[i + 2, 0], sharex=ax[0])
-            ax[i].grid()
-            if i < n - 1:
-                ax[i].tick_params(labelbottom=False)
+            gs = self.fig.add_gridspec(
+                n, 1,
+                wspace=0.0, hspace=0.0,
+                height_ratios=[3 if i == 0 else 1 for i in range(n)]
+            )
+            for i, axis in enumerate(gs.subplots(sharex='col')):
+                ax[i] = axis
+                ax[i].grid()
+        else:
+            ax[0] = self.fig.add_subplot()
+            ax[0].grid()
 
     def initChart(self, n: int):
         self.removeAxes()
