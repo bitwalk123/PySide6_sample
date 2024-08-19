@@ -1,17 +1,14 @@
 import mplfinance as mpf
+import pandas as pd
 import sys
 import yfinance as yf
-from matplotlib.axis import XAxis, Axis
 
 from matplotlib.backend_bases import MouseButton, MouseEvent
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar,
 )
-from matplotlib.dates import DateLocator, AutoDateFormatter
 from matplotlib.figure import Figure
-from matplotlib.lines import Line2D
-from matplotlib.ticker import AutoLocator, Locator
 from matplotlib.widgets import RectangleSelector
 
 from PySide6.QtCore import QObject, Qt, Signal
@@ -110,6 +107,24 @@ class MyChart(FigureCanvas):
         self.ax[0].set_title(title)
 
 
+def fibonacci_retracement(
+        chart: MyChart,
+        df: pd.DataFrame,
+        positions: list
+):
+    x_1, y_1, x_2, y_2 = positions
+    idx_max = len(df) - 1
+
+    idx_1 = int(x_1)
+    idx_2 = int(x_2)
+    if idx_1 < 0:
+        idx_1 = 0
+    if idx_max < x_2:
+        idx_2 = idx_max
+    print(idx_1, idx_2)
+    print(df.iloc[idx_1:(idx_2 + 1)])
+
+
 class MyToolBar(QToolBar):
     volumeCheckChanged = Signal()
 
@@ -119,7 +134,13 @@ class MyToolBar(QToolBar):
         chk_volume.checkStateChanged.connect(self.volume_check_changed)
         self.addWidget(chk_volume)
 
-    def isVolumeChecked(self) -> bool:
+        self.chk_fibo = chk_fibo = QCheckBox('Fibonacci retracement')
+        self.addWidget(chk_fibo)
+
+    def isFibonacciSelected(self) -> bool:
+        return self.chk_fibo.isChecked()
+
+    def isVolumeSelected(self) -> bool:
         return self.chk_volume.isChecked()
 
     def volume_check_changed(self):
@@ -147,11 +168,10 @@ class Example(QMainWindow):
         self.symbol = symbol = '^N225'
         ticker = yf.Ticker(symbol)
         self.df = ticker.history(period='3mo')
-        self.i_max = len(self.df)
         self.draw()
 
     def draw(self):
-        if self.toolbar.isVolumeChecked():
+        if self.toolbar.isVolumeSelected():
             n = 2
         else:
             n = 1
@@ -169,7 +189,7 @@ class Example(QMainWindow):
         y_high = max(self.df['High']) * 1.01
         param['ylim'] = (y_low, y_high)
 
-        if self.toolbar.isVolumeChecked():
+        if self.toolbar.isVolumeSelected():
             param['volume'] = self.chart.ax[1]
 
         mpf.plot(**param)
@@ -177,26 +197,9 @@ class Example(QMainWindow):
         self.chart.refreshDraw()
         self.navigation.update()
 
-        # axis: Axis = self.chart.ax[0]
-        # print(self.chart.ax[0].get_xticklabels())
-        # print(self.chart.ax[0].get_xticks())
-        # print(self.chart.ax[0].get_ylim())
-        # xaxis: XAxis = self.chart.ax[0].xaxis
-        # locator: Locator | DateLocator = xaxis.get_major_locator()
-        # ticklines: list = xaxis.get_minorticklines()
-        # print(len(ticklines))
-        # formatter = AutoDateFormatter(locator)
-        # print(formatter.scaled)
-
     def rectangle_selected(self, positions: list):
-        i1 = int(positions[0])
-        if i1 < 0:
-            i1 = 0
-        i2 = int(positions[2])
-        if self.i_max <= i2:
-            i2 = self.i_max
-        print(i1, i2)
-        print(self.df.iloc[i1:(i2 + 1)])
+        if self.toolbar.isFibonacciSelected():
+            fibonacci_retracement(self.chart, self.df, positions)
         self.chart.clearRectangle()
 
 
