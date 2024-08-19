@@ -1,16 +1,20 @@
 import mplfinance as mpf
 import sys
 import yfinance as yf
+from matplotlib.axis import XAxis, Axis
 
 from matplotlib.backend_bases import MouseButton, MouseEvent
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar,
 )
+from matplotlib.dates import DateLocator, AutoDateFormatter
 from matplotlib.figure import Figure
+from matplotlib.lines import Line2D
+from matplotlib.ticker import AutoLocator, Locator
 from matplotlib.widgets import RectangleSelector
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import QObject, Qt, Signal
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -19,10 +23,15 @@ from PySide6.QtWidgets import (
 )
 
 
+class CandleChartSignal(QObject):
+    rectangleSelected = Signal(list)
+
+
 class MyChart(FigureCanvas):
     def __init__(self):
         self.fig = Figure()
         super().__init__(self.fig)
+        self.signal = CandleChartSignal()
         self.fig.subplots_adjust(
             left=0.12,
             right=0.87,
@@ -30,6 +39,14 @@ class MyChart(FigureCanvas):
             bottom=0.05,
         )
         self.ax = dict()
+
+    def clearAxes(self):
+        axs = self.fig.axes
+        for ax in axs:
+            ax.cla()
+
+    def clearRectangle(self):
+        self.rs.clear()
 
     def initAxes(self, ax, n: int):
         if n > 1:
@@ -119,6 +136,9 @@ class Example(QMainWindow):
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
 
         self.chart = chart = MyChart()
+        chart.signal.rectangleSelected.connect(
+            self.rectangle_selected
+        )
         self.setCentralWidget(chart)
 
         self.navigation = navigation = NavigationToolbar(chart)
@@ -127,6 +147,7 @@ class Example(QMainWindow):
         self.symbol = symbol = '^N225'
         ticker = yf.Ticker(symbol)
         self.df = ticker.history(period='3mo')
+        self.i_max = len(self.df)
         self.draw()
 
     def draw(self):
@@ -144,6 +165,10 @@ class Example(QMainWindow):
             xrotation=0,
             ax=self.chart.ax[0],
         )
+        y_low = min(self.df['Low']) * 0.99
+        y_high = max(self.df['High']) * 1.01
+        param['ylim'] = (y_low, y_high)
+
         if self.toolbar.isVolumeChecked():
             param['volume'] = self.chart.ax[1]
 
@@ -152,10 +177,27 @@ class Example(QMainWindow):
         self.chart.refreshDraw()
         self.navigation.update()
 
-        print(self.chart.ax[0].get_xticklabels())
-        print(self.chart.ax[0].get_xticks())
-        print(self.chart.ax[0].get_xlim())
-        print(self.chart.ax[0].get_major_locator())
+        # axis: Axis = self.chart.ax[0]
+        # print(self.chart.ax[0].get_xticklabels())
+        # print(self.chart.ax[0].get_xticks())
+        # print(self.chart.ax[0].get_ylim())
+        # xaxis: XAxis = self.chart.ax[0].xaxis
+        # locator: Locator | DateLocator = xaxis.get_major_locator()
+        # ticklines: list = xaxis.get_minorticklines()
+        # print(len(ticklines))
+        # formatter = AutoDateFormatter(locator)
+        # print(formatter.scaled)
+
+    def rectangle_selected(self, positions: list):
+        i1 = int(positions[0])
+        if i1 < 0:
+            i1 = 0
+        i2 = int(positions[2])
+        if self.i_max <= i2:
+            i2 = self.i_max
+        print(i1, i2)
+        print(self.df.iloc[i1:(i2 + 1)])
+        self.chart.clearRectangle()
 
 
 def main():
