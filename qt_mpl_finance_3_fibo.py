@@ -1,4 +1,5 @@
 import mplfinance as mpf
+import numpy as np
 import pandas as pd
 import sys
 import yfinance as yf
@@ -113,16 +114,16 @@ def fibonacci_retracement(
         positions: list
 ):
     x_1, y_1, x_2, y_2 = positions
-    idx_max = len(df) - 1
+    idx_max = len(df)
 
     idx_1 = int(x_1)
-    idx_2 = int(x_2)
+    idx_2 = int(np.ceil(x_2))
     if idx_1 < 0:
         idx_1 = 0
     if idx_max < x_2:
         idx_2 = idx_max
     print(idx_1, idx_2)
-    print(df.iloc[idx_1:(idx_2 + 1)])
+    print(df.iloc[idx_1:idx_2])
 
 
 class MyToolBar(QToolBar):
