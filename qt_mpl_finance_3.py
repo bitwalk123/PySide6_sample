@@ -2,13 +2,13 @@ import mplfinance as mpf
 import sys
 import yfinance as yf
 
-from PySide6.QtCore import Signal
 from matplotlib.backends.backend_qtagg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar,
 )
 from matplotlib.figure import Figure
-from PySide6 import QtCore
+
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -88,13 +88,13 @@ class Example(QMainWindow):
 
         self.toolbar = toolbar = MyToolBar()
         toolbar.volumeCheckChanged.connect(self.draw)
-        self.addToolBar(QtCore.Qt.ToolBarArea.TopToolBarArea, toolbar)
+        self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
 
         self.chart = chart = MyChart()
         self.setCentralWidget(chart)
 
         self.navigation = navigation = NavigationToolbar(chart)
-        self.addToolBar(QtCore.Qt.ToolBarArea.BottomToolBarArea, navigation)
+        self.addToolBar(Qt.ToolBarArea.BottomToolBarArea, navigation)
 
         self.symbol = symbol = '^N225'
         ticker = yf.Ticker(symbol)
