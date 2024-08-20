@@ -85,11 +85,6 @@ class MyChart(FigureCanvas):
             )
         )
 
-    def clearAxes(self):
-        axs = self.fig.axes
-        for ax in axs:
-            ax.cla()
-
     def refreshDraw(self):
         self.fig.canvas.draw()
 
@@ -116,7 +111,7 @@ def fibonacci_retracement(
     x_1, y_1, x_2, y_2 = positions
     idx_max = len(df)
 
-    idx_1 = int(x_1)
+    idx_1 = round(x_1)
     idx_2 = int(np.ceil(x_2))
     if idx_1 < 0:
         idx_1 = 0
