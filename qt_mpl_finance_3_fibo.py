@@ -103,12 +103,8 @@ class MyChart(FigureCanvas):
         self.ax[0].set_title(title)
 
 
-def fibonacci_retracement(
-        chart: MyChart,
-        df: pd.DataFrame,
-        positions: list
-):
-    x_1, y_1, x_2, y_2 = positions
+def fibonacci_retracement(chart: MyChart, df: pd.DataFrame, pos: list):
+    x_1, y_1, x_2, y_2 = pos
     idx_max = len(df)
 
     idx_1 = round(x_1)
