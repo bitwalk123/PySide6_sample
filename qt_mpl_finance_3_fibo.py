@@ -119,6 +119,74 @@ def fibonacci_retracement(
         idx_2 = idx_max
 
     df_part = df.iloc[idx_1:idx_2]
+    if len(df_part) < 2:
+        return
+    # print(df_part)
+
+    list_ts = list()
+    y_low = min(df_part['Low'])
+    df_low = df_part[df_part['Low'] == y_low]
+    for ts in df_low.index:
+        list_ts.append(ts)
+
+    y_high = max(df_part['High'])
+    df_high = df_part[df_part['High'] == y_high]
+    for ts in df_high.index:
+        list_ts.append(ts)
+
+    y_delta = y_high - y_low
+
+    ts_left = min(list_ts)
+    idx_left = list(df.index).index(ts_left)
+    if df.iloc[idx_left]['Low'] == y_low:
+        lev_start = y_high
+        lev1 = lev_start - 0.236 * y_delta
+        lev2 = lev_start - 0.382 * y_delta
+        lev3 = lev_start - 0.618 * y_delta
+        lev_end = y_low
+    elif df.iloc[idx_left]['High'] == y_high:
+        lev_start = y_low
+        lev1 = lev_start + 0.236 * y_delta
+        lev2 = lev_start + 0.382 * y_delta
+        lev3 = lev_start + 0.618 * y_delta
+        lev_end = y_high
+    else:
+        print('Unknown error!')
+        return
+
+    x_left, x_right = chart.ax[0].get_xbound()
+    x_start = (idx_left - x_left) / (x_right - x_left)
+
+    fibo_level = [lev_start, lev1, lev2, lev3, lev_end]
+    fibo_ratio = [0.0, 0.236, 0.382, 0.618, 1.0]
+    right_xdelta = 8
+    y_gap = y_delta * 0.002
+    fibo_color = '#00a'
+
+    for y, v in zip(fibo_level, fibo_ratio):
+        chart.ax[0].axhline(
+            y,
+            xmin=x_start,
+            linestyle='dashed',
+            linewidth=0.75,
+            color=fibo_color,
+        )
+        chart.ax[0].text(
+            idx_left,
+            y + y_gap,
+            '%3.1f%%' % (v * 100),
+            color=fibo_color,
+            fontsize=9,
+        )
+        chart.ax[0].text(
+            x_right - right_xdelta,
+            y + y_gap,
+            '%.1f' % y,
+            color=fibo_color,
+            fontsize=9,
+        )
+
+    chart.refreshDraw()
 
 
 class MyToolBar(QToolBar):
