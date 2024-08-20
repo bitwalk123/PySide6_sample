@@ -117,8 +117,8 @@ def fibonacci_retracement(
         idx_1 = 0
     if idx_max < x_2:
         idx_2 = idx_max
-    print(idx_1, idx_2)
-    print(df.iloc[idx_1:idx_2])
+
+    df_part = df.iloc[idx_1:idx_2]
 
 
 class MyToolBar(QToolBar):
