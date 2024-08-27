@@ -19,7 +19,10 @@ class Example(QWidget):
         entry = QLineEdit()
         entry.returnPressed.connect(self.on_entry_entered)
         entry.setMinimumWidth(200)
-        entry.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        entry.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Fixed
+        )
         vbox.addWidget(entry)
 
     def on_entry_entered(self):
