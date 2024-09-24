@@ -15,7 +15,7 @@ class Example(QMainWindow):
     def __init__(self):
         super().__init__()
         self.url = QUrl('https://doc.qt.io/qtforpython-6/')
-        self.setWindowTitle('open url')
+        self.setWindowTitle('open URL')
 
         toolbar = QToolBar()
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
