@@ -1,6 +1,10 @@
 appdirs
+backports.tarfile
 fqdn
+importlib-metadata
+importlib-resources
 isoduration
+jaraco.collections
 jsonpointer
 jupyterlab
 mplfinance
@@ -13,6 +17,7 @@ pywavelets
 scikit-image
 scikit-learn
 seaborn
+tomli
 uri-template
 watchdog
 webcolors
