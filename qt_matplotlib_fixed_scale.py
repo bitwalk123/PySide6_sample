@@ -6,6 +6,7 @@ from matplotlib.backends.backend_qtagg import (
     NavigationToolbar2QT as NavigationToolbar,
 )
 from matplotlib.figure import Figure
+from matplotlib.ticker import MultipleLocator
 import sys
 
 from PySide6.QtCore import Qt
@@ -21,7 +22,7 @@ class MyChart(FigureCanvas):
     def __init__(self):
         self.fig = Figure()
         super().__init__(self.fig)
-        self.setFixedSize(1200, 800)
+        self.setFixedSize(1200, 600)
 
         # font setting
         fm.fontManager.addfont(FONT_PATH)
@@ -31,7 +32,12 @@ class MyChart(FigureCanvas):
 
         self.ax = ax = self.fig.add_subplot(111)
         ax.set_ylabel('Price')
-        ax.grid(True)
+        ax.grid(which='major', linestyle='-', linewidth=0.75, color='gray')
+        ax.minorticks_on()
+        ax.yaxis.set_major_locator(MultipleLocator(50))
+        ax.yaxis.set_minor_locator(MultipleLocator(10))
+        ax.grid(which='minor', linestyle='dotted', linewidth=0.75, color='gray')
+        ax.grid(True, which='both')
 
         self.fig.subplots_adjust(
             top=0.98,
@@ -58,7 +64,7 @@ class Example(QMainWindow):
     def draw(self, df):
         self.chart.ax.plot(df)
         price0 = df['Price'].median()
-        delta = 200
+        delta = 150
         self.chart.ax.set_ylim(price0 - delta, price0 + delta)
 
 def main():
