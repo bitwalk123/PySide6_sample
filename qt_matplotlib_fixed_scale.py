@@ -66,7 +66,8 @@ class Example(QMainWindow):
         price0 = df['Price'].median()
         delta = 150
         self.chart.ax.set_ylim(price0 - delta, price0 + delta)
-
+        #self.chart.ax.set_ylim(None, None)
+        print(self.chart.ax.get_ylim())
 def main():
     app = QApplication(sys.argv)
     ex = Example()
