@@ -28,7 +28,7 @@ class Example(QWidget):
             pixmap_icon = getattr(QStyle.StandardPixmap, name)
             icon = self.style().standardIcon(pixmap_icon)
             btn.setIcon(icon)
-            layout.addWidget(btn, n / 4, n % 4)
+            layout.addWidget(btn, int(n / 4), n % 4)
 
 
 def main():
