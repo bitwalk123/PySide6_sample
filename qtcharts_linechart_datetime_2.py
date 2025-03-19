@@ -10,7 +10,7 @@ from PySide6.QtCharts import (
 )
 from PySide6.QtCore import (
     QTime,
-    Qt, QDateTime, QTimeZone,
+    Qt,
 )
 from PySide6.QtGui import QPainter, QColor
 from PySide6.QtWidgets import (
