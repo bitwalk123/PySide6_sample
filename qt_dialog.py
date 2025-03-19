@@ -19,26 +19,24 @@ class ExampleDlg(QDialog):
         super().__init__()
         self.setWindowTitle('Dialog')
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
+        layout = QVBoxLayout()
+        self.setLayout(layout)
 
         message = QLabel('ダイアログボックスを表示しました。')
-        self.layout.addWidget(message)
+        layout.addWidget(message)
 
         dlgbtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
         bbox = QDialogButtonBox(dlgbtn)
         bbox.accepted.connect(self.accept)
         bbox.rejected.connect(self.reject)
-        self.layout.addWidget(bbox)
+        layout.addWidget(bbox)
 
 
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.init_ui()
         self.setWindowTitle('Dialog Example')
 
-    def init_ui(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
