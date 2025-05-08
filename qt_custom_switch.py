@@ -1,6 +1,7 @@
 import sys
 
 from PySide6.QtCore import (
+    QByteArray,
     QPropertyAnimation,
     QRect,
     QSize,
@@ -50,7 +51,8 @@ class Switch(QAbstractButton):
             self.fullWidth - 2 * self.slotMargin,
             self.slotHeight,
         )
-        self.animation = QPropertyAnimation(self, b'pqProp', self)
+        #self.animation = QPropertyAnimation(self, b'pqProp', self)
+        self.animation = QPropertyAnimation(self, QByteArray(b'pqProp'), self)
         self.animation.setDuration(120)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 

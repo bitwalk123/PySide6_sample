@@ -29,7 +29,7 @@ class Example(QWidget):
         vbox.addWidget(cbox_c)
 
     def checkbox_changed(self, state):
-        cbox = self.sender()
+        cbox: QCheckBox = self.sender()
         if cbox.isChecked():
             print('「' + cbox.text() + '」にチェックを入れました。')
         else:

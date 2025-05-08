@@ -39,7 +39,7 @@ class Example(QMainWindow):
         self.chart.legend().hide()
         self.chart.addSeries(self.series)
         self.chart.createDefaultAxes()
-        self.chart.setTitle("Simple line chart example")
+        self.chart.setTitle('Simple line chart example')
         self.chartView = QChartView(self.chart)
         self.chartView.setRenderHint(
             QPainter.RenderHint.Antialiasing
