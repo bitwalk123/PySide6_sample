@@ -1,34 +1,35 @@
+# Original was created by Google Gemini
+# Modified by Fuhito Suguri
 import sys
 import random
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
+from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import QTimer
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 
-class TrendChartWidget(QWidget):
+class Example(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
         # Matplotlib の Figure と Canvas を作成
         self.figure = Figure()
+        self.figure.tight_layout()
         self.canvas = FigureCanvas(self.figure)
+        self.setCentralWidget(self.canvas)
+
         self.ax = self.figure.add_subplot(111)
         self.ax.set_xlabel("Time")
         self.ax.set_ylabel("Value")
+        self.ax.grid()
         self.ax.set_title("Real-time Trend Chart")
 
         # データの初期化
-        self.x_data = []
-        self.y_data = []
+        self.x_data = list()
+        self.y_data = list()
 
         # プロットラインの初期化
         self.line, = self.ax.plot(self.x_data, self.y_data)
-
-        # レイアウトの設定
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.canvas)
-        self.setLayout(layout)
 
         # QTimer の設定 (1秒ごとに update_data メソッドを呼び出す)
         self.timer = QTimer(self)
@@ -59,10 +60,12 @@ class TrendChartWidget(QWidget):
         self.canvas.draw()
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = TrendChartWidget()
-    window.setWindowTitle("PySide6 Matplotlib Trend Chart")
-    window.setGeometry(100, 100, 800, 600)
-    window.show()
+def main():
+    app: QApplication = QApplication(sys.argv)
+    ex = Example()
+    ex.show()
     sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    main()
