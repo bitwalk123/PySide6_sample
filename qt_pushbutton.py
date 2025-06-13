@@ -1,4 +1,6 @@
 import sys
+
+from PySide6.QtCore import QObject
 from PySide6.QtWidgets import (
     QApplication,
     QPushButton,
@@ -25,7 +27,7 @@ class Example(QWidget):
         layout.addWidget(btn)
 
     def button_clicked(self):
-        obj = self.sender()
+        obj: QObject | QPushButton = self.sender()
         print('「%s」がクリックされました。' % obj.text())
 
 
