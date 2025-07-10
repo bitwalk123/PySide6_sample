@@ -8,13 +8,17 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from PySide6.QtNetwork import QHostAddress, QTcpServer
+from PySide6.QtNetwork import (
+    QHostAddress,
+    QTcpServer,
+    QTcpSocket,
+)
 
 
 class TcpSocketServer(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.client_connection = None
+        self.client: QTcpSocket | None = None
         self.server = QTcpServer(self)
         self.server.listen(QHostAddress.SpecialAddress.LocalHost, 12345)
         self.server.newConnection.connect(self.new_connection)
@@ -33,13 +37,16 @@ class TcpSocketServer(QMainWindow):
         layout.addWidget(self.tedit)
 
     def new_connection(self):
-        self.client_connection = self.server.nextPendingConnection()
-        self.client_connection.readyRead.connect(self.receive_message)
+        self.client = self.server.nextPendingConnection()
+        localAddress = self.client.localAddress()
+        localPort = self.client.localPort()
+        self.tedit.append(f"Connected from {localAddress.toString()}:{localPort}.")
+        self.client.readyRead.connect(self.receive_message)
 
     def receive_message(self):
-        msg = self.client_connection.readAll().data().decode()
+        msg = self.client.readAll().data().decode()
         self.tedit.append(f"Received: {msg}")
-        self.client_connection.write(f"Server received: {msg}".encode())
+        self.client.write(f"Server received: {msg}".encode())
 
 
 def main():
