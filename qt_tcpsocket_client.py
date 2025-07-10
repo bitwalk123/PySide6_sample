@@ -18,7 +18,7 @@ from PySide6.QtNetwork import (
 )
 
 
-class TcpSocketClientLocal(QMainWindow):
+class TcpSocketClient(QMainWindow):
     def __init__(self):
         super().__init__()
         self.socket = QTcpSocket(self)
@@ -70,7 +70,7 @@ class TcpSocketClientLocal(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    win = TcpSocketClientLocal()
+    win = TcpSocketClient()
     win.show()
     sys.exit(app.exec())
 

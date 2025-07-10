@@ -15,12 +15,12 @@ from PySide6.QtNetwork import (
 )
 
 
-class TcpSocketServerLocal(QMainWindow):
+class TcpSocketServer(QMainWindow):
     def __init__(self):
         super().__init__()
         self.client: QTcpSocket | None = None
         self.server = QTcpServer(self)
-        self.server.listen(QHostAddress.SpecialAddress.LocalHost, 12345)
+        self.server.listen(QHostAddress.SpecialAddress.Any, 12345)
         self.server.newConnection.connect(self.new_connection)
 
         self.resize(400, 300)
@@ -53,7 +53,7 @@ class TcpSocketServerLocal(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    win = TcpSocketServerLocal()
+    win = TcpSocketServer()
     win.show()
     sys.exit(app.exec())
 
