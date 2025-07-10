@@ -5,9 +5,10 @@
 import pandas as pd
 import sys
 from PySide6.QtWidgets import (
-    QTableView,
     QApplication,
-    QMainWindow, QHeaderView, QSizePolicy,
+    QHeaderView,
+    QMainWindow,
+    QTableView,
 )
 
 from qt_model_dataframe import PandasModel
