@@ -15,7 +15,7 @@ from PySide6.QtNetwork import (
 )
 
 
-class TcpSocketServer(QMainWindow):
+class TcpSocketServerLocal(QMainWindow):
     def __init__(self):
         super().__init__()
         self.client: QTcpSocket | None = None
@@ -32,9 +32,10 @@ class TcpSocketServer(QMainWindow):
         layout = QVBoxLayout()
         base.setLayout(layout)
 
-        self.tedit = QTextEdit(self)
-        self.tedit.setReadOnly(True)  # Set it to read-only for history
-        layout.addWidget(self.tedit)
+        self.tedit = tedit = QTextEdit(self)
+        tedit.setStyleSheet("QTextEdit {font-family: monospace;}")
+        tedit.setReadOnly(True)  # Set it to read-only for history
+        layout.addWidget(tedit)
 
     def new_connection(self):
         self.client = self.server.nextPendingConnection()
@@ -46,12 +47,13 @@ class TcpSocketServer(QMainWindow):
     def receive_message(self):
         msg = self.client.readAll().data().decode()
         self.tedit.append(f"Received: {msg}")
+        # just for verification
         self.client.write(f"Server received: {msg}".encode())
 
 
 def main():
     app = QApplication(sys.argv)
-    win = TcpSocketServer()
+    win = TcpSocketServerLocal()
     win.show()
     sys.exit(app.exec())
 
