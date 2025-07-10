@@ -5,6 +5,7 @@ import sys
 from PySide6.QtWidgets import (
     QApplication,
     QFormLayout,
+    QHBoxLayout,
     QLineEdit,
     QMainWindow,
     QPushButton,
@@ -35,9 +36,18 @@ class TcpSocketClient(QMainWindow):
         layout = QVBoxLayout()
         base.setLayout(layout)
 
+        layout_row = QHBoxLayout()
+        layout.addLayout(layout_row)
+
+        self.ledit_ip = ledit_ip = QLineEdit("127.0.0.1")
+        layout_row.addWidget(ledit_ip)
+
+        self.ledit_port = ledit_port = QLineEdit("12345")
+        layout_row.addWidget(ledit_port)
+
         but_connect = QPushButton("Connect")
         but_connect.clicked.connect(self.connect_to_server)
-        layout.addWidget(but_connect)
+        layout_row.addWidget(but_connect)
 
         self.tedit = tedit = QTextEdit(self)
         tedit.setStyleSheet("QTextEdit {font-family: monospace;}")
@@ -51,7 +61,11 @@ class TcpSocketClient(QMainWindow):
         layout.addLayout(form)
 
     def connect_to_server(self):
-        self.socket.connectToHost(QHostAddress.SpecialAddress.LocalHost, 12345)
+        #self.socket.connectToHost(QHostAddress.SpecialAddress.LocalHost, 12345)
+        self.socket.connectToHost(
+            self.ledit_ip.text(),
+            int(self.ledit_port.text())
+        )
 
     def connected(self):
         self.tedit.append("Connected to server.")
