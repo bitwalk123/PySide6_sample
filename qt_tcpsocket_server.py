@@ -39,10 +39,9 @@ class TcpSocketServer(QMainWindow):
 
     def new_connection(self):
         self.client = self.server.nextPendingConnection()
-        #localAddress = self.client.localAddress()
-        localAddress = self.client.peerAddress()
-        localPort = self.client.localPort()
-        self.tedit.append(f"Connected from {localAddress.toString()}:{localPort}.")
+        peerAddress = self.client.peerAddress()
+        peerPort = self.client.peerPort()
+        self.tedit.append(f"Connected from {peerAddress.toString()}:{peerPort}.")
         self.client.readyRead.connect(self.receive_message)
 
     def receive_message(self):
