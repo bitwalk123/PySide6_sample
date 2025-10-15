@@ -3,30 +3,28 @@
 # Reference
 #   https://doc.qt.io/qt-6/qtcharts-barchart-example.html
 import sys
-from PySide6.QtCharts import (
+
+from PySide6.QtGraphs import (
     QBarCategoryAxis,
     QBarSet,
     QBarSeries,
-    QChart,
-    QChartView,
     QValueAxis,
 )
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QApplication,
-    QMainWindow,
+    QMainWindow, QGraphicsView,
 )
 
 
-class BarChart(QChartView):
+class BarChart(QGraphicsView):
     def __init__(self):
         super().__init__()
-        chart = self.init_ui()
-        self.setChart(chart)
+        # chart = self.init_ui()
+        # self.setChart(chart)
         self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-    def init_ui(self):
         set0 = QBarSet('Jane')
         set1 = QBarSet('John')
         set2 = QBarSet('Axel')
@@ -46,26 +44,28 @@ class BarChart(QChartView):
         series.append(set3)
         series.append(set4)
 
-        chart = QChart()
-        chart.addSeries(series)
-        chart.setTitle('Simple barchart example')
-        chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
+        # chart = QChart()
+        # chart.addSeries(series)
+        # chart.setTitle('Simple barchart example')
+        # chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
 
         categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         axisX = QBarCategoryAxis()
         axisX.append(categories)
-        chart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
-        series.attachAxis(axisX)
+        # chart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
+        # series.attachAxis(axisX)
+        series.setAxisX(axisX)
 
         axisY = QValueAxis()
         axisY.setRange(0, 15)
-        chart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)
-        series.attachAxis(axisY)
+        # chart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)
+        # series.attachAxis(axisY)
+        series.setAxisY(axisY)
 
-        chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
+        # chart.legend().setVisible(True)
+        # chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
-        return chart
+        # return chart
 
 
 class Example(QMainWindow):
