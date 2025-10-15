@@ -113,7 +113,7 @@ class MyTableModel(QAbstractTableModel):
         )
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> Any:
-        # section is the index of the column/row.
+        # section is the midx of the column/row.
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 return self._data.getColumnHeader(section)

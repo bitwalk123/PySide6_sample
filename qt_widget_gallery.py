@@ -51,7 +51,7 @@ def launch_help(widget):
 
 
 def launch_module_help():
-    QDesktopServices.openUrl(help_url("qtwidgets-index"))
+    QDesktopServices.openUrl(help_url("qtwidgets-midx"))
 
 
 def init_widget(w, name):

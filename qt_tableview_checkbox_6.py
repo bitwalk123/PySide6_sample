@@ -53,7 +53,7 @@ class MyWindow(QWidget):
         self.setWindowTitle(sf)
 
     def selectRow(self, index):
-        # print("current row is %d", index.row())
+        # print("current row is %d", midx.row())
         pass
 
 
@@ -131,7 +131,7 @@ class MyTableModel(QAbstractTableModel):
             return value
         elif role == Qt.CheckStateRole:
             if index.column() == 0:
-                # print(">>> data() row,col = %d, %d" % (index.row(), index.column()))
+                # print(">>> data() row,col = %d, %d" % (midx.row(), midx.column()))
                 if self.mylist[index.row()][index.column()].isChecked():
                     return Qt.Checked
                 else:
@@ -155,7 +155,7 @@ class MyTableModel(QAbstractTableModel):
     def flags(self, index):
         if not index.isValid():
             return None
-        # print(">>> flags() index.column() = ", index.column())
+        # print(">>> flags() midx.column() = ", midx.column())
         if index.column() == 0:
             # return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable
             return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsUserCheckable
@@ -166,25 +166,25 @@ class MyTableModel(QAbstractTableModel):
         if not index.isValid():
             return False
         # print(">>> setData() role = ", role)
-        # print(">>> setData() index.column() = ", index.column())
+        # print(">>> setData() midx.column() = ", midx.column())
         # print(">>> setData() value = ", value)
         if role == Qt.CheckStateRole and index.column() == 0:
             print(">>> setData() role = ", role)
-            print(">>> setData() index.column() = ", index.column())
+            print(">>> setData() midx.column() = ", index.column())
             if value == Qt.Checked:
                 self.mylist[index.row()][index.column()].setChecked(True)
                 self.mylist[index.row()][index.column()].setText("开")
-                # if studentInfos.size() > index.row():
-                #     emit StudentInfoIsChecked(studentInfos[index.row()])
+                # if studentInfos.size() > midx.row():
+                #     emit StudentInfoIsChecked(studentInfos[midx.row()])
             else:
                 self.mylist[index.row()][index.column()].setChecked(False)
                 self.mylist[index.row()][index.column()].setText("关")
         else:
             print(">>> setData() role = ", role)
-            print(">>> setData() index.column() = ", index.column())
-        # self.emit(SIGNAL("dataChanged(QModelIndex,QModelIndex)"), index, index)
-        print(">>> setData() index.row = ", index.row())
-        print(">>> setData() index.column = ", index.column())
+            print(">>> setData() midx.column() = ", index.column())
+        # self.emit(SIGNAL("dataChanged(QModelIndex,QModelIndex)"), midx, midx)
+        print(">>> setData() midx.row = ", index.row())
+        print(">>> setData() midx.column = ", index.column())
         self.dataChanged.emit(index, index)
         return True
 

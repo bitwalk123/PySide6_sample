@@ -122,7 +122,7 @@ class MyTableModel(QAbstractTableModel):
         return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: Qt.ItemDataRole):
-        # section is the index of the column/row.
+        # section is the midx of the column/row.
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 return self._data.getColumnHeader(section)

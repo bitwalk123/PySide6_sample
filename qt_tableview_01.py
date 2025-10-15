@@ -25,7 +25,7 @@ class SimpleTableModel(QAbstractTableModel):
         self.source = source
         self.headers = headers
 
-    # QVariant QAbstractItemModel::data(const QModelIndex &index, int role = Qt::DisplayRole) const
+    # QVariant QAbstractItemModel::data(const QModelIndex &midx, int role = Qt::DisplayRole) const
     def data(self, index: QModelIndex, role: int) -> Any:
         if role == Qt.DisplayRole:
             return self.source[index.row()][index.column()]
