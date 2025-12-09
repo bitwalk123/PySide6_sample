@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import sys
-from PySide6.QtCore import QModelIndex
+from PySide6.QtCore import QModelIndex, QItemSelectionModel
 from PySide6.QtGui import (
     QStandardItem,
     QStandardItemModel,

@@ -25,8 +25,9 @@ class ExampleDlg(QDialog):
         message = QLabel('ダイアログボックスを表示しました。')
         layout.addWidget(message)
 
-        dlgbtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
-        bbox = QDialogButtonBox(dlgbtn)
+        bbox = QDialogButtonBox()
+        bbox.addButton(QDialogButtonBox.StandardButton.Ok)
+        bbox.addButton(QDialogButtonBox.StandardButton.Cancel)
         bbox.accepted.connect(self.accept)
         bbox.rejected.connect(self.reject)
         layout.addWidget(bbox)
@@ -51,7 +52,7 @@ class Example(QWidget):
     @staticmethod
     def button_clicked():
         dlg = ExampleDlg()
-        if dlg.exec():
+        if dlg.exec() == QDialog.DialogCode.Accepted:
             print('OK ボタンがクリックされました。')
         else:
             print('Cancel ボタンがクリックされました。')

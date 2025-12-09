@@ -6,13 +6,14 @@ from PySide6.QtCore import QModelIndex, Signal
 from PySide6.QtGui import (
     QMouseEvent,
     QStandardItem,
-    QStandardItemModel,
+    QStandardItemModel, QAction,
 )
 from PySide6.QtWidgets import (
     QApplication,
     QListView,
+    QMainWindow,
     QStyle,
-    QStyleOptionViewItem,
+    QStyleOptionViewItem, QToolBar,
 )
 
 
@@ -47,24 +48,39 @@ class ListView(QListView):
             return super().mousePressEvent(event)
 
 
-class Example(ListView):
+class Example(QMainWindow):
     list_letters = ['ABC', 'DEF', 'GHI', 'JKL', 'MNO']
 
     def __init__(self):
         super().__init__()
-        self.clickedOutsideCheckBox.connect(self.on_clicked)
 
-        self.model = model = QStandardItemModel(self)
-        self.setModel(model)
+        toolbar = QToolBar()
+        action_test = QAction(toolbar, text="TEST")
+        action_test.triggered.connect(self.on_current_item)
+        toolbar.addAction(action_test)
+
+        self.addToolBar(toolbar)
+
+        self.lv = lv = ListView()
+        lv.clickedOutsideCheckBox.connect(self.on_clicked)
+        self.setCentralWidget(lv)
+
+        self.model = model = QStandardItemModel(lv)
+        lv.setModel(model)
 
         for letters in self.list_letters:
             item = QStandardItem(letters)
             item.setCheckable(True)
             model.appendRow(item)
 
+
     def on_clicked(self, midx: QModelIndex):
         item: QStandardItem = self.model.itemFromIndex(midx)
         print(item.text())
+
+    def on_current_item(self):
+        idx = self.lv.currentIndex().row()
+        print("現在のインデックス", idx)
 
 
 def main():
