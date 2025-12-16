@@ -35,7 +35,7 @@ class Example(QWebEngineView):
         # Save page as single HTML
         url_path = download.url().path()
         if url_path == '/':
-            url_path = 'index.html'
+            url_path = 'midx.html'
         suffix = QFileInfo(url_path).suffix()
         path, _ = QFileDialog.getSaveFileName(
             self, 'Save File', url_path, '*.' + suffix

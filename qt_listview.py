@@ -29,13 +29,12 @@ class Example(QWidget):
         self.init_ui()
         self.setWindowTitle('QListView')
         self.setMinimumSize(600, 400)
-        self.show()
 
     def init_ui(self):
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
-        lv = QListView()
+        self.lv = lv = QListView()
         lv.clicked.connect(self.on_clicked)
         vbox.addWidget(lv)
 
@@ -48,15 +47,15 @@ class Example(QWidget):
             model.appendRow(item)
 
     def on_clicked(self, index: QModelIndex):
-        lv: QListView = self.sender()
-        model = lv.model()
+        model = self.lv.model()
         print(model.itemData(index)[0])
 
 
 def main():
-    app: QApplication = QApplication(sys.argv)
+    app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    ex.show()
+    sys.exit(app.exec())
 
 
 if __name__ == '__main__':

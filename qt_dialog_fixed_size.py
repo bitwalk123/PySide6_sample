@@ -6,11 +6,21 @@ from PySide6.QtWidgets import (
     QApplication,
     QDialog,
     QDialogButtonBox,
-    QLabel,
     QPushButton,
-    QSizePolicy,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
+)
+
+DESCRIPTION = (
+    "<p>"
+    "表示したダイアログのウィンドウサイズを固定するには、"
+    "showEvent() メソッドをオーバーライドして、ウィンドウサイズを固定する方法が簡単です。"
+    "</p>"
+    "<ul>"
+    "<li>showEvent() は ウィンドウが実際に表示された直後に呼ばれます。</li>"
+    "<li>レイアウト計算が終わった後なので、self.size() が確定しています。</li>"
+    "</ul>"
 )
 
 
@@ -22,8 +32,10 @@ class ExampleDlg(QDialog):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        message = QLabel('ダイアログボックスを表示しました。')
-        layout.addWidget(message)
+        tedit = QTextEdit(DESCRIPTION)
+        tedit.setStyleSheet("QTextEdit{background-color: white;}")
+        tedit.setReadOnly(True)
+        layout.addWidget(tedit)
 
         bbox = QDialogButtonBox()
         bbox.addButton(QDialogButtonBox.StandardButton.Ok)
@@ -32,20 +44,21 @@ class ExampleDlg(QDialog):
         bbox.rejected.connect(self.reject)
         layout.addWidget(bbox)
 
+    def showEvent(self, event):
+        super().showEvent(event)
+        # 表示後の最終サイズを固定
+        self.setFixedSize(self.size())
+
 
 class Example(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Dialog Example')
+        self.setWindowTitle("メイン")
 
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        btn = QPushButton('ダイアログ表示')
-        btn.setSizePolicy(
-            QSizePolicy.Policy.Expanding,
-            QSizePolicy.Policy.Expanding
-        )
+        btn = QPushButton("ダイアログ表示")
         btn.clicked.connect(self.button_clicked)
         layout.addWidget(btn)
 
@@ -53,9 +66,9 @@ class Example(QWidget):
     def button_clicked():
         dlg = ExampleDlg()
         if dlg.exec() == QDialog.DialogCode.Accepted:
-            print('OK ボタンがクリックされました。')
+            print("OK ボタンがクリックされました。")
         else:
-            print('Cancel ボタンがクリックされました。')
+            print("Cancel ボタンがクリックされました。")
 
 
 def main():

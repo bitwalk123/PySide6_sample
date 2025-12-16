@@ -62,14 +62,14 @@ class PandasModel2(QAbstractTableModel):
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> Any:
         """Override method from QAbstractTableModel
 
-        Return dataframe index as vertical header data and columns as horizontal header data.
+        Return dataframe midx as vertical header data and columns as horizontal header data.
         """
         if role == Qt.ItemDataRole.DisplayRole:
             if orientation == Qt.Orientation.Horizontal:
                 return str(self._dataframe.columns[section])
 
             if orientation == Qt.Orientation.Vertical:
-                # return str(self._dataframe.index[section])
+                # return str(self._dataframe.midx[section])
                 return section + 1
 
         if role == Qt.ItemDataRole.TextAlignmentRole:

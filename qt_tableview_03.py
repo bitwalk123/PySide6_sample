@@ -48,7 +48,7 @@ class SimpleTableModel(QAbstractTableModel):
 
     def data(self, index: QModelIndex, role: int) -> Any:
         if role == Qt.DisplayRole:
-            # The QTableView wants a cell text of 'index'
+            # The QTableView wants a cell text of 'midx'
             # BE CAREFUL about IndexError (rowCount() and/or columnCount() are incorrect.)
             return self.custom_data[index.row()].toList()[index.column()]
 

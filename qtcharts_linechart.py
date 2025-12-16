@@ -19,11 +19,7 @@ from PySide6.QtWidgets import (
 class LineChart(QChartView):
     def __init__(self):
         super().__init__()
-        chart = self.init_ui()
-        self.setChart(chart)
-        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-    def init_ui(self):
         series = QLineSeries()
         series.setPointsVisible(True)
         series.append(0, 6)
@@ -39,7 +35,8 @@ class LineChart(QChartView):
         chart.createDefaultAxes()
         chart.setTitle('Simple linechart example')
 
-        return chart
+        self.setChart(chart)
+        self.setRenderHint(QPainter.RenderHint.Antialiasing)
 
 
 class Example(QMainWindow):

@@ -53,7 +53,7 @@ class pandasModel(QAbstractTableModel):
         return flags
 
     def headerData(self, section, orientation, role):
-        # section is the index of the column/row.
+        # section is the midx of the column/row.
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 return str(self._data.columns[section])
