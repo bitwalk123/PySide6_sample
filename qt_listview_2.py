@@ -4,16 +4,18 @@
 import sys
 from PySide6.QtCore import QModelIndex, Signal
 from PySide6.QtGui import (
+    QAction,
     QMouseEvent,
     QStandardItem,
-    QStandardItemModel, QAction,
+    QStandardItemModel,
 )
 from PySide6.QtWidgets import (
     QApplication,
     QListView,
     QMainWindow,
     QStyle,
-    QStyleOptionViewItem, QToolBar,
+    QStyleOptionViewItem,
+    QToolBar,
 )
 
 
@@ -72,7 +74,6 @@ class Example(QMainWindow):
             item = QStandardItem(letters)
             item.setCheckable(True)
             model.appendRow(item)
-
 
     def on_clicked(self, midx: QModelIndex):
         item: QStandardItem = self.model.itemFromIndex(midx)

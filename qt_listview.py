@@ -26,11 +26,9 @@ class Example(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.init_ui()
         self.setWindowTitle('QListView')
         self.setMinimumSize(600, 400)
 
-    def init_ui(self):
         vbox = QVBoxLayout()
         self.setLayout(vbox)
 
