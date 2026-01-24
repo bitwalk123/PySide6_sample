@@ -1,6 +1,8 @@
 backports.tarfile
 importlib-metadata
-jaraco.collections
+jaraco-context
+jaraco-functools
+jaraco.text
 mplfinance
 odfpy
 openpyxl
@@ -8,6 +10,7 @@ pip-chill
 pip-review
 pyside6
 tomli
+tzdata
 xlrd
 xlwt
 yfinance
