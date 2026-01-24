@@ -66,10 +66,14 @@ class PDFViewer(QMainWindow):
         self.setWindowTitle(f"PDFViewer - {os.path.basename(path_pdf)}")
 
     def on_prev_page(self):
+        if self.doc is None:
+            return
         nav = self.view.pageNavigator()
         nav.jump(nav.currentPage() - 1, QPointF(0, 0))
 
     def on_next_page(self):
+        if self.doc is None:
+            return
         nav = self.view.pageNavigator()
         nav.jump(nav.currentPage() + 1, QPointF(0, 0))
 
