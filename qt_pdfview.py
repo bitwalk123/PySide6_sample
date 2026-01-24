@@ -22,7 +22,6 @@ class PDFViewer(QMainWindow):
         self.resize(800, 900)
         self.setWindowTitle("PDFViewer")
 
-        # --- Toolbar ---
         toolbar = QToolBar()
         self.addToolBar(toolbar)
 
@@ -70,7 +69,7 @@ class PDFViewer(QMainWindow):
 
         toolbar.addSeparator()
 
-        # --- PDF View ---
+        # PDF View
         self.view = view = QPdfView(self)
         view.setPageMode(QPdfView.PageMode.MultiPage)
         view.setZoomMode(QPdfView.ZoomMode.FitInView)
@@ -83,14 +82,14 @@ class PDFViewer(QMainWindow):
         # 初期状態ではページ移動不可
         self.update_nav_buttons()
 
-    def eventFilter(self, obj, event: QWheelEvent):
+    def eventFilter(self, obj, event: QEvent):
         """
         マウスホイールでページ移動
         """
-        if obj is self.view and event.type() == QEvent.Type.Wheel:
-            if self.doc is None:
-                return False
+        if self.doc is None:
+            return False
 
+        if obj is self.view and event.type() == QEvent.Type.Wheel:
             delta = event.angleDelta().y()
             nav = self.view.pageNavigator()
 
@@ -193,7 +192,7 @@ class PDFViewer(QMainWindow):
         page = nav.currentPage()
         total = self.doc.pageCount()
 
-        self.action_prev.setEnabled(page > 0)
+        self.action_prev.setEnabled(0 < page)
         self.action_next.setEnabled(page < total - 1)
 
     def update_page_status(self):
