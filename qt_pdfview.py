@@ -2,7 +2,7 @@ import os
 import sys
 
 from PySide6.QtCore import QPointF, QEvent
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QWheelEvent
 from PySide6.QtPdf import QPdfDocument
 from PySide6.QtPdfWidgets import QPdfView
 from PySide6.QtWidgets import (
@@ -50,11 +50,11 @@ class PDFViewer(QMainWindow):
 
         toolbar.addSeparator()
 
-        # Zoom In
-        icon_zoom_in = self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowUp)
-        self.action_zoom_in = action_zoom_in = QAction(icon_zoom_in, "Zoom In", self)
-        action_zoom_in.triggered.connect(self.on_zoom_in)
-        toolbar.addAction(action_zoom_in)
+        # Zoom Out
+        icon_zoom_out = self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowDown)
+        self.action_zoom_out = action_zoom_out = QAction(icon_zoom_out, "Zoom Out", self)
+        action_zoom_out.triggered.connect(self.on_zoom_out)
+        toolbar.addAction(action_zoom_out)
 
         # Fit In View
         icon_fit = self.style().standardIcon(QStyle.StandardPixmap.SP_BrowserReload)
@@ -62,11 +62,11 @@ class PDFViewer(QMainWindow):
         action_fit.triggered.connect(self.on_fit_in_view)
         toolbar.addAction(action_fit)
 
-        # Zoom Out
-        icon_zoom_out = self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowDown)
-        self.action_zoom_out = action_zoom_out = QAction(icon_zoom_out, "Zoom Out", self)
-        action_zoom_out.triggered.connect(self.on_zoom_out)
-        toolbar.addAction(action_zoom_out)
+        # Zoom In
+        icon_zoom_in = self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowUp)
+        self.action_zoom_in = action_zoom_in = QAction(icon_zoom_in, "Zoom In", self)
+        action_zoom_in.triggered.connect(self.on_zoom_in)
+        toolbar.addAction(action_zoom_in)
 
         toolbar.addSeparator()
 
@@ -184,7 +184,7 @@ class PDFViewer(QMainWindow):
     # ----------------------------
     # マウスホイールでページ移動
     # ----------------------------
-    def eventFilter(self, obj, event):
+    def eventFilter(self, obj, event: QWheelEvent):
         if obj is self.view and event.type() == QEvent.Type.Wheel:
             if self.doc is None:
                 return False
