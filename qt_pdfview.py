@@ -2,7 +2,7 @@ import os
 import sys
 
 from PySide6.QtCore import QPointF, QEvent
-from PySide6.QtGui import QAction, QWheelEvent
+from PySide6.QtGui import QAction
 from PySide6.QtPdf import QPdfDocument
 from PySide6.QtPdfWidgets import QPdfView
 from PySide6.QtWidgets import (
