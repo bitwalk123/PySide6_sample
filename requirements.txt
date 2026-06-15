@@ -3,12 +3,16 @@ importlib-metadata
 jaraco-context
 jaraco-functools
 jaraco.text
+matplotlib
 mplfinance
+numpy
 odfpy
 openpyxl
+pandas
 pip-chill
 pip-review
 pyside6
+seaborn
 tomli
 tzdata
 xlrd

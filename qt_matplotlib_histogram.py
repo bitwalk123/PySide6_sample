@@ -16,33 +16,30 @@ import seaborn as sns
 
 
 class Histogram(FigureCanvas):
-    fig = Figure()
 
-    def __init__(self, df: pd.Series):
-        super().__init__(self.fig)
-        self.init_chart(df)
-
-    def init_chart(self, df: pd.Series):
-        sns.set_style('whitegrid')
-        ax = sns.histplot(data=df, kde=True, ax=self.fig.add_subplot(111))
-        ax.set(title='Histogram Sample')
+    def __init__(self, ser: pd.Series):
+        fig = Figure()
+        super().__init__(fig)
+        sns.set_style("whitegrid")
+        ax = sns.histplot(data=ser, kde=True, ax=fig.add_subplot(111))
+        ax.set(title="Histogram Sample")
 
 
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Histogram example')
+        self.setWindowTitle("Histogram example")
         self.init_ui()
 
     def init_ui(self):
         # sample data
-        df = pd.Series(np.random.normal(50, 10, 1000), name='X')
+        ser = pd.Series(np.random.normal(50, 10, 1000), name="X")
         # chart
-        canvas: FigureCanvas = Histogram(df)
+        canvas: FigureCanvas = Histogram(ser)
         self.setCentralWidget(canvas)
         # navigation for plot
         navtoolbar = NavigationToolbar(canvas, self)
-        self.addToolBar(Qt.BottomToolBarArea, navtoolbar)
+        self.addToolBar(Qt.ToolBarArea.BottomToolBarArea, navtoolbar)
 
 
 def main():
