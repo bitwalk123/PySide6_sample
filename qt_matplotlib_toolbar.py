@@ -21,7 +21,9 @@ class MyNavToolbar(NavigationToolbar):
     def __init__(self, canvas: FigureCanvas):
         super().__init__(canvas)
         user_action = QAction("User", self)
-        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_TitleBarMenuButton)
+        icon = self.style().standardIcon(
+            QStyle.StandardPixmap.SP_TitleBarMenuButton
+        )
         user_action.setIcon(icon)
         user_action.triggered.connect(self.on_user_action)
 
