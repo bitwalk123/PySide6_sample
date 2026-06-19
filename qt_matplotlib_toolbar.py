@@ -57,9 +57,6 @@ class Example(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Histogram example")
-        self.init_ui()
-
-    def init_ui(self):
         # sample data
         ser = pd.Series(np.random.normal(50, 10, 100), name="Sample")
         # chart
