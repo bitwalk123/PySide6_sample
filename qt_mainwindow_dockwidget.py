@@ -11,11 +11,11 @@ class MyDockWidget(QDockWidget):
         super().__init__()
         self.setWindowTitle(title)
 
-        base = QLabel('Dock')
+        base = QLabel("Dock")
         base.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        if side == 'leftright':
+        if side == "leftright":
             base.setFixedWidth(80)
-        elif side == 'topbottom':
+        elif side == "topbottom":
             base.setFixedHeight(50)
 
         base.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)

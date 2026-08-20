@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
     QFrame,
     QLabel,
     QMainWindow,
+    QStyle,
 )
 
 from qt_mainwindow_dockwidget import MyDockWidget
@@ -17,7 +18,10 @@ from qt_mainwindow_toolbar import MyToolBar
 class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('QMainWindow')
+        name_icon = QStyle.StandardPixmap.SP_TitleBarMenuButton
+        icon = self.style().standardIcon(name_icon)
+        self.setWindowIcon(icon)
+        self.setWindowTitle("QMainWindow")
 
         menubar = MyMenuBar()
         menubar.openTriggered.connect(self.on_open)

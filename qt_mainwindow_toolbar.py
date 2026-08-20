@@ -1,7 +1,8 @@
-from PySide6.QtCore import Signal
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import Signal, Qt
 from PySide6.QtWidgets import (
-    QToolBar, QStyle, QPushButton,
+    QLabel,
+    QSizePolicy,
+    QToolBar,
 )
 
 from qt_mainwindow_toolbutton import OpenToolButton
@@ -16,6 +17,14 @@ class MyToolBar(QToolBar):
         but_open = OpenToolButton()
         but_open.clicked.connect(self.on_clicked_open)
         self.addWidget(but_open)
+        lab = QLabel("ToolBar")
+        lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        lab.setSizePolicy(
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Minimum
+        )
+        self.addWidget(lab)
+
 
     def on_clicked_open(self):
         self.openClicked.emit()
