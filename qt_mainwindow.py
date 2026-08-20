@@ -1,6 +1,7 @@
 import sys
 
 from PySide6.QtCore import Qt, QCoreApplication
+from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import (
     QApplication,
     QFrame,
@@ -66,7 +67,7 @@ class Example(QMainWindow):
         base.setLineWidth(1)
         self.setCentralWidget(base)
 
-    def closeEvent(self, event):
+    def closeEvent(self, event: QCloseEvent):
         print('アプリケーションを終了します。')
         event.accept()  # let the window close
 
