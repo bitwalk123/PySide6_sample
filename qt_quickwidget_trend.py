@@ -90,7 +90,6 @@ class Example(QMainWindow):
         arr_y = np.random.random(100)
         for i, y in enumerate(arr_y):
             trend.append_data(i, y)
-            # print(i/100., y)
 
 
 def main():
